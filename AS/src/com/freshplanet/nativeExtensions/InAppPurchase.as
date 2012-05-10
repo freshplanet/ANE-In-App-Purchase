@@ -41,7 +41,7 @@ package com.freshplanet.nativeExtensions
 						extCtx.addEventListener(StatusEvent.STATUS, onStatus);
 					} else
 					{
-						trace('extCtx is null.');
+						trace('[InAppPurchase] extCtx is null.');
 					}
 				}
 			_instance = this;
@@ -72,6 +72,7 @@ package com.freshplanet.nativeExtensions
 		{
 			if (this.isInAppPurchaseSupported)
 			{
+				trace("[InAppPurchase] purchasing", productId);
 				extCtx.call("makePurchase", productId);
 			} else
 			{
@@ -84,6 +85,7 @@ package com.freshplanet.nativeExtensions
 		{
 			if (this.isInAppPurchaseSupported)
 			{
+				trace("[InAppPurchase] removing product from queue", productId, receipt);
 				extCtx.call("removePurchaseFromQueue", productId, receipt);
 			}
 		}
@@ -94,6 +96,7 @@ package com.freshplanet.nativeExtensions
 		{
 			if (this.isInAppPurchaseSupported)
 			{
+				trace("[InAppPurchase] get Products Info");
 				extCtx.call("getProductsInfo", productsId);
 			} else
 			{
@@ -107,6 +110,7 @@ package com.freshplanet.nativeExtensions
 		{
 			if (this.isInAppPurchaseSupported)
 			{
+				trace("[InAppPurchase] check user can make a purchase");
 				extCtx.call("userCanMakeAPurchase");
 			} else
 			{
@@ -120,7 +124,7 @@ package com.freshplanet.nativeExtensions
 		public function get isInAppPurchaseSupported():Boolean
 		{
 			var value:Boolean = Capabilities.manufacturer.indexOf('iOS') > -1 || Capabilities.manufacturer.indexOf('Android') > -1;
-			trace(' is app purchase supported ? '+value);
+			trace(value ? '[InAppPurchase]  in app purchase is supported ' : '[InAppPurchase]  in app purchase is not supported ');
 			return value;
 		}
 		
