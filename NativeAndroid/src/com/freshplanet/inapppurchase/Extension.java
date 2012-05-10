@@ -33,7 +33,7 @@ public class Extension implements FREExtension {
 	 * Create the context (AS to Java).
 	 */
 	public FREContext createContext(String extId) {
-		Log.d(TAG, "Extension.createContext extId: " + extId);
+		Log.d(TAG, "Extension.createContext extId: ");
 		return context = new ExtensionContext();
 	}
 
