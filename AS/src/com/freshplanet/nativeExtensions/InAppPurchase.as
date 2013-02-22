@@ -116,10 +116,42 @@ package com.freshplanet.nativeExtensions
 			{
 				this.dispatchEvent(new InAppPurchaseEvent(InAppPurchaseEvent.PURCHASE_DISABLED));
 			}
-			
 		}
 			
+		public function userCanMakeASubscription():void
+		{
+			if (Capabilities.manufacturer.indexOf('Android') > -1)
+			{
+				trace("[InAppPurchase] check user can make a purchase");
+				extCtx.call("userCanMakeASubscription");
+			} else
+			{
+				this.dispatchEvent(new InAppPurchaseEvent(InAppPurchaseEvent.PURCHASE_DISABLED));
+			}
+		}
 		
+		public function makeSubscription(productId:String):void
+		{
+			if (Capabilities.manufacturer.indexOf('Android') > -1)
+			{
+				trace("[InAppPurchase] check user can make a subscription");
+				extCtx.call("makeSubscription", productId);
+			} else
+			{
+				this.dispatchEvent(new InAppPurchaseEvent(InAppPurchaseEvent.PURCHASE_ERROR, "InAppPurchase not supported"));
+			}
+		}
+		
+		
+		public function restoreTransactions():void
+		{
+			if (Capabilities.manufacturer.indexOf('Android') > -1)
+			{
+				trace("[InAppPurchase] restoring transactions");
+				extCtx.call("restoreTransaction");
+			}
+		}
+
 		
 		public function get isInAppPurchaseSupported():Boolean
 		{
@@ -143,10 +175,10 @@ package com.freshplanet.nativeExtensions
 					e = new InAppPurchaseEvent(InAppPurchaseEvent.PURCHASE_ERROR, event.level);
 					break;
 				case "PURCHASE_ENABLED":
-					e = new InAppPurchaseEvent(InAppPurchaseEvent.PURCHASE_ENABLED);
+					e = new InAppPurchaseEvent(InAppPurchaseEvent.PURCHASE_ENABLED, event.level);
 					break;
 				case "PURCHASE_DISABLED":
-					e = new InAppPurchaseEvent(InAppPurchaseEvent.PURCHASE_DISABLED);
+					e = new InAppPurchaseEvent(InAppPurchaseEvent.PURCHASE_DISABLED, event.level);
 					break;
 				case "PRODUCT_INFO_SUCCESS":
 					e = new InAppPurchaseEvent(InAppPurchaseEvent.PRODUCT_INFO_RECEIVED, event.level);

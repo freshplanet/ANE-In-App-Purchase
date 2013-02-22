@@ -34,7 +34,7 @@ import com.adobe.fre.FREWrongThreadException;
 
 public class RemovePurchaseFromQueuePurchase implements FREFunction {
 
-	private static String TAG = "removePurchase";
+	private static String TAG = "RemovePurchase";
 	
 	
 	@Override

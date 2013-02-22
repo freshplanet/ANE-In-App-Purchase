@@ -18,10 +18,11 @@
 
 package com.freshplanet.inapppurchase;
 
+import android.os.Handler;
+
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
-import com.adobe.fre.FREWrongThreadException;
 
 public class UserCanMakeAPurchaseFunction implements FREFunction {
 
@@ -29,19 +30,13 @@ public class UserCanMakeAPurchaseFunction implements FREFunction {
 	public FREObject call(FREContext arg0, FREObject[] arg1) {
 		
 		BillingService service = new BillingService();
+		service.setContext(arg0.getActivity());
 		
-		
-		// TODO Auto-generated method stub
-		
-		FREObject returnedValue;
-		try {
-			returnedValue = FREObject.newObject( service.checkBillingSupported() );
-		} catch (FREWrongThreadException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			returnedValue = null;
-		}
-		return returnedValue;
+		// register a cash purchase observer for ui.
+		ResponseHandler.register( new CashPurchaseObserver(new Handler()));
+
+		service.checkBillingSupported();
+		return null;
 	}
 
 }

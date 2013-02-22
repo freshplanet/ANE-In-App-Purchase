@@ -89,6 +89,7 @@ public class Consts {
     public static final String BILLING_REQUEST_API_VERSION = "API_VERSION";
     public static final String BILLING_REQUEST_PACKAGE_NAME = "PACKAGE_NAME";
     public static final String BILLING_REQUEST_ITEM_ID = "ITEM_ID";
+    public static final String BILLING_REQUEST_ITEM_TYPE = "ITEM_TYPE";
     public static final String BILLING_REQUEST_DEVELOPER_PAYLOAD = "DEVELOPER_PAYLOAD";
     public static final String BILLING_REQUEST_NOTIFY_IDS = "NOTIFY_IDS";
     public static final String BILLING_REQUEST_NONCE = "NONCE";

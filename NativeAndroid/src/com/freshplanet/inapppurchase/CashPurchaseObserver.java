@@ -28,7 +28,6 @@ import com.freshplanet.inapppurchase.Consts.ResponseCode;
 
 public class CashPurchaseObserver extends PurchaseObserver {
 
-	
     public CashPurchaseObserver(Handler handler) {
         super(Extension.context.getActivity(), handler);
     }
@@ -37,14 +36,32 @@ public class CashPurchaseObserver extends PurchaseObserver {
 	private static String TAG = "CashPurchaseObserver";
 	
 	@Override
-	public void onBillingSupported(boolean supported) {
+	public void onBillingSupported(boolean supported, String type) {
 		Log.d(TAG, "onBillingSupported");
 		if (supported)
 		{
-			Extension.context.dispatchStatusEventAsync("PURCHASE_ENABLED", "Yes");
+			if (type != null)
+			{
+				Log.d(TAG, "supported "+type);
+				Extension.context.dispatchStatusEventAsync("PURCHASE_ENABLED", type);
+			} else
+			{
+				Log.d(TAG, "supported");
+				Extension.context.dispatchStatusEventAsync("PURCHASE_ENABLED", "Yes");
+			}
 		} else
 		{
-			Extension.context.dispatchStatusEventAsync("PURCHASE_DISABLED", "Yes");
+			if (type != null)
+			{
+				Log.d(TAG, "unsupported "+type);
+
+				Extension.context.dispatchStatusEventAsync("PURCHASE_DISABLED", type);
+
+			} else
+			{
+				Log.d(TAG, "unsupported ");
+				Extension.context.dispatchStatusEventAsync("PURCHASE_DISABLED", "Yes");
+			}
 		}
 	}
 

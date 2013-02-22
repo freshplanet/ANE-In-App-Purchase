@@ -1,16 +1,16 @@
 TAirInAppPurchase
-v3
+v5
 r1
 cCheck dependencies
-cProcessPCH /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-asbifjxhchwipaetjyxpkuywtbfu/AirInAppPurchase-Prefix.pch.gch AirInAppPurchase/AirInAppPurchase-Prefix.pch normal armv7 objective-c com.apple.compilers.llvmgcc42
-cProcessPCH /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-axqihzojdgmwridibabttxuhrwgv/AirInAppPurchase-Prefix.pch.gch AirInAppPurchase/AirInAppPurchase-Prefix.pch normal armv6 objective-c com.apple.compilers.llvmgcc42
-cCompileC build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv6/AirInAppPurchase.o /Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase.m normal armv6 objective-c com.apple.compilers.llvmgcc42
-cCompileC build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv6/JSONKit.o /Users/titi/Projects/AirInAppPurchase/NativeIOS/JSONKit/JSONKit.m normal armv6 objective-c com.apple.compilers.llvmgcc42
-cCompileC build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/AirInAppPurchase.o /Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase.m normal armv7 objective-c com.apple.compilers.llvmgcc42
+cProcessPCH /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-fnnjotxgoewybjddozvgeqmrdzmj/AirInAppPurchase-Prefix.pch.gch AirInAppPurchase/AirInAppPurchase-Prefix.pch normal armv7 objective-c com.apple.compilers.llvmgcc42
+cProcessPCH /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-hgmtpnwlcgmonzbownhdyvofrafq/AirInAppPurchase-Prefix.pch.gch AirInAppPurchase/AirInAppPurchase-Prefix.pch normal armv7s objective-c com.apple.compilers.llvmgcc42
+cCompileC build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7s/AirInAppPurchase.o /Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase.m normal armv7s objective-c com.apple.compilers.llvmgcc42
+cCompileC build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7s/JSONKit.o /Users/titi/Projects/AirInAppPurchase/NativeIOS/JSONKit/JSONKit.m normal armv7s objective-c com.apple.compilers.llvmgcc42
 cCompileC build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/JSONKit.o /Users/titi/Projects/AirInAppPurchase/NativeIOS/JSONKit/JSONKit.m normal armv7 objective-c com.apple.compilers.llvmgcc42
-cLibtool /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv6/libAirInAppPurchase.a normal armv6
+cCompileC build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/AirInAppPurchase.o /Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase.m normal armv7 objective-c com.apple.compilers.llvmgcc42
 cLibtool /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/libAirInAppPurchase.a normal armv7
-cCreateUniversalBinary /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/libAirInAppPurchase.a normal "armv6 armv7"
+cLibtool /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7s/libAirInAppPurchase.a normal armv7s
+cCreateUniversalBinary /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/libAirInAppPurchase.a normal "armv7 armv7s"
 
 N/Applications/Adobe Flash Builder 4.6/sdks/4.6.0/include/FlashRuntimeExtensions.h
 c000000004F5FD2CD0000000000004FCB
@@ -18,165 +18,165 @@ t1331679949
 s20427
 i<stdint.h>
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk
-c000000004D9A119B0000000000000110
-t1301942683
-s272
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk
+c00000000503C83D40000000000000132
+t1346143188
+s306
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFArray.h
-c000000004D93DFE90000000000007AC8
-t1301536745
-s31432
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFArray.h
+c0000000050D380AB0000000000007B03
+t1356038315
+s31491
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFDictionary.h
-c000000004D93DFE900000000000080D0
-t1301536745
-s32976
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFDictionary.h
+c0000000050D380AB000000000000810B
+t1356038315
+s33035
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFNumber.h
-c000000004D93DFEA0000000000000EDF
-t1301536746
-s3807
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFNumber.h
+c0000000050D380AB0000000000000EC3
+t1356038315
+s3779
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFString.h
-c000000004D93DFEA000000000000B7CA
-t1301536746
-s47050
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFString.h
+c0000000050D380AB000000000000B27D
+t1356038315
+s45693
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/Foundation.framework/Foundation
-c000000004D93E1FD00000000003E22F0
-t1301537277
-s4072176
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/Foundation.framework/Foundation
+c0000000050D380AD0000000000629C80
+t1356038317
+s6462592
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h
-c000000004D93E1E60000000000001466
-t1301537254
-s5222
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h
+c0000000050D380AC00000000000015F7
+t1356038316
+s5623
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSArray.h
-c000000004D93E1E60000000000001B27
-t1301537254
-s6951
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSArray.h
+c0000000050D380AC0000000000001B88
+t1356038316
+s7048
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSAutoreleasePool.h
-c000000004D93E1E600000000000001CB
-t1301537254
-s459
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSAutoreleasePool.h
+c0000000050D380AC0000000000000179
+t1356038316
+s377
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSData.h
-c000000004D93E1E60000000000001777
-t1301537254
-s6007
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSData.h
+c0000000050D380AC000000000000187D
+t1356038316
+s6269
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSDictionary.h
-c000000004D93E1E60000000000000E3B
-t1301537254
-s3643
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSDictionary.h
+c0000000050D380AC0000000000001573
+t1356038316
+s5491
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSError.h
-c000000004D93E1E60000000000001DE5
-t1301537254
-s7653
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSError.h
+c0000000050D380AC0000000000001B34
+t1356038316
+s6964
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSException.h
-c000000004D93E1E60000000000002033
-t1301537254
-s8243
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSException.h
+c0000000050D380AC00000000000028F7
+t1356038316
+s10487
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSNull.h
-c000000004D93E1E600000000000000B8
-t1301537254
-s184
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSNull.h
+c0000000050D380AC00000000000000BE
+t1356038316
+s190
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSObjCRuntime.h
-c000000004D93E1E60000000000002E87
-t1301537254
-s11911
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSObjCRuntime.h
+c0000000050D380AC0000000000004C44
+t1356038316
+s19524
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSString.h
-c000000004D93E1E60000000000006506
-t1301537254
-s25862
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSString.h
+c0000000050D380AD00000000000064BF
+t1356038317
+s25791
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/StoreKit.framework/Headers/StoreKit.h
-c000000004D99FE06000000000000016E
-t1301937670
-s366
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/StoreKit.framework/Headers/StoreKit.h
+c0000000050D380AE00000000000001C0
+t1356038318
+s448
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/StoreKit.framework/StoreKit
-c000000004D99FE08000000000001C8E0
-t1301937672
-s116960
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/StoreKit.framework/StoreKit
+c0000000050D380AE00000000000495D0
+t1356038318
+s300496
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/usr/include/AvailabilityMacros.h
-c000000004D4F74C20000000000007A5E
-t1297052866
-s31326
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/usr/include/AvailabilityMacros.h
+c0000000050D380B50000000000008F07
+t1356038325
+s36615
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/usr/include/TargetConditionals.h
-c000000004D4F74C200000000000031E9
-t1297052866
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/usr/include/TargetConditionals.h
+c0000000050D380C000000000000031E9
+t1356038336
 s12777
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/usr/include/assert.h
-c000000004D4F6E900000000000000F6E
-t1297051280
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/usr/include/assert.h
+c0000000050D380B50000000000000F6E
+t1356038325
 s3950
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/usr/include/math.h
-c000000004D4F6E4300000000000004F1
-t1297051203
-s1265
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/usr/include/math.h
+c0000000050D380BF000000000000697B
+t1356038335
+s27003
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/usr/include/objc/runtime.h
-c000000004D93DB5800000000000063AF
-t1301535576
-s25519
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/usr/include/objc/runtime.h
+c0000000050D380BF000000000000672A
+t1356038335
+s26410
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/usr/include/stdint.h
-c000000004D4F6E9000000000000018EF
-t1297051280
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/usr/include/stdint.h
+c0000000050D380BF00000000000018EF
+t1356038335
 s6383
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/usr/include/stdio.h
-c000000004D4F6E910000000000004763
-t1297051281
-s18275
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/usr/include/stdio.h
+c0000000050D380BF0000000000004523
+t1356038335
+s17699
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/usr/include/stdlib.h
-c000000004D4F6E9100000000000030A7
-t1297051281
-s12455
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/usr/include/stdlib.h
+c0000000050D380BF0000000000003089
+t1356038335
+s12425
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/usr/include/string.h
-c000000004D4F6E910000000000001A3A
-t1297051281
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/usr/include/string.h
+c0000000050D380BF0000000000001A3A
+t1356038335
 s6714
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/usr/include/sys/errno.h
-c000000004D93DB9C0000000000002A36
-t1301535644
-s10806
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/usr/include/sys/errno.h
+c0000000050D380C00000000000002A67
+t1356038336
+s10855
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/usr/llvm-gcc-4.2/lib/gcc/arm-apple-darwin10/4.2.1/include/limits.h
-c000000004D93D9890000000000000D03
-t1301535113
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/llvm-gcc-4.2/lib/gcc/arm-apple-darwin10/4.2.1/include/limits.h
+c0000000050D380C30000000000000D03
+t1356038339
 s3331
 
-N/Developer/Platforms/iPhoneOS.platform/Developer/usr/llvm-gcc-4.2/lib/gcc/arm-apple-darwin10/4.2.1/include/stddef.h
-c000000004D93D9890000000000003197
-t1301535113
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/llvm-gcc-4.2/lib/gcc/arm-apple-darwin10/4.2.1/include/stddef.h
+c0000000050D380C30000000000003197
+t1356038339
 s12695
 
 N/Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase-Prefix.pch
-c000000004F9B222F00000000000003F4
-t1335566895
+c0000000050A119CE00000000000003F4
+t1352735182
 s1012
 i<Foundation/Foundation.h>
 
 N/Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase.h
-c000000004FAB1FA20000000000000709
-t1336614818
+c0000000050A119CE0000000000000709
+t1352735182
 s1801
 i<Foundation/Foundation.h>
 i<StoreKit/StoreKit.h>
@@ -184,8 +184,8 @@ i"FlashRuntimeExtensions.h"
 i"JSONKit.h"
 
 N/Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase.m
-c000000004FAB3E270000000000003D15
-t1336622631
+c0000000050A119CE0000000000003D15
+t1352735182
 s15637
 i"AirInAppPurchase.h"
 
@@ -231,26 +231,9 @@ i<Foundation/NSException.h>
 i<Foundation/NSNull.h>
 i<Foundation/NSObjCRuntime.h>
 
-N/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv6/AirInAppPurchase.LinkFileList
-c000000004FAB40FC0000000000000131
-t1336623356
-s305
-
-N/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv6/AirInAppPurchase.o
-t2
-s0
-
-N/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv6/JSONKit.o
-t2
-s0
-
-N/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv6/libAirInAppPurchase.a
-t2
-s0
-
 N/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/AirInAppPurchase.LinkFileList
-c000000004FAB40FC0000000000000131
-t1336623356
+c00000000511C21AA0000000000000131
+t1360798122
 s305
 
 N/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/AirInAppPurchase.o
@@ -265,51 +248,42 @@ N/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Re
 t2
 s0
 
+N/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7s/AirInAppPurchase.LinkFileList
+c00000000511C21AA0000000000000133
+t1360798122
+s307
+
+N/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7s/AirInAppPurchase.o
+t2
+s0
+
+N/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7s/JSONKit.o
+t2
+s0
+
+N/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7s/libAirInAppPurchase.a
+t2
+s0
+
 N/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/libAirInAppPurchase.a
 t2
 s0
 
-N/var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-asbifjxhchwipaetjyxpkuywtbfu/AirInAppPurchase-Prefix.pch.gch
+N/var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-fnnjotxgoewybjddozvgeqmrdzmj/AirInAppPurchase-Prefix.pch.gch
 t2
 s0
 
-N/var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-axqihzojdgmwridibabttxuhrwgv/AirInAppPurchase-Prefix.pch.gch
+N/var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-hgmtpnwlcgmonzbownhdyvofrafq/AirInAppPurchase-Prefix.pch.gch
 t2
 s0
 
 CCheck dependencies
 r0
-lSLF03#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependencies7c7e007c785bb541^c6fc247c785bb541^---0#1#0#--18"Check dependencies
-
-CCompileC build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv6/AirInAppPurchase.o /Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase.m normal armv6 objective-c com.apple.compilers.llvmgcc42
-s358316156.520508
-e358316156.820789
-r1
-xCompileC
-xbuild/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv6/AirInAppPurchase.o
-x/Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase.m
-xnormal
-xarmv6
-xobjective-c
-xcom.apple.compilers.llvmgcc42
-lSLF03#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection91"Compile /Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase.m7a6e857c785bb541^b01fd27c785bb541^---0#0#0#-19%DVTDocumentLocation2@99"file://localhost/Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase.m0000000000000000^2606"CompileC build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv6/AirInAppPurchase.o AirInAppPurchase/AirInAppPurchase.m normal armv6 objective-c com.apple.compilers.llvmgcc42    cd /Users/titi/Projects/AirInAppPurchase/NativeIOS    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249@global/bin:/Users/titi/.rvm/rubies/ruby-1.8.7-p249/bin:/Users/titi/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/Users/titi/bin:/Users/titi/.gem/ruby/1.8/bin:/bin:/usr/local/Cellar/cloud-watch/1.0.2.3/jars/bin:/usr/local/Cellar/auto-scaling/1.0.33.1/jars/bin:/bin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x objective-c -arch armv6 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -Os -Wreturn-type -Wunused-variable -Wuninitialized -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk -gdwarf-2 -mthumb -miphoneos-version-min=4.0 -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-generated-files.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-own-target-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-all-target-headers.hmap -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-project-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/include -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources/armv6 -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources -F/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos -include /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-axqihzojdgmwridibabttxuhrwgv/AirInAppPurchase-Prefix.pch -c /Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase.m -o /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv6/AirInAppPurchase.o
-
-CCompileC build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv6/JSONKit.o /Users/titi/Projects/AirInAppPurchase/NativeIOS/JSONKit/JSONKit.m normal armv6 objective-c com.apple.compilers.llvmgcc42
-s358316156.520518
-e358316157.984595
-r1
-xCompileC
-xbuild/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv6/JSONKit.o
-x/Users/titi/Projects/AirInAppPurchase/NativeIOS/JSONKit/JSONKit.m
-xnormal
-xarmv6
-xobjective-c
-xcom.apple.compilers.llvmgcc42
-lSLF03#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection73"Compile /Users/titi/Projects/AirInAppPurchase/NativeIOS/JSONKit/JSONKit.m9c6e857c785bb541^3a21fc7d785bb541^---0#0#0#-19%DVTDocumentLocation2@81"file://localhost/Users/titi/Projects/AirInAppPurchase/NativeIOS/JSONKit/JSONKit.m0000000000000000^2552"CompileC build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv6/JSONKit.o JSONKit/JSONKit.m normal armv6 objective-c com.apple.compilers.llvmgcc42    cd /Users/titi/Projects/AirInAppPurchase/NativeIOS    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249@global/bin:/Users/titi/.rvm/rubies/ruby-1.8.7-p249/bin:/Users/titi/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/Users/titi/bin:/Users/titi/.gem/ruby/1.8/bin:/bin:/usr/local/Cellar/cloud-watch/1.0.2.3/jars/bin:/usr/local/Cellar/auto-scaling/1.0.33.1/jars/bin:/bin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x objective-c -arch armv6 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -Os -Wreturn-type -Wunused-variable -Wuninitialized -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk -gdwarf-2 -mthumb -miphoneos-version-min=4.0 -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-generated-files.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-own-target-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-all-target-headers.hmap -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-project-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/include -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources/armv6 -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources -F/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos -include /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-axqihzojdgmwridibabttxuhrwgv/AirInAppPurchase-Prefix.pch -c /Users/titi/Projects/AirInAppPurchase/NativeIOS/JSONKit/JSONKit.m -o /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv6/JSONKit.o
+lSLF05#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependencies8d284d2a59ccb641^6f458a2a59ccb641^---0#1#0#--18"Check dependencies36"25B29737-381F-4BA5-9F3A-BA8C72D129C3-
 
 CCompileC build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/AirInAppPurchase.o /Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase.m normal armv7 objective-c com.apple.compilers.llvmgcc42
-s358316156.550143
-e358316156.856195
+s382490923.068452
+e382490923.513739
 r1
 xCompileC
 xbuild/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/AirInAppPurchase.o
@@ -318,11 +292,11 @@ xnormal
 xarmv7
 xobjective-c
 xcom.apple.compilers.llvmgcc42
-lSLF03#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection91"Compile /Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase.m200b8d7c785bb541^b22ddb7c785bb541^---0#0#0#-19%DVTDocumentLocation2@99"file://localhost/Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase.m0000000000000000^2606"CompileC build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/AirInAppPurchase.o AirInAppPurchase/AirInAppPurchase.m normal armv7 objective-c com.apple.compilers.llvmgcc42    cd /Users/titi/Projects/AirInAppPurchase/NativeIOS    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249@global/bin:/Users/titi/.rvm/rubies/ruby-1.8.7-p249/bin:/Users/titi/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/Users/titi/bin:/Users/titi/.gem/ruby/1.8/bin:/bin:/usr/local/Cellar/cloud-watch/1.0.2.3/jars/bin:/usr/local/Cellar/auto-scaling/1.0.33.1/jars/bin:/bin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x objective-c -arch armv7 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -Os -Wreturn-type -Wunused-variable -Wuninitialized -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk -gdwarf-2 -mthumb -miphoneos-version-min=4.0 -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-generated-files.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-own-target-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-all-target-headers.hmap -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-project-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/include -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources/armv7 -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources -F/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos -include /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-asbifjxhchwipaetjyxpkuywtbfu/AirInAppPurchase-Prefix.pch -c /Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase.m -o /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/AirInAppPurchase.o
+lSLF05#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection91"Compile /Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase.mbabc112b59ccb641^9f73832b59ccb641^---0#0#0#-19%DVTDocumentLocation2@99"file://localhost/Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase.m0000000000000000^3019"CompileC build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/AirInAppPurchase.o AirInAppPurchase/AirInAppPurchase.m normal armv7 objective-c com.apple.compilers.llvmgcc42    cd /Users/titi/Projects/AirInAppPurchase/NativeIOS    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249@global/bin:/Users/titi/.rvm/rubies/ruby-1.8.7-p249/bin:/Users/titi/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/titi/bin:/Users/titi/.gem/ruby/1.8/bin:/bin:/usr/local/Cellar/cloud-watch/1.0.2.3/jars/bin:/usr/local/Cellar/auto-scaling/1.0.33.1/jars/bin:/bin:/Users/titi/gsutil"    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x objective-c -arch armv7 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -Os -Wreturn-type -Wunused-variable -Wuninitialized -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk -gdwarf-2 -mthumb -miphoneos-version-min=4.0 -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-generated-files.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-own-target-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-all-target-headers.hmap -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-project-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources/armv7 -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources -F/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos -include /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-fnnjotxgoewybjddozvgeqmrdzmj/AirInAppPurchase-Prefix.pch -c /Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase.m -o /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/AirInAppPurchase.o36"1C447B19-1390-4450-B29D-FDB03F602357-
 
 CCompileC build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/JSONKit.o /Users/titi/Projects/AirInAppPurchase/NativeIOS/JSONKit/JSONKit.m normal armv7 objective-c com.apple.compilers.llvmgcc42
-s358316156.551186
-e358316158.173924
+s382490923.066493
+e382490924.649755
 r1
 xCompileC
 xbuild/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/JSONKit.o
@@ -331,63 +305,89 @@ xnormal
 xarmv7
 xobjective-c
 xcom.apple.compilers.llvmgcc42
-lSLF03#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection73"Compile /Users/titi/Projects/AirInAppPurchase/NativeIOS/JSONKit/JSONKit.m8e798d7c785bb541^e8842c7e785bb541^---0#0#0#-19%DVTDocumentLocation2@81"file://localhost/Users/titi/Projects/AirInAppPurchase/NativeIOS/JSONKit/JSONKit.m0000000000000000^2552"CompileC build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/JSONKit.o JSONKit/JSONKit.m normal armv7 objective-c com.apple.compilers.llvmgcc42    cd /Users/titi/Projects/AirInAppPurchase/NativeIOS    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249@global/bin:/Users/titi/.rvm/rubies/ruby-1.8.7-p249/bin:/Users/titi/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/Users/titi/bin:/Users/titi/.gem/ruby/1.8/bin:/bin:/usr/local/Cellar/cloud-watch/1.0.2.3/jars/bin:/usr/local/Cellar/auto-scaling/1.0.33.1/jars/bin:/bin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x objective-c -arch armv7 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -Os -Wreturn-type -Wunused-variable -Wuninitialized -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk -gdwarf-2 -mthumb -miphoneos-version-min=4.0 -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-generated-files.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-own-target-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-all-target-headers.hmap -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-project-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/include -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources/armv7 -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources -F/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos -include /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-asbifjxhchwipaetjyxpkuywtbfu/AirInAppPurchase-Prefix.pch -c /Users/titi/Projects/AirInAppPurchase/NativeIOS/JSONKit/JSONKit.m -o /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/JSONKit.o
+lSLF05#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection73"Compile /Users/titi/Projects/AirInAppPurchase/NativeIOS/JSONKit/JSONKit.mab5b112b59ccb641^9b56a62c59ccb641^---0#0#0#-19%DVTDocumentLocation2@81"file://localhost/Users/titi/Projects/AirInAppPurchase/NativeIOS/JSONKit/JSONKit.m0000000000000000^2965"CompileC build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/JSONKit.o JSONKit/JSONKit.m normal armv7 objective-c com.apple.compilers.llvmgcc42    cd /Users/titi/Projects/AirInAppPurchase/NativeIOS    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249@global/bin:/Users/titi/.rvm/rubies/ruby-1.8.7-p249/bin:/Users/titi/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/titi/bin:/Users/titi/.gem/ruby/1.8/bin:/bin:/usr/local/Cellar/cloud-watch/1.0.2.3/jars/bin:/usr/local/Cellar/auto-scaling/1.0.33.1/jars/bin:/bin:/Users/titi/gsutil"    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x objective-c -arch armv7 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -Os -Wreturn-type -Wunused-variable -Wuninitialized -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk -gdwarf-2 -mthumb -miphoneos-version-min=4.0 -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-generated-files.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-own-target-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-all-target-headers.hmap -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-project-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources/armv7 -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources -F/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos -include /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-fnnjotxgoewybjddozvgeqmrdzmj/AirInAppPurchase-Prefix.pch -c /Users/titi/Projects/AirInAppPurchase/NativeIOS/JSONKit/JSONKit.m -o /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/JSONKit.o36"FDFA2E7C-D3FC-4235-8232-92760120C79C-
 
-CCreateUniversalBinary /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/libAirInAppPurchase.a normal "armv6 armv7"
-s358316158.216285
-e358316158.251731
+CCompileC build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7s/AirInAppPurchase.o /Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase.m normal armv7s objective-c com.apple.compilers.llvmgcc42
+s382490923.033869
+e382490923.531342
+r1
+xCompileC
+xbuild/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7s/AirInAppPurchase.o
+x/Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase.m
+xnormal
+xarmv7s
+xobjective-c
+xcom.apple.compilers.llvmgcc42
+lSLF05#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection91"Compile /Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase.me7e1082b59ccb641^6c06882b59ccb641^---0#0#0#-19%DVTDocumentLocation2@99"file://localhost/Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase.m0000000000000000^3024"CompileC build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7s/AirInAppPurchase.o AirInAppPurchase/AirInAppPurchase.m normal armv7s objective-c com.apple.compilers.llvmgcc42    cd /Users/titi/Projects/AirInAppPurchase/NativeIOS    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249@global/bin:/Users/titi/.rvm/rubies/ruby-1.8.7-p249/bin:/Users/titi/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/titi/bin:/Users/titi/.gem/ruby/1.8/bin:/bin:/usr/local/Cellar/cloud-watch/1.0.2.3/jars/bin:/usr/local/Cellar/auto-scaling/1.0.33.1/jars/bin:/bin:/Users/titi/gsutil"    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x objective-c -arch armv7s -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -Os -Wreturn-type -Wunused-variable -Wuninitialized -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk -gdwarf-2 -mthumb -miphoneos-version-min=4.0 -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-generated-files.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-own-target-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-all-target-headers.hmap -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-project-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources/armv7s -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources -F/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos -include /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-hgmtpnwlcgmonzbownhdyvofrafq/AirInAppPurchase-Prefix.pch -c /Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase.m -o /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7s/AirInAppPurchase.o36"8645E2C5-C4D2-4275-9467-C7FF7405B398-
+
+CCompileC build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7s/JSONKit.o /Users/titi/Projects/AirInAppPurchase/NativeIOS/JSONKit/JSONKit.m normal armv7s objective-c com.apple.compilers.llvmgcc42
+s382490923.033903
+e382490924.651072
+r1
+xCompileC
+xbuild/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7s/JSONKit.o
+x/Users/titi/Projects/AirInAppPurchase/NativeIOS/JSONKit/JSONKit.m
+xnormal
+xarmv7s
+xobjective-c
+xcom.apple.compilers.llvmgcc42
+lSLF05#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection73"Compile /Users/titi/Projects/AirInAppPurchase/NativeIOS/JSONKit/JSONKit.me7e1082b59ccb641^64aca62c59ccb641^---0#0#0#-19%DVTDocumentLocation2@81"file://localhost/Users/titi/Projects/AirInAppPurchase/NativeIOS/JSONKit/JSONKit.m0000000000000000^2970"CompileC build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7s/JSONKit.o JSONKit/JSONKit.m normal armv7s objective-c com.apple.compilers.llvmgcc42    cd /Users/titi/Projects/AirInAppPurchase/NativeIOS    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249@global/bin:/Users/titi/.rvm/rubies/ruby-1.8.7-p249/bin:/Users/titi/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/titi/bin:/Users/titi/.gem/ruby/1.8/bin:/bin:/usr/local/Cellar/cloud-watch/1.0.2.3/jars/bin:/usr/local/Cellar/auto-scaling/1.0.33.1/jars/bin:/bin:/Users/titi/gsutil"    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x objective-c -arch armv7s -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -Os -Wreturn-type -Wunused-variable -Wuninitialized -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk -gdwarf-2 -mthumb -miphoneos-version-min=4.0 -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-generated-files.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-own-target-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-all-target-headers.hmap -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-project-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources/armv7s -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources -F/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos -include /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-hgmtpnwlcgmonzbownhdyvofrafq/AirInAppPurchase-Prefix.pch -c /Users/titi/Projects/AirInAppPurchase/NativeIOS/JSONKit/JSONKit.m -o /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7s/JSONKit.o36"DD455194-7A15-4297-9A85-E7462949B505-
+
+CCreateUniversalBinary /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/libAirInAppPurchase.a normal "armv7 armv7s"
+s382490924.688912
+e382490924.744658
 r1
 xCreateUniversalBinary
 x/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/libAirInAppPurchase.a
 xnormal
-xarmv6 armv7
-lSLF03#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection116"Create universal binary /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/libAirInAppPurchase.a0587377e785bb541^ef73407e785bb541^---0#0#0#-19%DVTDocumentLocation2@108"file://localhost/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/libAirInAppPurchase.a00f4f4a1dfffdf42^1096"CreateUniversalBinary build/Release-iphoneos/libAirInAppPurchase.a normal "armv6 armv7"    cd /Users/titi/Projects/AirInAppPurchase/NativeIOS    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249@global/bin:/Users/titi/.rvm/rubies/ruby-1.8.7-p249/bin:/Users/titi/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/Users/titi/bin:/Users/titi/.gem/ruby/1.8/bin:/bin:/usr/local/Cellar/cloud-watch/1.0.2.3/jars/bin:/usr/local/Cellar/auto-scaling/1.0.33.1/jars/bin:/bin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/libtool -static /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv6/libAirInAppPurchase.a /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/libAirInAppPurchase.a -o /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/libAirInAppPurchase.a
-
-CLibtool /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv6/libAirInAppPurchase.a normal armv6
-s358316157.992110
-e358316158.013273
-r1
-xLibtool
-x/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv6/libAirInAppPurchase.a
-xnormal
-xarmv6
-o/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/libtool: -dynamic not specified the following flags are invalid: -ObjC 
-lSLF03#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection132"Libtool build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv6/libAirInAppPurchase.a normal armv61c26fe7d785bb541^fb79037e785bb541^---0#0#0#--1328"Libtool build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv6/libAirInAppPurchase.a normal armv6    cd /Users/titi/Projects/AirInAppPurchase/NativeIOS    setenv IPHONEOS_DEPLOYMENT_TARGET 4.0    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249@global/bin:/Users/titi/.rvm/rubies/ruby-1.8.7-p249/bin:/Users/titi/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/Users/titi/bin:/Users/titi/.gem/ruby/1.8/bin:/bin:/usr/local/Cellar/cloud-watch/1.0.2.3/jars/bin:/usr/local/Cellar/auto-scaling/1.0.33.1/jars/bin:/bin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/libtool -static -arch_only armv6 -syslibroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk -L/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos -filelist /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv6/AirInAppPurchase.LinkFileList -ObjC -framework StoreKit -framework Foundation -o /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv6/libAirInAppPurchase.a
+xarmv7 armv7s
+lSLF05#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection116"Create universal binary /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/libAirInAppPurchase.a6188b02c59ccb641^c7a1be2c59ccb641^---0#0#0#-19%DVTDocumentLocation2@108"file://localhost/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/libAirInAppPurchase.a000000000080d041^1111"CreateUniversalBinary build/Release-iphoneos/libAirInAppPurchase.a normal "armv7 armv7s"    cd /Users/titi/Projects/AirInAppPurchase/NativeIOS    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249@global/bin:/Users/titi/.rvm/rubies/ruby-1.8.7-p249/bin:/Users/titi/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/titi/bin:/Users/titi/.gem/ruby/1.8/bin:/bin:/usr/local/Cellar/cloud-watch/1.0.2.3/jars/bin:/usr/local/Cellar/auto-scaling/1.0.33.1/jars/bin:/bin:/Users/titi/gsutil"    libtool -static /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/libAirInAppPurchase.a /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7s/libAirInAppPurchase.a -o /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/libAirInAppPurchase.a36"41D8FF85-C28F-432A-8C03-8CCF80D754E5-
 
 CLibtool /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/libAirInAppPurchase.a normal armv7
-s358316158.181532
-e358316158.207839
+s382490924.656448
+e382490924.680298
 r1
 xLibtool
 x/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/libAirInAppPurchase.a
 xnormal
 xarmv7
-o/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/libtool: -dynamic not specified the following flags are invalid: -ObjC 
-lSLF03#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection132"Libtool build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/libAirInAppPurchase.a normal armv7279f2e7e785bb541^2b2f357e785bb541^---0#0#0#--1328"Libtool build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/libAirInAppPurchase.a normal armv7    cd /Users/titi/Projects/AirInAppPurchase/NativeIOS    setenv IPHONEOS_DEPLOYMENT_TARGET 4.0    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249@global/bin:/Users/titi/.rvm/rubies/ruby-1.8.7-p249/bin:/Users/titi/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/Users/titi/bin:/Users/titi/.gem/ruby/1.8/bin:/bin:/usr/local/Cellar/cloud-watch/1.0.2.3/jars/bin:/usr/local/Cellar/auto-scaling/1.0.33.1/jars/bin:/bin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/libtool -static -arch_only armv7 -syslibroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk -L/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos -filelist /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/AirInAppPurchase.LinkFileList -ObjC -framework StoreKit -framework Foundation -o /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/libAirInAppPurchase.a
+o/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool: -dynamic not specified the following flags are invalid: -ObjC 
+lSLF05#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection132"Libtool build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/libAirInAppPurchase.a normal armv7a932a82c59ccb641^ed28ae2c59ccb641^-159"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool: -dynamic not specified the following flags are invalid: -ObjC -0#0#0#--1460"Libtool build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/libAirInAppPurchase.a normal armv7    cd /Users/titi/Projects/AirInAppPurchase/NativeIOS    setenv IPHONEOS_DEPLOYMENT_TARGET 4.0    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249@global/bin:/Users/titi/.rvm/rubies/ruby-1.8.7-p249/bin:/Users/titi/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/titi/bin:/Users/titi/.gem/ruby/1.8/bin:/bin:/usr/local/Cellar/cloud-watch/1.0.2.3/jars/bin:/usr/local/Cellar/auto-scaling/1.0.33.1/jars/bin:/bin:/Users/titi/gsutil"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool -static -arch_only armv7 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk -L/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos -filelist /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/AirInAppPurchase.LinkFileList -ObjC -framework StoreKit -framework Foundation -o /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7/libAirInAppPurchase.a36"0A22B5CD-5A1E-4492-84CE-102C3DFFB58B-
 
-CProcessPCH /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-asbifjxhchwipaetjyxpkuywtbfu/AirInAppPurchase-Prefix.pch.gch AirInAppPurchase/AirInAppPurchase-Prefix.pch normal armv7 objective-c com.apple.compilers.llvmgcc42
-s358316156.155223
-e358316156.543064
+CLibtool /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7s/libAirInAppPurchase.a normal armv7s
+s382490924.657239
+e382490924.682049
+r1
+xLibtool
+x/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7s/libAirInAppPurchase.a
+xnormal
+xarmv7s
+o/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool: -dynamic not specified the following flags are invalid: -ObjC 
+lSLF05#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection134"Libtool build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7s/libAirInAppPurchase.a normal armv7s616da82c59ccb641^7898ae2c59ccb641^-159"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool: -dynamic not specified the following flags are invalid: -ObjC -0#0#0#--1465"Libtool build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7s/libAirInAppPurchase.a normal armv7s    cd /Users/titi/Projects/AirInAppPurchase/NativeIOS    setenv IPHONEOS_DEPLOYMENT_TARGET 4.0    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249@global/bin:/Users/titi/.rvm/rubies/ruby-1.8.7-p249/bin:/Users/titi/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/titi/bin:/Users/titi/.gem/ruby/1.8/bin:/bin:/usr/local/Cellar/cloud-watch/1.0.2.3/jars/bin:/usr/local/Cellar/auto-scaling/1.0.33.1/jars/bin:/bin:/Users/titi/gsutil"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool -static -arch_only armv7s -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk -L/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos -filelist /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7s/AirInAppPurchase.LinkFileList -ObjC -framework StoreKit -framework Foundation -o /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/Objects-normal/armv7s/libAirInAppPurchase.a36"71DD22DD-54B4-4C13-9D27-A51DFC1E7E6A-
+
+CProcessPCH /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-fnnjotxgoewybjddozvgeqmrdzmj/AirInAppPurchase-Prefix.pch.gch AirInAppPurchase/AirInAppPurchase-Prefix.pch normal armv7 objective-c com.apple.compilers.llvmgcc42
+s382490922.549318
+e382490923.059488
 r1
 xProcessPCH
-x/var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-asbifjxhchwipaetjyxpkuywtbfu/AirInAppPurchase-Prefix.pch.gch
+x/var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-fnnjotxgoewybjddozvgeqmrdzmj/AirInAppPurchase-Prefix.pch.gch
 xAirInAppPurchase/AirInAppPurchase-Prefix.pch
 xnormal
 xarmv7
 xobjective-c
 xcom.apple.compilers.llvmgcc42
-lSLF03#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection55"Precompile AirInAppPurchase/AirInAppPurchase-Prefix.pchd4ee277c785bb541^111c8b7c785bb541^---0#0#0#-19%DVTDocumentLocation2@108"file://localhost/Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase-Prefix.pch0000000000000000^2541"ProcessPCH /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-asbifjxhchwipaetjyxpkuywtbfu/AirInAppPurchase-Prefix.pch.gch AirInAppPurchase/AirInAppPurchase-Prefix.pch normal armv7 objective-c com.apple.compilers.llvmgcc42    cd /Users/titi/Projects/AirInAppPurchase/NativeIOS    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249@global/bin:/Users/titi/.rvm/rubies/ruby-1.8.7-p249/bin:/Users/titi/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/Users/titi/bin:/Users/titi/.gem/ruby/1.8/bin:/bin:/usr/local/Cellar/cloud-watch/1.0.2.3/jars/bin:/usr/local/Cellar/auto-scaling/1.0.33.1/jars/bin:/bin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x objective-c-header -arch armv7 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -Os -Wreturn-type -Wunused-variable -Wuninitialized -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk -gdwarf-2 -mthumb -miphoneos-version-min=4.0 -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-generated-files.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-own-target-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-all-target-headers.hmap -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-project-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/include -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources/armv7 -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources -F/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos -c /Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase-Prefix.pch -o /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-asbifjxhchwipaetjyxpkuywtbfu/AirInAppPurchase-Prefix.pch.gch
+lSLF05#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection55"Precompile AirInAppPurchase/AirInAppPurchase-Prefix.pch85ec8c2a59ccb641^05510f2b59ccb641^---0#0#0#-19%DVTDocumentLocation2@108"file://localhost/Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase-Prefix.pch0000000000000000^2954"ProcessPCH /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-fnnjotxgoewybjddozvgeqmrdzmj/AirInAppPurchase-Prefix.pch.gch AirInAppPurchase/AirInAppPurchase-Prefix.pch normal armv7 objective-c com.apple.compilers.llvmgcc42    cd /Users/titi/Projects/AirInAppPurchase/NativeIOS    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249@global/bin:/Users/titi/.rvm/rubies/ruby-1.8.7-p249/bin:/Users/titi/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/titi/bin:/Users/titi/.gem/ruby/1.8/bin:/bin:/usr/local/Cellar/cloud-watch/1.0.2.3/jars/bin:/usr/local/Cellar/auto-scaling/1.0.33.1/jars/bin:/bin:/Users/titi/gsutil"    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x objective-c-header -arch armv7 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -Os -Wreturn-type -Wunused-variable -Wuninitialized -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk -gdwarf-2 -mthumb -miphoneos-version-min=4.0 -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-generated-files.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-own-target-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-all-target-headers.hmap -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-project-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources/armv7 -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources -F/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos -c /Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase-Prefix.pch -o /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-fnnjotxgoewybjddozvgeqmrdzmj/AirInAppPurchase-Prefix.pch.gch36"9B6CC0C6-BE4D-4EAD-AAD9-AA7D510BB2E8-
 
-CProcessPCH /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-axqihzojdgmwridibabttxuhrwgv/AirInAppPurchase-Prefix.pch.gch AirInAppPurchase/AirInAppPurchase-Prefix.pch normal armv6 objective-c com.apple.compilers.llvmgcc42
-s358316156.155224
-e358316156.513273
+CProcessPCH /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-hgmtpnwlcgmonzbownhdyvofrafq/AirInAppPurchase-Prefix.pch.gch AirInAppPurchase/AirInAppPurchase-Prefix.pch normal armv7s objective-c com.apple.compilers.llvmgcc42
+s382490922.549363
+e382490923.027059
 r1
 xProcessPCH
-x/var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-axqihzojdgmwridibabttxuhrwgv/AirInAppPurchase-Prefix.pch.gch
+x/var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-hgmtpnwlcgmonzbownhdyvofrafq/AirInAppPurchase-Prefix.pch.gch
 xAirInAppPurchase/AirInAppPurchase-Prefix.pch
 xnormal
-xarmv6
+xarmv7s
 xobjective-c
 xcom.apple.compilers.llvmgcc42
-lSLF03#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection55"Precompile AirInAppPurchase/AirInAppPurchase-Prefix.pch78f0277c785bb541^9163837c785bb541^---0#0#0#-19%DVTDocumentLocation2@108"file://localhost/Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase-Prefix.pch0000000000000000^2541"ProcessPCH /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-axqihzojdgmwridibabttxuhrwgv/AirInAppPurchase-Prefix.pch.gch AirInAppPurchase/AirInAppPurchase-Prefix.pch normal armv6 objective-c com.apple.compilers.llvmgcc42    cd /Users/titi/Projects/AirInAppPurchase/NativeIOS    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249@global/bin:/Users/titi/.rvm/rubies/ruby-1.8.7-p249/bin:/Users/titi/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/Users/titi/bin:/Users/titi/.gem/ruby/1.8/bin:/bin:/usr/local/Cellar/cloud-watch/1.0.2.3/jars/bin:/usr/local/Cellar/auto-scaling/1.0.33.1/jars/bin:/bin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x objective-c-header -arch armv6 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -Os -Wreturn-type -Wunused-variable -Wuninitialized -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk -gdwarf-2 -mthumb -miphoneos-version-min=4.0 -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-generated-files.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-own-target-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-all-target-headers.hmap -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-project-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/include -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources/armv6 -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources -F/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos -c /Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase-Prefix.pch -o /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-axqihzojdgmwridibabttxuhrwgv/AirInAppPurchase-Prefix.pch.gch
+lSLF05#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection55"Precompile AirInAppPurchase/AirInAppPurchase-Prefix.pch85ec8c2a59ccb641^24ed062b59ccb641^---0#0#0#-19%DVTDocumentLocation2@108"file://localhost/Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase-Prefix.pch0000000000000000^2957"ProcessPCH /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-hgmtpnwlcgmonzbownhdyvofrafq/AirInAppPurchase-Prefix.pch.gch AirInAppPurchase/AirInAppPurchase-Prefix.pch normal armv7s objective-c com.apple.compilers.llvmgcc42    cd /Users/titi/Projects/AirInAppPurchase/NativeIOS    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249/bin:/Users/titi/.rvm/gems/ruby-1.8.7-p249@global/bin:/Users/titi/.rvm/rubies/ruby-1.8.7-p249/bin:/Users/titi/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/titi/bin:/Users/titi/.gem/ruby/1.8/bin:/bin:/usr/local/Cellar/cloud-watch/1.0.2.3/jars/bin:/usr/local/Cellar/auto-scaling/1.0.33.1/jars/bin:/bin:/Users/titi/gsutil"    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x objective-c-header -arch armv7s -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -Os -Wreturn-type -Wunused-variable -Wuninitialized -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk -gdwarf-2 -mthumb -miphoneos-version-min=4.0 -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-generated-files.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-own-target-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-all-target-headers.hmap -iquote /Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/AirInAppPurchase-project-headers.hmap -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources/armv7s -I/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/AirInAppPurchase.build/Release-iphoneos/AirInAppPurchase.build/DerivedSources -F/Users/titi/Projects/AirInAppPurchase/NativeIOS/build/Release-iphoneos -c /Users/titi/Projects/AirInAppPurchase/NativeIOS/AirInAppPurchase/AirInAppPurchase-Prefix.pch -o /var/folders/5k/z80853k16hn_mm7cjjznwfjc0000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/AirInAppPurchase-Prefix-hgmtpnwlcgmonzbownhdyvofrafq/AirInAppPurchase-Prefix.pch.gch36"1926CC61-F3FB-4A07-90C7-1DDF10EB50BA-
 

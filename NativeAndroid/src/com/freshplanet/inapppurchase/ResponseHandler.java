@@ -74,11 +74,18 @@ public class ResponseHandler {
      * {@link BillingService#checkBillingSupported()}.
      * @param supported true if in-app billing is supported.
      */
-    public static void checkBillingSupportedResponse(boolean supported) {
+    public static void checkBillingSupportedResponse(boolean supported, String type) {
 
-    	Log.d(TAG, "supported "+Boolean.toString(supported));
+    	if (type != null)
+    	{
+        	Log.d(TAG, "supported "+Boolean.toString(supported));
+
+    	} else
+    	{
+        	Log.d(TAG, "supported "+Boolean.toString(supported)+" for type"+type);
+    	}
         if (sPurchaseObserver != null) {
-            sPurchaseObserver.onBillingSupported(supported);
+            sPurchaseObserver.onBillingSupported(supported, type);
         }
     }
 

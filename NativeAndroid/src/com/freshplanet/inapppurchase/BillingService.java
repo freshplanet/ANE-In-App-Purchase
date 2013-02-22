@@ -51,7 +51,11 @@ import com.freshplanet.inapppurchase.Consts.ResponseCode;
  * You should modify and obfuscate this code before using it.
  */
 public class BillingService extends Service implements ServiceConnection {
-    private static final String TAG = "BillingService";
+    
+	public static final String ITEM_TYPE_INAPP = "inapp";
+	public static final String ITEM_TYPE_SUBSCRIPTION = "subs";
+	
+	private static final String TAG = "BillingService";
 
     /** The service connection to the remote MarketBillingService. */
     private static IMarketBillingService mService;
@@ -102,9 +106,19 @@ public class BillingService extends Service implements ServiceConnection {
 
             if (bindToMarketBillingService()) {
                 // Add a pending request to run when the service is connected.
+                if (Consts.DEBUG) {
+                    Log.d(TAG, "appending request");
+                }
+
                 mPendingRequests.add(this);
                 return true;
             }
+            
+            if (Consts.DEBUG) {
+                Log.d(TAG, "error when making the request");
+            }
+
+            
             return false;
         }
 
@@ -166,7 +180,7 @@ public class BillingService extends Service implements ServiceConnection {
 
             Bundle request = new Bundle();
             request.putString(Consts.BILLING_REQUEST_METHOD, method);
-            request.putInt(Consts.BILLING_REQUEST_API_VERSION, 1);
+            request.putInt(Consts.BILLING_REQUEST_API_VERSION, 2);
             request.putString(Consts.BILLING_REQUEST_PACKAGE_NAME, getPackageName());
             return request;
         }
@@ -184,16 +198,27 @@ public class BillingService extends Service implements ServiceConnection {
      * Wrapper class that checks if in-app billing is supported.
      */
     class CheckBillingSupported extends BillingRequest {
-        public CheckBillingSupported() {
+        
+    	public String mProductType = null;
+    	public CheckBillingSupported() {
             // This object is never created as a side effect of starting this
             // service so we pass -1 as the startId to indicate that we should
             // not stop this service after executing this request.
             super(-1);
         }
 
+        public CheckBillingSupported(String type) {
+            super(-1);
+            mProductType = type;
+        }
+
+    	
         @Override
         protected long run() throws RemoteException {
             Bundle request = makeRequestBundle("CHECK_BILLING_SUPPORTED");
+            if (mProductType != null) {
+                request.putString(Consts.BILLING_REQUEST_ITEM_TYPE, mProductType);
+            }
             Bundle response = mService.sendBillingRequest(request);
             int responseCode = response.getInt(Consts.BILLING_RESPONSE_RESPONSE_CODE);
             if (Consts.DEBUG) {
@@ -201,7 +226,7 @@ public class BillingService extends Service implements ServiceConnection {
                         ResponseCode.valueOf(responseCode));
             }
             boolean billingSupported = (responseCode == ResponseCode.RESULT_OK.ordinal());
-            ResponseHandler.checkBillingSupportedResponse(billingSupported);
+            ResponseHandler.checkBillingSupportedResponse(billingSupported, mProductType);
             return Consts.BILLING_RESPONSE_INVALID_REQUEST_ID;
         }
     }
@@ -212,7 +237,8 @@ public class BillingService extends Service implements ServiceConnection {
     class RequestPurchase extends BillingRequest {
         public final String mProductId;
         public final String mDeveloperPayload;
-
+        public final String mProductType;
+        
         public RequestPurchase(String itemId) {
             this(itemId, null);
         }
@@ -224,14 +250,32 @@ public class BillingService extends Service implements ServiceConnection {
             super(-1);
             mProductId = itemId;
             mDeveloperPayload = developerPayload;
+            mProductType = null;
         }
 
+        
+        public RequestPurchase(String itemId, String productType, String developerPayload) {
+            // This object is never created as a side effect of starting this
+            // service so we pass -1 as the startId to indicate that we should
+            // not stop this service after executing this request.
+            super(-1);
+            mProductId = itemId;
+            mProductType = productType;
+            mDeveloperPayload = developerPayload;
+        }
+
+        
+        
         @Override
         protected long run() throws RemoteException {
         	Log.d(TAG, "RequestPurchase response");
 
             Bundle request = makeRequestBundle("REQUEST_PURCHASE");
             request.putString(Consts.BILLING_REQUEST_ITEM_ID, mProductId);
+            if (mProductType != null) {
+            	request.putString(Consts.BILLING_REQUEST_ITEM_TYPE, mProductType);
+            }
+            
             // Note that the developer payload is optional.
             if (mDeveloperPayload != null) {
                 request.putString(Consts.BILLING_REQUEST_DEVELOPER_PAYLOAD, mDeveloperPayload);
@@ -418,7 +462,7 @@ public class BillingService extends Service implements ServiceConnection {
     private boolean bindToMarketBillingService() {
         try {
             if (Consts.DEBUG) {
-                Log.i(TAG, "binding to Market billing service");
+                Log.i(TAG, "binding to Market billing service todo");
             }
             boolean bindResult = bindService(
                     new Intent(Consts.MARKET_BILLING_SERVICE_ACTION),
@@ -426,6 +470,9 @@ public class BillingService extends Service implements ServiceConnection {
                     Context.BIND_AUTO_CREATE);
 
             if (bindResult) {
+                if (Consts.DEBUG) {
+                    Log.i(TAG, "Bind successfull");
+                }
                 return true;
             } else {
                 Log.e(TAG, "Could not bind to service.");
@@ -436,12 +483,22 @@ public class BillingService extends Service implements ServiceConnection {
         return false;
     }
 
+    
     /**
      * Checks if in-app billing is supported.
      * @return true if supported; false otherwise
      */
     public boolean checkBillingSupported() {
         return new CheckBillingSupported().runRequest();
+    }
+    
+    /**
+     * Checks if in-app billing is supported.
+     * @param type Billing Type checking (in app or subscriptions)
+     * @return true if supported; false otherwise
+     */
+    public boolean checkBillingSupported(String type) {
+        return new CheckBillingSupported(type).runRequest();
     }
 
     /**
@@ -457,6 +514,11 @@ public class BillingService extends Service implements ServiceConnection {
     public boolean requestPurchase(String productId, String developerPayload) {
         return new RequestPurchase(productId, developerPayload).runRequest();
     }
+    
+    public boolean requestPurchase(String productId, String productType, String developerPayload) {
+        return new RequestPurchase(productId, productType, developerPayload).runRequest();
+    }
+
 
     /**
      * Requests transaction information for all managed items. Call this only when the
@@ -510,7 +572,7 @@ public class BillingService extends Service implements ServiceConnection {
      */
     private void purchaseStateChanged(int startId, String signedData, String signature) {
         
-    	Log.e("BillingService", "purchaseStateChanged "+signedData+" . "+signature);
+    	Log.e(TAG, "purchaseStateChanged "+signedData+" . "+signature);
     	
         JSONObject jsonObject = new JSONObject();
         try {

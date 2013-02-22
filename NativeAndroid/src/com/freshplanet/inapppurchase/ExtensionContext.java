@@ -32,7 +32,7 @@ public class ExtensionContext extends FREContext {
 	private static String TAG = "InAppExtensionContext";
 
 	public ExtensionContext() {
-		Log.d(TAG, "ExtensionContext.C2DMExtensionContext");
+		Log.d(TAG, "ExtensionContext.create");
 	}
 	
 	@Override
@@ -52,6 +52,9 @@ public class ExtensionContext extends FREContext {
 		functionMap.put("makePurchase", new MakePurchaseFunction());
 		functionMap.put("userCanMakeAPurchase", new UserCanMakeAPurchaseFunction());
 		functionMap.put("removePurchaseFromQueue", new RemovePurchaseFromQueuePurchase());
+		functionMap.put("userCanMakeASubscription", new UserCanMakeASubscriptionFunction());
+		functionMap.put("makeSubscription", new MakeSubscriptionFunction());
+		functionMap.put("restoreTransaction", new RestoreTransactionFunction());
 		return functionMap;	
 	}
 

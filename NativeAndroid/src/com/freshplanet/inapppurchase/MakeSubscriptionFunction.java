@@ -28,10 +28,10 @@ import com.adobe.fre.FREObject;
 import com.adobe.fre.FRETypeMismatchException;
 import com.adobe.fre.FREWrongThreadException;
 
-public class MakePurchaseFunction implements FREFunction {
+public class MakeSubscriptionFunction implements FREFunction {
 
-    private static final String TAG = "MakePurchase";
-	
+    private static final String TAG = "MakeSubscription";
+
 	@Override
 	public FREObject call(FREContext arg0, FREObject[] arg1) {
 		
@@ -63,10 +63,10 @@ public class MakePurchaseFunction implements FREFunction {
 		
 		if (purchaseId != null)
 		{
-			service.requestPurchase(purchaseId, null);
+			service.requestPurchase(purchaseId, BillingService.ITEM_TYPE_SUBSCRIPTION, null);
 		}
 		
-		return null;
+		return null;	
 	}
 
 }

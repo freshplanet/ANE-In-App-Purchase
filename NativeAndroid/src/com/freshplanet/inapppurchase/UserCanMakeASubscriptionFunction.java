@@ -19,54 +19,25 @@
 package com.freshplanet.inapppurchase;
 
 import android.os.Handler;
-import android.util.Log;
 
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
-import com.adobe.fre.FREInvalidObjectException;
 import com.adobe.fre.FREObject;
-import com.adobe.fre.FRETypeMismatchException;
-import com.adobe.fre.FREWrongThreadException;
 
-public class MakePurchaseFunction implements FREFunction {
+public class UserCanMakeASubscriptionFunction implements FREFunction {
 
-    private static final String TAG = "MakePurchase";
-	
 	@Override
 	public FREObject call(FREContext arg0, FREObject[] arg1) {
 		
-		Log.d(TAG, "v2.6");
-		
-		String purchaseId = null;
-		try {
-			purchaseId = arg1[0].getAsString();
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		} catch (FRETypeMismatchException e) {
-			e.printStackTrace();
-		} catch (FREInvalidObjectException e) {
-			e.printStackTrace();
-		} catch (FREWrongThreadException e) {
-			e.printStackTrace();
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		Log.d(TAG, "purchase id : "+purchaseId);
-		
-		// start a service.
 		BillingService service = new BillingService();
 		service.setContext(arg0.getActivity());
 		
 		// register a cash purchase observer for ui.
 		ResponseHandler.register( new CashPurchaseObserver(new Handler()));
-		
-		if (purchaseId != null)
-		{
-			service.requestPurchase(purchaseId, null);
-		}
-		
+
+		service.checkBillingSupported(BillingService.ITEM_TYPE_SUBSCRIPTION);
 		return null;
+		
 	}
 
 }

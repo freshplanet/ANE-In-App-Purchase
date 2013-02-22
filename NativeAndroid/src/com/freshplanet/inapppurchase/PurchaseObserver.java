@@ -63,7 +63,7 @@ public abstract class PurchaseObserver {
      * {@link BillingService#checkBillingSupported()} request.
      * @param supported true if in-app billing is supported.
      */
-    public abstract void onBillingSupported(boolean supported);
+    public abstract void onBillingSupported(boolean supported, String type);
 
     /**
      * This is the callback that is invoked when an item is purchased,
