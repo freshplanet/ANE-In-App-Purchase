@@ -75,9 +75,9 @@ public class CashPurchaseObserver extends PurchaseObserver {
 	@Override
 	public void onRequestPurchaseResponse(RequestPurchase request,
 			ResponseCode responseCode) {
-		Log.d(TAG, "onRequestPurchaseResponse");
+		Log.d(TAG, "onRequestPurchaseResponse:"+responseCode.toString());
 		
-		if (responseCode != Consts.ResponseCode.RESULT_OK && responseCode != Consts.ResponseCode.RESULT_USER_CANCELED)
+		if (responseCode != Consts.ResponseCode.RESULT_OK)
 		{
 			Extension.context.dispatchStatusEventAsync("PURCHASE_ERROR", responseCode.toString());
 		}
