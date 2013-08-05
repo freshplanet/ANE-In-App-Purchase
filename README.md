@@ -1,14 +1,13 @@
-AirInAppPurchase
-================
+Air Native Extension for In App Purchases (iOS + Android)
+======================================
 
-AirInAppPurchase is an ADOBE AIR Native Extension (ANE) to purchase virtual items.
-It works both for iOS and Android devices.
-It uses Apple In App Purchase for iOS devices and Google Play for Android ones.
+This is an [Air native extension](http://www.adobe.com/devnet/air/native-extensions-for-air.html) for In App Purchases on iOS and Android. It has been developed by [FreshPlanet](http://freshplanet.com) and is used in the game [SongPop](http://songpop.fm).
+
 
 Installation
-------------
-The ANE is already compiled. You can find it under the folder Binaries. 
-If you want to recompile it, just run ant in the same directory, after changing the parameters (called properties) in build.xml.
+---------
+
+The ANE binary (InAppPurchase.ane) is located in the *bin* folder. You should add it to your application project's Build Path and make sure to package it with your app (more information [here](http://help.adobe.com/en_US/air/build/WS597e5dadb9cc1e0253f7d2fc1311b491071-8000.html)).
 
 On Android:
 
@@ -42,10 +41,19 @@ On Android:
     ``` 
 
 
-IOS Compilation
----------------
 
-The iOS library has been compiled using the sdk iOS 4.3 and deployment target set to iOS 4.0, using GCC 4.2.
-This ANE has NOT been tested with an sdk version superior to iOS 4.3.
+Build script
+---------
 
-It is distributed under Apache 2.0 license.
+Should you need to edit the extension source code and/or recompile it, you will find an ant build script (build.xml) in the *build* folder:
+
+    cd /path/to/the/ane/build
+    mv example.build.config build.config
+    #edit the build.config file to provide your machine-specific paths
+    ant
+
+
+Authors
+------
+
+This ANE has been written by [Thibaut Crenn](https://github.com/titi-us). It belongs to [FreshPlanet Inc.](http://freshplanet.com) and is distributed under the [Apache Licence, version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
