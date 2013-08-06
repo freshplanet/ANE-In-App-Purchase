@@ -48,6 +48,7 @@ public class ExtensionContext extends FREContext {
 	public Map<String, FREFunction> getFunctions() {
 		Log.d(TAG, "ExtensionContext.getFunctions");
 		Map<String, FREFunction> functionMap = new HashMap<String, FREFunction>();
+		functionMap.put("init", new InitFunction());
 		functionMap.put("getProductsInfo", new GetProductsInfoFunction());
 		functionMap.put("makePurchase", new MakePurchaseFunction());
 		functionMap.put("userCanMakeAPurchase", new UserCanMakeAPurchaseFunction());

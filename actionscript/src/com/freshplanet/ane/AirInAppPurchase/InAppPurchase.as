@@ -61,7 +61,10 @@ package com.freshplanet.ane.AirInAppPurchase
 		
 		public function init():void
 		{
-			extCtx.call("init");
+			if (this.isInAppPurchaseSupported)
+			{
+				extCtx.call("init");
+			}
 		}
 		
 		public function makePurchase(productId:String ):void
