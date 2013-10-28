@@ -183,7 +183,7 @@ package com.freshplanet.ane.AirInAppPurchase
 					e = new InAppPurchaseEvent(InAppPurchaseEvent.PRODUCT_INFO_RECEIVED, event.level);
 					break;
 				case "PRODUCT_INFO_ERROR":
-					e = new InAppPurchaseEvent(InAppPurchaseEvent.PRODUCT_INFO_ERROR);
+					e = new InAppPurchaseEvent(InAppPurchaseEvent.PRODUCT_INFO_ERROR, event.level);
 					break;
 				default:
 				
