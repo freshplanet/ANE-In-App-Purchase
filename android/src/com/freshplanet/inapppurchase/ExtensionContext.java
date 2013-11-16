@@ -16,47 +16,108 @@
 //  
 //////////////////////////////////////////////////////////////////////////////////////
 
-
 package com.freshplanet.inapppurchase;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import android.util.Log;
-
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
+import com.freshplanet.inapppurchase.functions.GetProductsInfoFunction;
+import com.freshplanet.inapppurchase.functions.InitFunction;
+import com.freshplanet.inapppurchase.functions.MakePurchaseFunction;
+import com.freshplanet.inapppurchase.functions.MakeSubscriptionFunction;
+import com.freshplanet.inapppurchase.functions.RemovePurchaseFromQueuePurchase;
+import com.freshplanet.inapppurchase.functions.RestoreTransactionFunction;
+import com.freshplanet.inapppurchase.utils.IabHelper;
+import com.freshplanet.inapppurchase.utils.IabResult;
+import com.freshplanet.inapppurchase.utils.Inventory;
+import com.freshplanet.inapppurchase.utils.Purchase;
 
-public class ExtensionContext extends FREContext {
-
-	private static String TAG = "InAppExtensionContext";
-
-	public ExtensionContext() {
-		Log.d(TAG, "ExtensionContext.create");
-	}
+public class ExtensionContext extends FREContext implements IabHelper.OnIabSetupFinishedListener,
+						   			  						IabHelper.OnConsumeFinishedListener,
+						   			  						IabHelper.QueryInventoryFinishedListener
+{
+	public ExtensionContext() {}
 	
 	@Override
-	public void dispose() {
-		Log.d(TAG, "ExtensionContext.dispose");
+	public void dispose()
+	{
 		Extension.context = null;
 	}
 
-	/**
-	 * Registers AS function name to Java Function Class
-	 */
 	@Override
-	public Map<String, FREFunction> getFunctions() {
-		Log.d(TAG, "ExtensionContext.getFunctions");
+	public Map<String, FREFunction> getFunctions()
+	{
 		Map<String, FREFunction> functionMap = new HashMap<String, FREFunction>();
-		functionMap.put("init", new InitFunction());
+		
+		functionMap.put("initLib", new InitFunction());
 		functionMap.put("getProductsInfo", new GetProductsInfoFunction());
 		functionMap.put("makePurchase", new MakePurchaseFunction());
-		functionMap.put("userCanMakeAPurchase", new UserCanMakeAPurchaseFunction());
-		functionMap.put("removePurchaseFromQueue", new RemovePurchaseFromQueuePurchase());
-		functionMap.put("userCanMakeASubscription", new UserCanMakeASubscriptionFunction());
-		functionMap.put("makeSubscription", new MakeSubscriptionFunction());
 		functionMap.put("restoreTransaction", new RestoreTransactionFunction());
+		functionMap.put("removePurchaseFromQueue", new RemovePurchaseFromQueuePurchase());
+		functionMap.put("makeSubscription", new MakeSubscriptionFunction());
+		
 		return functionMap;	
 	}
-
+	
+	private IabHelper _iabHelper;
+	
+	public IabHelper getIabHelper()
+	{
+		return _iabHelper;
+	}
+	
+	public void setupIab(String key, Boolean debug)
+	{
+		Extension.log("Initializing IAB Helper with Key: " + key);
+		
+		if (_iabHelper != null)
+		{
+			_iabHelper.dispose();
+		}
+		
+		_iabHelper = new IabHelper(getActivity(), key);
+		_iabHelper.enableDebugLogging(debug);
+		_iabHelper.startSetup(this);
+	}
+	
+	public void onIabSetupFinished(IabResult result)
+    {
+    	if (result.isSuccess())
+    	{
+    		Extension.log("Initialized IAB Helper successfully");
+        }
+    	else
+    	{
+    		Extension.log("Failed to initialize IAB Helper: " + result.getMessage());
+    	}
+    }
+	
+	public void onConsumeFinished(Purchase purchase, IabResult result)
+	{
+		if (result.isSuccess())
+		{
+			Extension.log("Successfully consumed: " + purchase);
+		}
+		else
+		{
+			Extension.log("Failed to consume: " + purchase + ". Error: " + result.getMessage());
+		}
+    }
+	
+	public void onQueryInventoryFinished(IabResult result, Inventory inventory)
+	{	
+		if (result.isSuccess())
+		{
+			Extension.log("Query inventory successful: " + inventory);
+			String data = inventory != null ? inventory.toString() : "";
+	        dispatchStatusEventAsync("RESTORE_INFO_RECEIVED", data) ;
+		}
+		else
+		{
+			Extension.log("Failed to query inventory: " + result.getMessage());
+			dispatchStatusEventAsync("PRODUCT_INFO_ERROR", "ERROR");
+		}
+    }
 }

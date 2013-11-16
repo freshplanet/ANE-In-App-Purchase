@@ -16,26 +16,33 @@
 //  
 //////////////////////////////////////////////////////////////////////////////////////-->
 
-<extension xmlns="http://ns.adobe.com/air/extension/3.1">
-  <id>com.freshplanet.AirInAppPurchase</id>
-  <versionNumber>1</versionNumber>
-  <platforms>
-    <platform name="iPhone-ARM">
-            <applicationDeployment>
-                <nativeLibrary>libAirInAppPurchase.a</nativeLibrary>
-                <initializer>AirInAppInitializer</initializer> 
-            </applicationDeployment>
-    </platform>
-    <platform name="Android-ARM"> 
-        <applicationDeployment> 
-            <nativeLibrary>libAirInAppPurchase.jar</nativeLibrary> 
-            <initializer>com.freshplanet.inapppurchase.Extension</initializer> 
-            <finalizer>com.freshplanet.inapppurchase.Extension</finalizer> 
-        </applicationDeployment> 
-    </platform> 
+<extension xmlns="http://ns.adobe.com/air/extension/3.9">
+
+    <id>com.freshplanet.AirInAppPurchase</id>
+
+    <versionNumber>2.0.0</versionNumber>
+
+    <platforms>
+
+        <platform name="iPhone-ARM">
+                <applicationDeployment>
+                    <nativeLibrary>libAirInAppPurchase.a</nativeLibrary>
+                    <initializer>AirInAppInitializer</initializer> 
+                </applicationDeployment>
+        </platform>
+
+        <platform name="Android-ARM"> 
+            <applicationDeployment> 
+                <nativeLibrary>libAirInAppPurchase.jar</nativeLibrary> 
+                <initializer>com.freshplanet.inapppurchase.Extension</initializer> 
+                <finalizer>com.freshplanet.inapppurchase.Extension</finalizer> 
+            </applicationDeployment> 
+        </platform> 
+
+        <platform name="default"> 
+            <applicationDeployment/> 
+        </platform> 
+
+    </platforms>
     
-    <platform name="default"> 
-        <applicationDeployment/> 
-    </platform> 
-  </platforms>
 </extension>

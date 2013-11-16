@@ -16,7 +16,7 @@
 //  
 //////////////////////////////////////////////////////////////////////////////////////
 
-package com.freshplanet.inapppurchase;
+package com.freshplanet.inapppurchase.utils;
 
 import java.security.SecureRandom;
 import java.util.HashSet;

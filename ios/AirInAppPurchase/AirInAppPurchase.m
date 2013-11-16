@@ -148,13 +148,13 @@ void *AirInAppRefToSelf;
     [data setValue:[[transaction error] localizedDescription] forKey:@"FailureDescription"];
     [data setValue:[[transaction error] localizedRecoverySuggestion] forKey:@"RecoverySuggestion"];
     
-    
+    NSString *error = transaction.error.code == SKErrorPaymentCancelled ? @"RESULT_USER_CANCELED" : [data JSONString];
     
     // conclude the transaction
     [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
     
     // dispatch event
-    FREDispatchStatusEventAsync(AirInAppCtx, (uint8_t*)"PURCHASE_ERROR", (uint8_t*) [[data JSONString] UTF8String]); 
+    FREDispatchStatusEventAsync(AirInAppCtx, (uint8_t*)"PURCHASE_ERROR", (uint8_t*) [error UTF8String]);
     
 }
 
@@ -393,7 +393,7 @@ void AirInAppContextInitializer(void* extData, const uint8_t* ctxType, FREContex
     
     FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * nbFuntionsToLink);
     
-    func[0].name = (const uint8_t*) "init";
+    func[0].name = (const uint8_t*) "initLib";
     func[0].functionData = NULL;
     func[0].function = &AirInAppPurchaseInit;
     

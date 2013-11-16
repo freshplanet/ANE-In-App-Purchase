@@ -59,11 +59,12 @@ package com.freshplanet.ane.AirInAppPurchase
 		}
 		
 		
-		public function init():void
+		public function init(googlePlayKey:String, debug:Boolean = false):void
 		{
 			if (this.isInAppPurchaseSupported)
 			{
-				extCtx.call("init");
+				trace("[InAppPurchase] init library");
+				extCtx.call("initLib", googlePlayKey, debug);
 			}
 		}
 		
@@ -86,17 +87,33 @@ package com.freshplanet.ane.AirInAppPurchase
 			{
 				trace("[InAppPurchase] removing product from queue", productId, receipt);
 				extCtx.call("removePurchaseFromQueue", productId, receipt);
+				
+				if (Capabilities.manufacturer.indexOf("iOS") > -1)
+				{
+					_iosPendingPurchases = _iosPendingPurchases.filter(function(jsonPurchase:String, index:int, purchases:Vector.<Object>):Boolean {
+						try
+						{
+							var purchase:Object = JSON.parse(jsonPurchase);
+							return JSON.stringify(purchase.receipt) != receipt;
+						} 
+						catch(error:Error)
+						{
+							trace("[InAppPurchase] Couldn't parse purchase: " + jsonPurchase);
+						}
+						return false;
+					});
+				}
 			}
 		}
 		
 		
 		
-		public function getProductsInfo(productsId:Array):void
+		public function getProductsInfo(productsId:Array, subscriptionIds:Array):void
 		{
 			if (this.isInAppPurchaseSupported)
 			{
 				trace("[InAppPurchase] get Products Info");
-				extCtx.call("getProductsInfo", productsId);
+				extCtx.call("getProductsInfo", productsId, subscriptionIds);
 			} else
 			{
 				this.dispatchEvent( new InAppPurchaseEvent(InAppPurchaseEvent.PRODUCT_INFO_ERROR) );
@@ -146,8 +163,23 @@ package com.freshplanet.ane.AirInAppPurchase
 		{
 			if (Capabilities.manufacturer.indexOf('Android') > -1)
 			{
-				trace("[InAppPurchase] restoring transactions");
 				extCtx.call("restoreTransaction");
+			}
+			else if (Capabilities.manufacturer.indexOf("iOS") > -1)
+			{
+				var jsonPurchases:String = "[" + _iosPendingPurchases.join(",") + "]";
+				var jsonData:String = "{ \"purchases\": " + jsonPurchases + "}";
+				dispatchEvent(new InAppPurchaseEvent(InAppPurchaseEvent.RESTORE_INFO_RECEIVED, jsonData));
+			}
+		}
+
+
+		public function stop():void
+		{
+			if (Capabilities.manufacturer.indexOf('Android') > -1)
+			{
+				trace("[InAppPurchase] stop library");
+				extCtx.call("stopLib");
 			}
 		}
 
@@ -159,7 +191,7 @@ package com.freshplanet.ane.AirInAppPurchase
 			return value;
 		}
 		
-		
+		private var _iosPendingPurchases:Vector.<Object> = new Vector.<Object>();
 		
 		private function onStatus(event:StatusEvent):void
 		{
@@ -167,7 +199,14 @@ package com.freshplanet.ane.AirInAppPurchase
 			var e:InAppPurchaseEvent;
 			switch(event.code)
 			{
+				case "PRODUCT_INFO_RECEIVED":
+					e = new InAppPurchaseEvent(InAppPurchaseEvent.PRODUCT_INFO_RECEIVED, event.level);
+					break;
 				case "PURCHASE_SUCCESSFUL":
+					if (Capabilities.manufacturer.indexOf("iOS") > -1)
+					{
+						_iosPendingPurchases.push(event.level);
+					}
 					e = new InAppPurchaseEvent(InAppPurchaseEvent.PURCHASE_SUCCESSFULL, event.level);
 					break;
 				case "PURCHASE_ERROR":
@@ -179,11 +218,17 @@ package com.freshplanet.ane.AirInAppPurchase
 				case "PURCHASE_DISABLED":
 					e = new InAppPurchaseEvent(InAppPurchaseEvent.PURCHASE_DISABLED, event.level);
 					break;
-				case "PRODUCT_INFO_SUCCESS":
-					e = new InAppPurchaseEvent(InAppPurchaseEvent.PRODUCT_INFO_RECEIVED, event.level);
-					break;
 				case "PRODUCT_INFO_ERROR":
 					e = new InAppPurchaseEvent(InAppPurchaseEvent.PRODUCT_INFO_ERROR);
+					break;
+				case "SUBSCRIPTION_ENABLED":
+					e = new InAppPurchaseEvent(InAppPurchaseEvent.SUBSCRIPTION_ENABLED);
+					break;
+				case "SUBSCRIPTION_DISABLED":
+					e = new InAppPurchaseEvent(InAppPurchaseEvent.SUBSCRIPTION_DISABLED);
+					break;
+				case "RESTORE_INFO_RECEIVED":
+					e = new InAppPurchaseEvent(InAppPurchaseEvent.RESTORE_INFO_RECEIVED, event.level);
 					break;
 				default:
 				

@@ -16,27 +16,37 @@
 //  
 //////////////////////////////////////////////////////////////////////////////////////
 
-package com.freshplanet.inapppurchase;
+package com.freshplanet.inapppurchase.functions;
 
-import android.os.Handler;
+import android.content.Intent;
 
 import com.adobe.fre.FREContext;
-import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
+import com.freshplanet.inapppurchase.Extension;
+import com.freshplanet.inapppurchase.activities.BillingActivity;
 
-public class UserCanMakeAPurchaseFunction implements FREFunction {
-
+public class MakeSubscriptionFunction extends BaseFunction
+{
 	@Override
-	public FREObject call(FREContext arg0, FREObject[] arg1) {
+	public FREObject call(FREContext context, FREObject[] args)
+	{
+		super.call(context, args);
 		
-		BillingService service = new BillingService();
-		service.setContext(arg0.getActivity());
+		String purchaseId = getStringFromFREObject(args[0]);
+		if (purchaseId == null)
+		{
+			Extension.log("Can't make subscription with null purchaseId");
+			Extension.context.dispatchStatusEventAsync("PURCHASE_ERROR", "ERROR");
+			return null;
+		}
 		
-		// register a cash purchase observer for ui.
-		ResponseHandler.register( new CashPurchaseObserver(new Handler()));
-
-		service.checkBillingSupported();
-		return null;
+		Extension.log("Making subscription with ID: " + purchaseId);
+		
+		Intent i = new Intent(context.getActivity().getApplicationContext(), BillingActivity.class);
+		i.putExtra("type", BillingActivity.MAKE_SUBSCRIPTION);
+		i.putExtra("purchaseId", purchaseId);
+		context.getActivity().startActivity(i);
+		
+		return null;	
 	}
-
 }

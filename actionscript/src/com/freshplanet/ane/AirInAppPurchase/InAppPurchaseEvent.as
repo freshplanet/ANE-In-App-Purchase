@@ -32,10 +32,17 @@ package com.freshplanet.ane.AirInAppPurchase
 		// user cannot make a purchase
 		public static const PURCHASE_DISABLED:String = "purchaseDisabled";
 		
+		// user can make a subscription
+		public static const SUBSCRIPTION_ENABLED:String = "subsEnabled";
+		// user cannot make a subscription
+		public static const SUBSCRIPTION_DISABLED:String = "subsDisabled";
+
+		
+		
 		public static const PRODUCT_INFO_RECEIVED:String = "productInfoReceived";
 		public static const PRODUCT_INFO_ERROR:String = "productInfoError";
 
-		
+		public static const RESTORE_INFO_RECEIVED:String = "restoreInfoReceived";
 		
 		// json encoded string (if any)
 		public var data:String;

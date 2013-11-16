@@ -16,21 +16,37 @@
 //  
 //////////////////////////////////////////////////////////////////////////////////////
 
-package com.freshplanet.inapppurchase;
+package com.freshplanet.inapppurchase.functions;
+
+import android.content.Intent;
 
 import com.adobe.fre.FREContext;
-import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
+import com.freshplanet.inapppurchase.Extension;
+import com.freshplanet.inapppurchase.activities.BillingActivity;
 
-public class GetProductsInfoFunction implements FREFunction {
-
+public class MakePurchaseFunction extends BaseFunction
+{
 	@Override
-	public FREObject call(FREContext arg0, FREObject[] arg1) {
-		// TODO Auto-generated method stub
+	public FREObject call(FREContext context, FREObject[] args)
+	{	
+		super.call(context, args);
 		
-		arg0.dispatchStatusEventAsync("PRODUCT_INFO_ERROR", "not supported by android");
+		String purchaseId = getStringFromFREObject(args[0]);
+		if (purchaseId == null)
+		{
+			Extension.log("Can't make purchase with null purchaseId");
+			Extension.context.dispatchStatusEventAsync("PURCHASE_ERROR", "ERROR");
+			return null;
+		}
 		
+		Extension.log("Making purchase with ID: " + purchaseId);
+		
+		Intent i = new Intent(context.getActivity().getApplicationContext(), BillingActivity.class);
+		i.putExtra("type", BillingActivity.MAKE_PURCHASE);
+		i.putExtra("purchaseId", purchaseId);
+		context.getActivity().startActivity(i);
+
 		return null;
 	}
-
 }

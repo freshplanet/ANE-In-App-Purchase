@@ -34,7 +34,13 @@
         <delete dir="../android/temp"/>
         <mkdir dir="../android/temp/classes"/>
 
-        <javac srcdir="../android/src;../android/gen" destdir="../android/temp/classes" includeantruntime="false">
+        <exec executable="${android.sdk}/../../platform-tools/aidl" failonerror="true" dir="../android/">
+        	<arg line="-p${android.sdk}/framework.aidl"/>
+        	<arg line="-o./gen"/>
+        	<arg line="./src/com/android/vending/billing/IInAppBillingService.aidl"/>
+        </exec>
+
+        <javac source="1.6" srcdir="../android/src;../android/gen" destdir="../android/temp/classes" includeantruntime="false">
             <classpath>
                 <pathelement location="${android.sdk}/android.jar"/>
                 <pathelement location="${flex.sdk}/lib/android/FlashRuntimeExtensions.jar"/>
