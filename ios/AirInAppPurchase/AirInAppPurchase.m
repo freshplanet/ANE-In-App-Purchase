@@ -204,7 +204,7 @@ void *AirInAppRefToSelf;
                 break;
             case SKPaymentTransactionStateRestored:
                 FREDispatchStatusEventAsync(AirInAppCtx, (uint8_t*)"TRANSACTION_RESTORED",
-                                            (uint8_t*)[[[transaction error] localizedDescription] UTF8String]);
+                                            (uint8_t*)[[transaction transactionIdentifier] UTF8String]);
 
                 [self restoreTransaction:transaction];
                 break;
