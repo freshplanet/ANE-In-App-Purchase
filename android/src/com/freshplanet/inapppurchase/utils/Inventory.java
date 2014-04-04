@@ -108,7 +108,7 @@ public class Inventory {
        JSONObject detailsObject = new JSONObject();
        for (SkuDetails s : mSkuMap.values()) {
     	   try {
-    		   detailsObject.put(s.getSku(), s.getJson());
+    		   detailsObject.put(s.getSku(), new JSONObject(s.getJson()));
     	   } catch (JSONException e) {
     		   e.printStackTrace();
     	   }
