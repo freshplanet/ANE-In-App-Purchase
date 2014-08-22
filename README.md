@@ -26,11 +26,7 @@ On Android:
     <manifestAdditions><![CDATA[
         <manifest android:installLocation="auto">
             
-            <uses-permission android:name="com.android.vending.BILLING" />
-            
-            <application>
-                <service android:name="com.freshplanet.inapppurchase.BillingService" />
-            </application>
+            <activity android:name="com.freshplanet.inapppurchase.activities.BillingActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"></activity>
 
         </manifest>
     ]]></manifestAdditions>
