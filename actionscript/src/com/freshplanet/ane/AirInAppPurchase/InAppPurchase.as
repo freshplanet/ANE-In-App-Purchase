@@ -199,7 +199,7 @@ package com.freshplanet.ane.AirInAppPurchase
 			var e:InAppPurchaseEvent;
 			switch(event.code)
 			{
-				case "PRODUCT_INFO_RECEIVED":
+				case "PRODUCT_INFO_SUCCESS":
 					e = new InAppPurchaseEvent(InAppPurchaseEvent.PRODUCT_INFO_RECEIVED, event.level);
 					break;
 				case "PURCHASE_SUCCESSFUL":
