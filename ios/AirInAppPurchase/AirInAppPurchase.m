@@ -88,7 +88,7 @@ void *AirInAppRefToSelf;
     
     NSString* jsonDictionary = [dictionary JSONString];
     
-    FREDispatchStatusEventAsync(AirInAppCtx ,(uint8_t*) "PRODUCT_INFO_SUCCESS", (uint8_t*) [jsonDictionary UTF8String] );
+    FREDispatchStatusEventAsync(AirInAppCtx ,(uint8_t*) "PRODUCT_INFO_RECEIVED", (uint8_t*) [jsonDictionary UTF8String] );
     
     if ([response invalidProductIdentifiers] != nil && [[response invalidProductIdentifiers] count] > 0)
     {
