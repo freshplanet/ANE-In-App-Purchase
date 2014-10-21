@@ -22,8 +22,12 @@ package com.freshplanet.ane.AirInAppPurchase
 	
 	public class InAppPurchaseEvent extends Event
 	{
-		
-		// init -> check if previously purchases not being processed by the app
+        // on Android the init() call is completed async, and no other calls to the ane should be made before one of these signals are received.
+        // on iOS the success event is always emitted.
+        public static const INIT_SUCCESSFULL:String = "initSuccesfull";
+        public static const INIT_ERROR:String = "initError";
+
+        // init -> check if previously purchases not being processed by the app
 		public static const PURCHASE_SUCCESSFULL:String = "purchaseSuccesfull";
 		public static const PURCHASE_ERROR:String   	= "purchaseError";
 		

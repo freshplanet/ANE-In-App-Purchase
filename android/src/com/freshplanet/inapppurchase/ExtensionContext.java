@@ -62,37 +62,54 @@ public class ExtensionContext extends FREContext implements IabHelper.OnIabSetup
 	}
 	
 	private IabHelper _iabHelper;
-	
+
+	private String _publicKey;
+	private Boolean _debugEnabled;
+
 	public IabHelper getIabHelper()
 	{
 		return _iabHelper;
 	}
-	
+
+	public String getPublicKey()
+	{
+		return _publicKey;
+	}
+
+	public Boolean getDebugEnabled()
+	{
+		return _debugEnabled;
+	}
+
 	public void setupIab(String key, Boolean debug)
 	{
 		Extension.log("Initializing IAB Helper with Key: " + key);
-		
+
+		_publicKey = key;
+		_debugEnabled = debug;
+
 		if (_iabHelper != null)
 		{
 			_iabHelper.dispose();
 		}
-		
-		_iabHelper = new IabHelper(getActivity(), key);
-		_iabHelper.enableDebugLogging(debug);
+
+		_iabHelper = new IabHelper(getActivity(), _publicKey);
+		_iabHelper.enableDebugLogging(_debugEnabled);
 		_iabHelper.startSetup(this);
 	}
-	
+
 	public void onIabSetupFinished(IabResult result)
-    {
-    	if (result.isSuccess())
-    	{
-    		Extension.log("Initialized IAB Helper successfully");
-        }
-    	else
-    	{
-    		Extension.log("Failed to initialize IAB Helper: " + result.getMessage());
-    	}
-    }
+	{
+		if (result.isSuccess())
+		{
+			Extension.log("Initialized IAB Helper successfully");
+			dispatchStatusEventAsync("INIT_SUCCESSFULL", "");
+		} else
+		{
+			Extension.log("Failed to initialize IAB Helper: " + result.getMessage());
+			dispatchStatusEventAsync("INIT_ERROR", result.getMessage());
+		}
+	}
 	
 	public void onConsumeFinished(Purchase purchase, IabResult result)
 	{
@@ -107,17 +124,16 @@ public class ExtensionContext extends FREContext implements IabHelper.OnIabSetup
     }
 	
 	public void onQueryInventoryFinished(IabResult result, Inventory inventory)
-	{	
+	{
 		if (result.isSuccess())
 		{
 			Extension.log("Query inventory successful: " + inventory);
 			String data = inventory != null ? inventory.toString() : "";
-	        dispatchStatusEventAsync("RESTORE_INFO_RECEIVED", data) ;
-		}
-		else
+			dispatchStatusEventAsync("RESTORE_INFO_RECEIVED", data);
+		} else
 		{
 			Extension.log("Failed to query inventory: " + result.getMessage());
 			dispatchStatusEventAsync("PRODUCT_INFO_ERROR", "ERROR");
 		}
-    }
+	}
 }

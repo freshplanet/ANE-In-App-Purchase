@@ -61,9 +61,8 @@ public class GetProductsInfoFunction extends BaseFunction
 		super.call(context, args);
 		
 		List<String> skusName = getListOfStringFromFREArray((FREArray)args[0]);
-		List<String> skusSubsName = getListOfStringFromFREArray((FREArray)args[1]);
-		
-		Extension.context.getIabHelper().queryInventoryAsync(true , skusName, skusSubsName, listener);
+
+		Extension.context.getIabHelper().queryInventoryAsync(true , skusName, listener);
 		
 		return null;
 	}

@@ -88,7 +88,7 @@ void *AirInAppRefToSelf;
     
     NSString* jsonDictionary = [dictionary JSONString];
     
-    FREDispatchStatusEventAsync(AirInAppCtx ,(uint8_t*) "PRODUCT_INFO_SUCCESS", (uint8_t*) [jsonDictionary UTF8String] );
+    FREDispatchStatusEventAsync(AirInAppCtx ,(uint8_t*) "PRODUCT_INFO_RECEIVED", (uint8_t*) [jsonDictionary UTF8String] );
     
     if ([response invalidProductIdentifiers] != nil && [[response invalidProductIdentifiers] count] > 0)
     {
@@ -108,7 +108,11 @@ void *AirInAppRefToSelf;
 // on product info error
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error
 {
-    FREDispatchStatusEventAsync(AirInAppCtx ,(uint8_t*) "DEBUG", (uint8_t*) [@"requestDidFailWithError" UTF8String] );
+    NSString *description = [error description];
+    if(description == nil)
+        description = @"";
+
+    FREDispatchStatusEventAsync(AirInAppCtx ,(uint8_t*) "PRODUCT_INFO_ERROR", (uint8_t*) [description UTF8String] );
 }
 
 
@@ -237,6 +241,7 @@ void *AirInAppRefToSelf;
 DEFINE_ANE_FUNCTION(AirInAppPurchaseInit)
 {
     [(AirInAppPurchase*)AirInAppRefToSelf registerObserver];
+    FREDispatchStatusEventAsync(AirInAppCtx, (uint8_t*)"INIT_SUCCESSFULL", "");
     
     return nil;
 }
