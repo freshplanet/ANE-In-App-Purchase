@@ -167,9 +167,12 @@ package com.freshplanet.ane.AirInAppPurchase
 			}
 			else if (Capabilities.manufacturer.indexOf("iOS") > -1)
 			{
-				var jsonPurchases:String = "[" + _iosPendingPurchases.join(",") + "]";
-				var jsonData:String = "{ \"purchases\": " + jsonPurchases + "}";
-				dispatchEvent(new InAppPurchaseEvent(InAppPurchaseEvent.RESTORE_INFO_RECEIVED, jsonData));
+				extCtx.call("restoreTransaction");
+				
+				//This restore purchases in memory not from appstore
+				//var jsonPurchases:String = "[" + _iosPendingPurchases.join(",") + "]";
+				//var jsonData:String = "{ \"purchases\": " + jsonPurchases + "}";
+				//dispatchEvent(new InAppPurchaseEvent(InAppPurchaseEvent.RESTORE_INFO_RECEIVED, jsonData));
 			}
 		}
 
