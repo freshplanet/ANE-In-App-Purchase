@@ -178,7 +178,8 @@ void *AirInAppRefToSelf;
     // transaction restored
     // dispatch event
     FREDispatchStatusEventAsync(AirInAppCtx, (uint8_t*)"TRANSACTION_RESTORED", (uint8_t*)             
-                                [[[transaction error] localizedDescription] UTF8String]
+                                //[[[transaction error] localizedDescription] UTF8String]
+                                [[[transaction payment] productIdentifier] UTF8String]
                                 ); 
     
     
