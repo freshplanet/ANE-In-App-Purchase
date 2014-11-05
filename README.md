@@ -24,7 +24,7 @@ On Android:
 
 
 
-
+<android>
 <manifestAdditions><![CDATA[<manifest android:installLocation="auto">
 
 	<uses-permission android:name="com.android.vending.BILLING" />
@@ -37,7 +37,8 @@ On Android:
 		/>
 		
 	</application>
-</manifest>]]>
+</manifest>]]></manifestAdditions>
+</android>
 
 
 ```
