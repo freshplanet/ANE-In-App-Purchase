@@ -80,9 +80,18 @@ void *AirInAppRefToSelf;
     for (SKProduct* product in [response products])
     {        
         
+        NSMutableDictionary *productDict = [[NSMutableDictionary alloc] init];
         [numberFormatter setLocale:product.priceLocale];
         formattedString = [numberFormatter stringFromNumber:product.price];
-        [dictionary setValue:formattedString forKey:[product productIdentifier]];
+        
+        [productDict setValue:product.localizedTitle forKey:@"title"];
+        [productDict setValue:product.localizedDescription forKey:@"description"];
+        [productDict setValue:formattedString forKey:@"price"];
+        
+        [productDict setValue:[product.priceLocale objectForKey:NSLocaleCurrencyCode] forKey:@"currencyCode"];
+        [productDict setValue:product.price forKey:@"localePrice"];
+        
+        [dictionary setValue:productDict forKey:[product productIdentifier]];
     }
     
     
