@@ -22,15 +22,25 @@ On Android:
 
 ```xml
 
-<android>
-    <manifestAdditions><![CDATA[
-        <manifest android:installLocation="auto">
-            
-            <activity android:name="com.freshplanet.inapppurchase.activities.BillingActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"></activity>
 
-        </manifest>
-    ]]></manifestAdditions>
+
+<android>
+<manifestAdditions><![CDATA[<manifest android:installLocation="auto">
+
+	<uses-permission android:name="com.android.vending.BILLING" />
+
+	<application android:enabled="true">
+
+		<activity android:name="com.freshplanet.inapppurchase.activities.BillingActivity" 
+			android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" 
+			android:background="#30000000"
+		/>
+		
+	</application>
+</manifest>]]></manifestAdditions>
 </android>
+
+
 ```
 
 

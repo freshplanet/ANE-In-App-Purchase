@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright 2012 Freshplanet (http://freshplanet.com | opensource@freshplanet.com)
 //  
@@ -95,7 +95,7 @@ package com.freshplanet.ane.AirInAppPurchase
 						{
 							var purchase:Object = JSON.parse(jsonPurchase);
 							return JSON.stringify(purchase.receipt) != receipt;
-						} 
+						}
 						catch(error:Error)
 						{
 							trace("[InAppPurchase] Couldn't parse purchase: " + jsonPurchase);
@@ -108,12 +108,12 @@ package com.freshplanet.ane.AirInAppPurchase
 		
 		
 		
-		public function getProductsInfo(productsId:Array, subscriptionIds:Array):void
+		public function getProductsInfo(productsId:Array):void
 		{
 			if (this.isInAppPurchaseSupported)
 			{
 				trace("[InAppPurchase] get Products Info");
-				extCtx.call("getProductsInfo", productsId, subscriptionIds);
+				extCtx.call("getProductsInfo", productsId);
 			} else
 			{
 				this.dispatchEvent( new InAppPurchaseEvent(InAppPurchaseEvent.PRODUCT_INFO_ERROR) );
@@ -159,7 +159,7 @@ package com.freshplanet.ane.AirInAppPurchase
 		}
 		
 		
-		public function restoreTransactions():void
+		public function restoreTransactions(fromStore:Boolean=false):void
 		{
 			if (Capabilities.manufacturer.indexOf('Android') > -1)
 			{
@@ -167,9 +167,13 @@ package com.freshplanet.ane.AirInAppPurchase
 			}
 			else if (Capabilities.manufacturer.indexOf("iOS") > -1)
 			{
-				var jsonPurchases:String = "[" + _iosPendingPurchases.join(",") + "]";
-				var jsonData:String = "{ \"purchases\": " + jsonPurchases + "}";
-				dispatchEvent(new InAppPurchaseEvent(InAppPurchaseEvent.RESTORE_INFO_RECEIVED, jsonData));
+				if(!fromStore){
+					var jsonPurchases:String = "[" + _iosPendingPurchases.join(",") + "]";
+					var jsonData:String = "{ \"purchases\": " + jsonPurchases + "}";
+					dispatchEvent(new InAppPurchaseEvent(InAppPurchaseEvent.RESTORE_INFO_RECEIVED, jsonData));
+				}else{
+					extCtx.call("restoreTransaction");
+				}
 			}
 		}
 
@@ -199,6 +203,12 @@ package com.freshplanet.ane.AirInAppPurchase
 			var e:InAppPurchaseEvent;
 			switch(event.code)
 			{
+				case "INIT_SUCCESSFULL":
+					e = new InAppPurchaseEvent(InAppPurchaseEvent.INIT_SUCCESSFULL);
+					break;
+				case "INIT_ERROR":
+					e = new InAppPurchaseEvent(InAppPurchaseEvent.INIT_ERROR, event.level);
+					break;
 				case "PRODUCT_INFO_RECEIVED":
 					e = new InAppPurchaseEvent(InAppPurchaseEvent.PRODUCT_INFO_RECEIVED, event.level);
 					break;
@@ -230,6 +240,15 @@ package com.freshplanet.ane.AirInAppPurchase
 				case "RESTORE_INFO_RECEIVED":
 					e = new InAppPurchaseEvent(InAppPurchaseEvent.RESTORE_INFO_RECEIVED, event.level);
 					break;
+	case "TRANSACTION_RESTORED":
+		e = new InAppPurchaseEvent(InAppPurchaseEvent.RESTORE_COMPLETED_TRANSACTIONS, event.level);
+		break;
+	case "TRANSACTION_RESTORE_FAILED":
+		e = new InAppPurchaseEvent(InAppPurchaseEvent.RESTORE_FAILED, event.level);
+		break;
+				
+				
+				
 				default:
 				
 			}

@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright 2012 Freshplanet (http://freshplanet.com | opensource@freshplanet.com)
 //  
@@ -22,8 +22,12 @@ package com.freshplanet.ane.AirInAppPurchase
 	
 	public class InAppPurchaseEvent extends Event
 	{
-		
-		// init -> check if previously purchases not being processed by the app
+        // on Android the init() call is completed async, and no other calls to the ane should be made before one of these signals are received.
+        // on iOS the success event is always emitted.
+        public static const INIT_SUCCESSFULL:String = "initSuccesfull";
+        public static const INIT_ERROR:String = "initError";
+
+        // init -> check if previously purchases not being processed by the app
 		public static const PURCHASE_SUCCESSFULL:String = "purchaseSuccesfull";
 		public static const PURCHASE_ERROR:String   	= "purchaseError";
 		
@@ -43,6 +47,9 @@ package com.freshplanet.ane.AirInAppPurchase
 		public static const PRODUCT_INFO_ERROR:String = "productInfoError";
 
 		public static const RESTORE_INFO_RECEIVED:String = "restoreInfoReceived";
+		
+public static const RESTORE_COMPLETED_TRANSACTIONS:String = "restoreCompletedTransactions";
+public static const RESTORE_FAILED:String = "restoreFailed";		
 		
 		// json encoded string (if any)
 		public var data:String;

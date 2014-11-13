@@ -80,15 +80,24 @@ void *AirInAppRefToSelf;
     for (SKProduct* product in [response products])
     {        
         
+        NSMutableDictionary *productDict = [[NSMutableDictionary alloc] init];
         [numberFormatter setLocale:product.priceLocale];
         formattedString = [numberFormatter stringFromNumber:product.price];
-        [dictionary setValue:formattedString forKey:[product productIdentifier]];
+        
+        [productDict setValue:product.localizedTitle forKey:@"title"];
+        [productDict setValue:product.localizedDescription forKey:@"description"];
+        [productDict setValue:formattedString forKey:@"price"];
+        
+        [productDict setValue:[product.priceLocale objectForKey:NSLocaleCurrencyCode] forKey:@"currencyCode"];
+        [productDict setValue:product.price forKey:@"localePrice"];
+        
+        [dictionary setValue:productDict forKey:[product productIdentifier]];
     }
     
     
     NSString* jsonDictionary = [dictionary JSONString];
     
-    FREDispatchStatusEventAsync(AirInAppCtx ,(uint8_t*) "PRODUCT_INFO_SUCCESS", (uint8_t*) [jsonDictionary UTF8String] );
+    FREDispatchStatusEventAsync(AirInAppCtx ,(uint8_t*) "PRODUCT_INFO_RECEIVED", (uint8_t*) [jsonDictionary UTF8String] );
     
     if ([response invalidProductIdentifiers] != nil && [[response invalidProductIdentifiers] count] > 0)
     {
@@ -108,7 +117,11 @@ void *AirInAppRefToSelf;
 // on product info error
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error
 {
-    FREDispatchStatusEventAsync(AirInAppCtx ,(uint8_t*) "DEBUG", (uint8_t*) [@"requestDidFailWithError" UTF8String] );
+    NSString *description = [error description];
+    if(description == nil)
+        description = @"";
+
+    FREDispatchStatusEventAsync(AirInAppCtx ,(uint8_t*) "PRODUCT_INFO_ERROR", (uint8_t*) [description UTF8String] );
 }
 
 
@@ -173,9 +186,12 @@ void *AirInAppRefToSelf;
 {
     // transaction restored
     // dispatch event
+    
+    /*tsangwailam remove it
     FREDispatchStatusEventAsync(AirInAppCtx, (uint8_t*)"TRANSACTION_RESTORED", (uint8_t*)             
-                                [[[transaction error] localizedDescription] UTF8String]
-                                ); 
+                                //[[[transaction error] localizedDescription] UTF8String]
+                                [[[transaction payment] productIdentifier] UTF8String]
+                                ); */
     
     
     // conclude the transaction
@@ -203,6 +219,9 @@ void *AirInAppRefToSelf;
                 [self purchasingTransaction:transaction];
                 break;
             case SKPaymentTransactionStateRestored:
+                FREDispatchStatusEventAsync(AirInAppCtx, (uint8_t*)"TRANSACTION_RESTORED",
+                                            // (uint8_t*)[[transaction transactionIdentifier] UTF8String]);
+                                               (uint8_t*) [[[transaction payment] productIdentifier] UTF8String]);
                 [self restoreTransaction:transaction];
                 break;
             default:
@@ -221,7 +240,8 @@ void *AirInAppRefToSelf;
 // restoring transaction failed.
 - (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error
 {
-    FREDispatchStatusEventAsync(AirInAppCtx, (uint8_t*)"DEBUG", (uint8_t*) [@"restoreFailed" UTF8String] ); 
+    FREDispatchStatusEventAsync(AirInAppCtx, (uint8_t*)"DEBUG", (uint8_t*) [@"restoreFailed" UTF8String] );
+    FREDispatchStatusEventAsync(AirInAppCtx, (uint8_t*)"TRANSACTION_RESTORE_FAILED", (uint8_t*)"restoreFailed");
 }
 
 // transaction has been removed.
@@ -237,6 +257,7 @@ void *AirInAppRefToSelf;
 DEFINE_ANE_FUNCTION(AirInAppPurchaseInit)
 {
     [(AirInAppPurchase*)AirInAppRefToSelf registerObserver];
+    FREDispatchStatusEventAsync(AirInAppCtx, (uint8_t*)"INIT_SUCCESSFULL", "");
     
     return nil;
 }
@@ -327,6 +348,19 @@ DEFINE_ANE_FUNCTION(getProductsInfo)
     return nil;
 }
 
+
+
+// restore purchase from queue.
+DEFINE_ANE_FUNCTION(restoreTransaction)
+{
+    
+    [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
+    
+    return nil;
+}
+
+
+
 // remove purchase from queue.
 DEFINE_ANE_FUNCTION(removePurchaseFromQueue)
 {
@@ -388,7 +422,7 @@ void AirInAppContextInitializer(void* extData, const uint8_t* ctxType, FREContex
                              uint32_t* numFunctionsToTest, const FRENamedFunction** functionsToSet) 
 {    
     // Register the links btwn AS3 and ObjC. (dont forget to modify the nbFuntionsToLink integer if you are adding/removing functions)
-    NSInteger nbFuntionsToLink = 5;
+    NSInteger nbFuntionsToLink = 6;
     *numFunctionsToTest = nbFuntionsToLink;
     
     FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * nbFuntionsToLink);
@@ -412,6 +446,10 @@ void AirInAppContextInitializer(void* extData, const uint8_t* ctxType, FREContex
     func[4].name = (const uint8_t*) "removePurchaseFromQueue";
     func[4].functionData = NULL;
     func[4].function = &removePurchaseFromQueue;
+    
+    func[5].name = (const uint8_t*) "restoreTransaction";
+    func[5].functionData = NULL;
+    func[5].function = &restoreTransaction;
     
     *functionsToSet = func;
     

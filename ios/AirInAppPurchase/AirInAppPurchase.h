@@ -35,3 +35,4 @@ FREObject makePurchase(FREContext context, void* functionData, uint32_t argc, FR
 FREObject userCanMakeAPurchase(FREContext context, void* functionData, uint32_t argc, FREObject argv[]);
 FREObject getProductsInfo(FREContext context, void* functionData, uint32_t argc, FREObject argv[]);
 FREObject removePurchaseFromQueue(FREContext context, void* functionData, uint32_t argc, FREObject argv[]);
+FREObject restoreTransaction(FREContext context, void* functionData, uint32_t argc, FREObject argv[]);
