@@ -34,7 +34,7 @@
         <delete dir="../android/temp"/>
         <mkdir dir="../android/temp/classes"/>
 
-        <exec executable="${android.sdk}/../../platform-tools/aidl" failonerror="true" dir="../android/">
+        <exec executable="${android.aidl}" failonerror="true" dir="../android/">
         	<arg line="-p${android.sdk}/framework.aidl"/>
         	<arg line="-o./gen"/>
         	<arg line="./src/com/android/vending/billing/IInAppBillingService.aidl"/>
