@@ -88,7 +88,7 @@ void *AirInAppRefToSelf;
     
     NSString* jsonDictionary = [dictionary JSONString];
     
-    FREDispatchStatusEventAsync(AirInAppCtx ,(uint8_t*) "PRODUCT_INFO_SUCCESS", (uint8_t*) [jsonDictionary UTF8String] );
+    FREDispatchStatusEventAsync(AirInAppCtx ,(uint8_t*) "PRODUCT_INFO_RECEIVED", (uint8_t*) [jsonDictionary UTF8String] );
     
     if ([response invalidProductIdentifiers] != nil && [[response invalidProductIdentifiers] count] > 0)
     {
@@ -173,9 +173,9 @@ void *AirInAppRefToSelf;
 {
     // transaction restored
     // dispatch event
-    FREDispatchStatusEventAsync(AirInAppCtx, (uint8_t*)"TRANSACTION_RESTORED", (uint8_t*)             
-                                [[[transaction error] localizedDescription] UTF8String]
-                                ); 
+//    FREDispatchStatusEventAsync(AirInAppCtx, (uint8_t*)"TRANSACTION_RESTORED", (uint8_t*)             
+//                                [[[transaction error] localizedDescription] UTF8String]
+//                                ); 
     
     
     // conclude the transaction
@@ -203,6 +203,9 @@ void *AirInAppRefToSelf;
                 [self purchasingTransaction:transaction];
                 break;
             case SKPaymentTransactionStateRestored:
+                FREDispatchStatusEventAsync(AirInAppCtx, (uint8_t*)"TRANSACTION_RESTORED",
+                                            (uint8_t*)[[transaction transactionIdentifier] UTF8String]);
+
                 [self restoreTransaction:transaction];
                 break;
             default:
@@ -215,13 +218,19 @@ void *AirInAppRefToSelf;
 // restoring transaction is done.
 - (void)paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue *)queue
 {
-    FREDispatchStatusEventAsync(AirInAppCtx, (uint8_t*)"DEBUG", (uint8_t*) [@"restoreCompletedTransactions" UTF8String] ); 
+    FREDispatchStatusEventAsync(AirInAppCtx, (uint8_t*)"DEBUG", (uint8_t*) [@"restoreCompletedTransactions" UTF8String] );
+    
+//    for ( SKPaymentTransaction* transaction in transactions)
+//    {
+//    }
+//    [self completeTransaction:]
 }
 
 // restoring transaction failed.
 - (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error
 {
-    FREDispatchStatusEventAsync(AirInAppCtx, (uint8_t*)"DEBUG", (uint8_t*) [@"restoreFailed" UTF8String] ); 
+    FREDispatchStatusEventAsync(AirInAppCtx, (uint8_t*)"DEBUG", (uint8_t*) [@"restoreFailed" UTF8String] );
+    FREDispatchStatusEventAsync(AirInAppCtx, (uint8_t*)"TRANSACTION_RESTORE_FAILED", (uint8_t*)"restoreFailed");
 }
 
 // transaction has been removed.
@@ -261,7 +270,7 @@ DEFINE_ANE_FUNCTION(makePurchase)
     FREDispatchStatusEventAsync(context, (uint8_t*) "DEBUG", (uint8_t*) [productIdentifier UTF8String]);
     
     SKPayment* payment = [SKPayment paymentWithProductIdentifier:productIdentifier];
-        
+
     FREDispatchStatusEventAsync(context, (uint8_t*) "DEBUG", (uint8_t*) [[payment productIdentifier] UTF8String]);
     
  //   [[SKPaymentQueue defaultQueue] removeTransactionObserver:self];
@@ -327,6 +336,15 @@ DEFINE_ANE_FUNCTION(getProductsInfo)
     return nil;
 }
 
+// restore purchase from queue.
+DEFINE_ANE_FUNCTION(restoreTransaction)
+{
+    
+    [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
+    
+    return nil;
+}
+
 // remove purchase from queue.
 DEFINE_ANE_FUNCTION(removePurchaseFromQueue)
 {
@@ -388,7 +406,7 @@ void AirInAppContextInitializer(void* extData, const uint8_t* ctxType, FREContex
                              uint32_t* numFunctionsToTest, const FRENamedFunction** functionsToSet) 
 {    
     // Register the links btwn AS3 and ObjC. (dont forget to modify the nbFuntionsToLink integer if you are adding/removing functions)
-    NSInteger nbFuntionsToLink = 5;
+    NSInteger nbFuntionsToLink = 6;
     *numFunctionsToTest = nbFuntionsToLink;
     
     FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * nbFuntionsToLink);
@@ -412,6 +430,10 @@ void AirInAppContextInitializer(void* extData, const uint8_t* ctxType, FREContex
     func[4].name = (const uint8_t*) "removePurchaseFromQueue";
     func[4].functionData = NULL;
     func[4].function = &removePurchaseFromQueue;
+
+    func[5].name = (const uint8_t*) "restoreTransaction";
+    func[5].functionData = NULL;
+    func[5].function = &restoreTransaction;
     
     *functionsToSet = func;
     

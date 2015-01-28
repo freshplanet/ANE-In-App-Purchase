@@ -10,29 +10,29 @@
 	<string>AirInAppPurchase</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>14A81C466A2EAA9826ACA73D78CDF18769CB3FFC</key>
-		<string>https://github.com/freshplanet/ANE-In-App-Purchase.git</string>
+		<key>9DA9F2D6-742D-49D2-BB7D-A7B8639E1CF8</key>
+		<string>ssh://github.com/freshplanet/ANE-In-App-Purchase.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>ios/AirInAppPurchase.xcodeproj</string>
+	<string>ios/AirInAppPurchase.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>14A81C466A2EAA9826ACA73D78CDF18769CB3FFC</key>
+		<key>9DA9F2D6-742D-49D2-BB7D-A7B8639E1CF8</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/freshplanet/ANE-In-App-Purchase.git</string>
+	<string>ssh://github.com/freshplanet/ANE-In-App-Purchase.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>111</integer>
+	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>14A81C466A2EAA9826ACA73D78CDF18769CB3FFC</string>
+	<string>9DA9F2D6-742D-49D2-BB7D-A7B8639E1CF8</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>14A81C466A2EAA9826ACA73D78CDF18769CB3FFC</string>
+			<string>9DA9F2D6-742D-49D2-BB7D-A7B8639E1CF8</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ANE-In-App-Purchase</string>
 		</dict>

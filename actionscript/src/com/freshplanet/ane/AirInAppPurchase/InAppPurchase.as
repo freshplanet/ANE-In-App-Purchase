@@ -167,9 +167,10 @@ package com.freshplanet.ane.AirInAppPurchase
 			}
 			else if (Capabilities.manufacturer.indexOf("iOS") > -1)
 			{
-				var jsonPurchases:String = "[" + _iosPendingPurchases.join(",") + "]";
-				var jsonData:String = "{ \"purchases\": " + jsonPurchases + "}";
-				dispatchEvent(new InAppPurchaseEvent(InAppPurchaseEvent.RESTORE_INFO_RECEIVED, jsonData));
+                extCtx.call("restoreTransaction");
+//				var jsonPurchases:String = "[" + _iosPendingPurchases.join(",") + "]";
+//				var jsonData:String = "{ \"purchases\": " + jsonPurchases + "}";
+//				dispatchEvent(new InAppPurchaseEvent(InAppPurchaseEvent.RESTORE_INFO_RECEIVED, jsonData));
 			}
 		}
 
@@ -230,6 +231,13 @@ package com.freshplanet.ane.AirInAppPurchase
 				case "RESTORE_INFO_RECEIVED":
 					e = new InAppPurchaseEvent(InAppPurchaseEvent.RESTORE_INFO_RECEIVED, event.level);
 					break;
+                case "TRANSACTION_RESTORED":
+                    e = new InAppPurchaseEvent(InAppPurchaseEvent.RESTORE_COMPLETED_TRANSACTIONS, event.level);
+                    break;
+                case "TRANSACTION_RESTORE_FAILED":
+                    e = new InAppPurchaseEvent(InAppPurchaseEvent.RESTORE_FAILED, event.level);
+                    break;
+
 				default:
 				
 			}
