@@ -26,7 +26,9 @@ On Android:
     <manifestAdditions><![CDATA[
         <manifest android:installLocation="auto">
             
-            <activity android:name="com.freshplanet.inapppurchase.activities.BillingActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"></activity>
+				<application>
+					<activity android:name="com.freshplanet.inapppurchase.activities.BillingActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"></activity>
+				</application>
 
         </manifest>
     ]]></manifestAdditions>
