@@ -9,52 +9,73 @@
 
     <!-- iOS -->
     <target name="ios" description="Build iOS Library">
-        <mkdir dir="../temp/ios/build/"/>
 
+        <!-- make the build directory for the objc code -->
+        <mkdir dir="temp/ios/build/"/>
+
+        <!-- clean the build -->
         <exec executable="xcodebuild" failonerror="true" dir="../ios/">
             <arg line="-project ${name}.xcodeproj"/>
             <arg line="-alltargets clean"/>
         </exec>
 
+        <!-- compile the ios lib -->
         <exec executable="xcodebuild" failonerror="true" dir="../ios/">
             <arg line="-project ${name}.xcodeproj"/>
-            <arg line="-sdk ${ios.sdkversion}"/>
+            <arg line="-sdk iphoneos"/>
             <arg line="-alltargets"/>
             <arg line="-configuration Release"/>
-            <arg line="SYMROOT=../temp/ios/build/"/>
+            <arg line="SYMROOT=../build/temp/ios/build/"/>
         </exec>
 
-        <copy file="../temp/ios/build/Release-iphoneos/lib${name}.a" todir="../temp/ios" overwrite="true"/>
+        <!-- copy the ios lib to the base temp ios directory -->
+        <copy file="temp/ios/build/Release-iphoneos/lib${name}.a" todir="temp/ios" overwrite="true"/>
 
-        <delete dir="../temp/ios/build/"/>
+        <!-- remove the build directory -->
+        <delete dir="temp/ios/build/"/>
     </target>
 
     <!-- Android -->
     <target name="android" description="Build Android Library">
-        <delete dir="../android/temp"/>
-        <mkdir dir="../android/temp/classes"/>
 
-        <exec executable="${android.aidl}" failonerror="true" dir="../android/">
-        	<arg line="-p${android.sdk}/framework.aidl"/>
-        	<arg line="-o./gen"/>
-        	<arg line="./src/com/android/vending/billing/IInAppBillingService.aidl"/>
+        <property name="android.platform.home" value="${android.sdk.home}/platforms/android-${android.platform}"/>
+        <property name="android.build.tools.path" value="${android.sdk.home}/build-tools/${android.build.tools.version}"/>
+
+        <!-- make the build directory for the java code -->
+        <mkdir dir="temp/android/build/"/>
+
+        <!-- compile the billing aidl -->
+        <exec executable="${android.build.tools.path}/aidl" failonerror="true" dir="../android/">
+            <arg line="-p${android.platform.home}/framework.aidl"/>
+            <arg line="-o./gen"/>
+            <arg line="./src/com/android/vending/billing/IInAppBillingService.aidl"/>
         </exec>
 
-        <javac source="1.6" srcdir="../android/src;../android/gen" destdir="../android/temp/classes" includeantruntime="false">
+        <!-- compile the java code -->
+        <javac destdir="temp/android/build/" source="1.6" target="1.6" includeantruntime="false" debug="${ANDROID_DEBUG}">
+            <src path="../android/src"/>
+            <src path="../android/gen"/>
             <classpath>
-                <pathelement location="${android.sdk}/android.jar"/>
-                <pathelement location="${flex.sdk}/lib/android/FlashRuntimeExtensions.jar"/>
+                <pathelement location="${android.platform.home}/android.jar"/>
+                <pathelement location="${air.sdk.home}/lib/android/FlashRuntimeExtensions.jar"/>
             </classpath>
         </javac>
 
-        <mkdir dir="../temp/android/"/>
-        <jar basedir="../android/temp/classes" destfile="../temp/android/lib${name}.jar"/>
-        <delete dir="../android/temp"/>
+        <!-- make the jar -->
+        <jar basedir="temp/android/build/" destfile="temp/android/lib${name}.jar"/>
+
+        <!-- remove the build classes -->
+        <delete dir="temp/android/build/"/>
+
+        <!-- Copy over the required libs -->
+
+        <!-- Copy over required resources -->
+
     </target>
 
     <!-- Actionscript -->
     <target name="swc" description="Build SWC library">
-        <mkdir dir="../temp/swc/content/"/>
+        <mkdir dir="temp/swc/content/"/>
 
         <fileset dir="../actionscript/src" casesensitive="yes" id="classfiles">
             <include name="**/*.as"/>
@@ -64,39 +85,39 @@
             <regexpmapper from=".*src.(.*)\.as" to="\1"/>
         </pathconvert>
 
-        <exec executable="${flex.sdk}/bin/compc${bin.ext}" failonerror="true">
-            <env key="AIR_SDK_HOME" value="${flex.sdk}"/>
+        <exec executable="${air.sdk.home}/bin/compc" failonerror="true">
+            <env key="AIR_SDK_HOME" value="${air.sdk.home}"/>
             <arg line='-source-path ../actionscript/src'/>
-            <arg line='-output ../temp/swc/${name}.swc'/>
-            <arg line='-swf-version=14'/>
-            <arg line='-external-library-path+="${flex.sdk}/frameworks/libs/air/airglobal.swc"'/>
+            <arg line='-output temp/swc/${name}.swc'/>
+            <arg line='-swf-version=25'/>
+            <arg line='-external-library-path+="${air.sdk.home}/frameworks/libs/air/airglobal.swc"'/>
             <arg line='-include-classes ${classlist}'/>
         </exec>
 
-        <unzip src="../temp/swc/${name}.swc" dest="../temp/swc/content" overwrite="true"/>
-        <copy file="../temp/swc/content/library.swf" todir="../temp/ios" overwrite="true"/>
-        <copy file="../temp/swc/content/library.swf" todir="../temp/android" overwrite="true"/>
-        <copy file="../temp/swc/content/library.swf" todir="../temp/default" overwrite="true"/>
-        <delete dir="../temp/swc/content/"/>
+        <unzip src="temp/swc/${name}.swc" dest="temp/swc/content" overwrite="true"/>
+
+        <copy file="temp/swc/content/library.swf" todir="temp/ios" overwrite="true"/>
+        <copy file="temp/swc/content/library.swf" todir="temp/ios-simulator" overwrite="true"/>
+        <copy file="temp/swc/content/library.swf" todir="temp/android" overwrite="true"/>
+        <copy file="temp/swc/content/library.swf" todir="temp/default" overwrite="true"/>
     </target>
 
     <!-- Package -->
     <target name="package" description="Create the extension package">
-        <exec executable="${flex.sdk}/bin/adt${bin.ext}" failonerror="true" dir="../temp">
-            <env key="AIR_SDK_HOME" value="${flex.sdk}"/>
+        <exec executable="${air.sdk.home}/bin/adt" failonerror="true" dir="temp/">
             <arg value="-package"/>
             <arg value="-target"/>
             <arg value="ane"/>
             <arg value="${name}.ane"/>
-            <arg value="../build/extension.xml"/>
+            <arg value="../extension.xml"/>
             <arg line="-swc swc/${name}.swc"/>
-            <arg line="-platform iPhone-ARM -platformoptions ../build/platform.xml -C ios/ ."/>
-            <arg line="-platform Android-ARM -C android/ ."/>
+            <arg line="-platform iPhone-ARM -platformoptions ../platform-ios.xml -C ios/ . "/>
+            <arg line="-platform Android-ARM -platformoptions ../platform-android.xml -C android/ ."/>
             <arg line="-platform default -C default/ ."/>
         </exec>
 
-        <move file="../temp/${name}.ane" todir="../bin"/>
-        <delete dir="../temp"/>
+        <move file="temp/${name}.ane" todir="../bin"/>
+        <delete dir="temp"/>
     </target>
 
 </project>
