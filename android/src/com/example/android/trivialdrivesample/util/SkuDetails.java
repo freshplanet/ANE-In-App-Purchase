@@ -50,6 +50,7 @@ public class SkuDetails {
     public String getPrice() { return mPrice; }
     public String getTitle() { return mTitle; }
     public String getDescription() { return mDescription; }
+    public String getJson() { return mJson; }
 
     @Override
     public String toString() {
