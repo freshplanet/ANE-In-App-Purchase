@@ -561,7 +561,7 @@ public class IabHelper {
                 }
 
                 if (querySkuDetails) {
-                    r = querySkuDetails(ITEM_TYPE_SUBS, inv, moreItemSkus);
+                    r = querySkuDetails(ITEM_TYPE_SUBS, inv, moreSubsSkus);
                     if (r != BILLING_RESPONSE_RESULT_OK) {
                         throw new IabException(r, "Error refreshing inventory (querying prices of subscriptions).");
                     }
@@ -604,6 +604,7 @@ public class IabHelper {
      */
     public void queryInventoryAsync(final boolean querySkuDetails,
                                final List<String> moreSkus,
+                               final List<String> moreSubSkus,
                                final QueryInventoryFinishedListener listener) {
         final Handler handler = new Handler();
         checkNotDisposed();
@@ -614,7 +615,7 @@ public class IabHelper {
                 IabResult result = new IabResult(BILLING_RESPONSE_RESULT_OK, "Inventory refresh successful.");
                 Inventory inv = null;
                 try {
-                    inv = queryInventory(querySkuDetails, moreSkus);
+                    inv = queryInventory(querySkuDetails, moreSkus, moreSubSkus);
                 }
                 catch (IabException ex) {
                     result = ex.getResult();
@@ -636,11 +637,11 @@ public class IabHelper {
     }
 
     public void queryInventoryAsync(QueryInventoryFinishedListener listener) {
-        queryInventoryAsync(true, null, listener);
+        queryInventoryAsync(true, null, null, listener);
     }
 
     public void queryInventoryAsync(boolean querySkuDetails, QueryInventoryFinishedListener listener) {
-        queryInventoryAsync(querySkuDetails, null, listener);
+        queryInventoryAsync(querySkuDetails, null, null, listener);
     }
 
 
