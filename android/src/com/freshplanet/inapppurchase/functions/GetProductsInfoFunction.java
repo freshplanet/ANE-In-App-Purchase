@@ -24,9 +24,9 @@ import com.adobe.fre.FREArray;
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREObject;
 import com.freshplanet.inapppurchase.Extension;
-import com.freshplanet.inapppurchase.utils.IabHelper;
-import com.freshplanet.inapppurchase.utils.IabResult;
-import com.freshplanet.inapppurchase.utils.Inventory;
+import com.example.android.trivialdrivesample.util.IabHelper;
+import com.example.android.trivialdrivesample.util.IabResult;
+import com.example.android.trivialdrivesample.util.Inventory;
 
 public class GetProductsInfoFunction extends BaseFunction
 {

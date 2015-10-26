@@ -8,9 +8,9 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.freshplanet.inapppurchase.Extension;
-import com.freshplanet.inapppurchase.utils.IabHelper;
-import com.freshplanet.inapppurchase.utils.IabResult;
-import com.freshplanet.inapppurchase.utils.Purchase;
+import com.example.android.trivialdrivesample.util.IabHelper;
+import com.example.android.trivialdrivesample.util.IabResult;
+import com.example.android.trivialdrivesample.util.Purchase;
 
 public class BillingActivity extends Activity implements IabHelper.OnIabPurchaseFinishedListener
 {

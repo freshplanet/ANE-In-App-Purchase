@@ -16,21 +16,16 @@
 //  
 //////////////////////////////////////////////////////////////////////////////////////-->
 
-<extension xmlns="http://ns.adobe.com/air/extension/3.9">
-
+<extension xmlns="http://ns.adobe.com/air/extension/17.0">
     <id>com.freshplanet.AirInAppPurchase</id>
-
     <versionNumber>2.0.0</versionNumber>
-
     <platforms>
-
         <platform name="iPhone-ARM">
                 <applicationDeployment>
                     <nativeLibrary>libAirInAppPurchase.a</nativeLibrary>
                     <initializer>AirInAppInitializer</initializer> 
                 </applicationDeployment>
         </platform>
-
         <platform name="Android-ARM"> 
             <applicationDeployment> 
                 <nativeLibrary>libAirInAppPurchase.jar</nativeLibrary> 
@@ -38,11 +33,8 @@
                 <finalizer>com.freshplanet.inapppurchase.Extension</finalizer> 
             </applicationDeployment> 
         </platform> 
-
         <platform name="default"> 
             <applicationDeployment/> 
         </platform> 
-
     </platforms>
-    
 </extension>

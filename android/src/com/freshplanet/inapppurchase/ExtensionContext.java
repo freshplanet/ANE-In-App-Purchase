@@ -29,10 +29,10 @@ import com.freshplanet.inapppurchase.functions.MakePurchaseFunction;
 import com.freshplanet.inapppurchase.functions.MakeSubscriptionFunction;
 import com.freshplanet.inapppurchase.functions.RemovePurchaseFromQueuePurchase;
 import com.freshplanet.inapppurchase.functions.RestoreTransactionFunction;
-import com.freshplanet.inapppurchase.utils.IabHelper;
-import com.freshplanet.inapppurchase.utils.IabResult;
-import com.freshplanet.inapppurchase.utils.Inventory;
-import com.freshplanet.inapppurchase.utils.Purchase;
+import com.example.android.trivialdrivesample.util.IabHelper;
+import com.example.android.trivialdrivesample.util.IabResult;
+import com.example.android.trivialdrivesample.util.Inventory;
+import com.example.android.trivialdrivesample.util.Purchase;
 
 public class ExtensionContext extends FREContext implements IabHelper.OnIabSetupFinishedListener,
 						   			  						IabHelper.OnConsumeFinishedListener,
