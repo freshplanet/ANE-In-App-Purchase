@@ -31,3 +31,4 @@ Thumbs.db
 # intellij
 .idea
 *.iml
+out

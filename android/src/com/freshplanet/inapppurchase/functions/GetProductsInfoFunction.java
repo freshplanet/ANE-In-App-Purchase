@@ -28,43 +28,41 @@ import com.example.android.trivialdrivesample.util.IabHelper;
 import com.example.android.trivialdrivesample.util.IabResult;
 import com.example.android.trivialdrivesample.util.Inventory;
 
-public class GetProductsInfoFunction extends BaseFunction
-{
-    IabHelper.QueryInventoryFinishedListener listener = new IabHelper.QueryInventoryFinishedListener()
-    {
-        public void onQueryInventoryFinished(IabResult result, Inventory inventory)
-        {
-        	if (Extension.context == null)
-    		{
-    			Extension.log("Extension context is null");
-    			return;
-    		}
-        	
-        	if (result.isSuccess())
-    		{
-    			Extension.log("Query inventory successful");
-    			
-    			String data = inventory != null ? inventory.toString() : "";
-    	        Extension.context.dispatchStatusEventAsync("PRODUCT_INFO_RECEIVED", data) ;
-    		}
-    		else
-    		{
-    			Extension.log("Failed to query inventory: " + result.getMessage());
-    			Extension.context.dispatchStatusEventAsync("PRODUCT_INFO_ERROR", "ERROR");
-    		}
-        }
-    };
+public class GetProductsInfoFunction extends BaseFunction implements IabHelper.QueryInventoryFinishedListener {
 
 	@Override
-	public FREObject call(FREContext context, FREObject[] args)
-	{
+	public FREObject call(FREContext context, FREObject[] args) {
+
 		super.call(context, args);
 		
 		List<String> skusName = getListOfStringFromFREArray((FREArray)args[0]);
 		List<String> skusSubsName = getListOfStringFromFREArray((FREArray)args[1]);
 		
-		Extension.context.getIabHelper().queryInventoryAsync(true , skusName, skusSubsName, listener);
+		Extension.context.getIabHelper().queryInventoryAsync(true, skusName, skusSubsName, this);
 		
 		return null;
 	}
+
+    @Override
+    public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+
+        if (Extension.context == null) {
+
+            Extension.log("Extension context is null");
+            return;
+        }
+
+        if (result.isSuccess()) {
+
+            Extension.log("Successful query for inventory");
+
+            String data = inventory != null ? inventory.toString() : "";
+            Extension.context.dispatchStatusEventAsync("PRODUCT_INFO_RECEIVED", data);
+        }
+        else {
+
+            Extension.log("Failed query for inventory: " + result.getMessage());
+            Extension.context.dispatchStatusEventAsync("PRODUCT_INFO_ERROR", result.getMessage());
+        }
+    }
 }

@@ -18,6 +18,8 @@
 
 package com.freshplanet.inapppurchase.functions;
 
+import com.example.android.trivialdrivesample.util.IabResult;
+import com.freshplanet.inapppurchase.activities.BillingActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,11 +29,11 @@ import com.freshplanet.inapppurchase.Extension;
 import com.example.android.trivialdrivesample.util.IabHelper;
 import com.example.android.trivialdrivesample.util.Purchase;
 
-public class RemovePurchaseFromQueuePurchase extends BaseFunction
-{
+public class RemovePurchaseFromQueuePurchase extends BaseFunction implements IabHelper.OnConsumeFinishedListener {
+
 	@Override
-	public FREObject call(FREContext context, FREObject[] args)
-	{
+	public FREObject call(FREContext context, FREObject[] args) {
+
 		super.call(context, args);
 		
 		String receipt = getStringFromFREObject(args[1]);
@@ -39,33 +41,54 @@ public class RemovePurchaseFromQueuePurchase extends BaseFunction
 		Extension.log("Consuming purchase with receipt: " + receipt);
 		
 		String signedData = null;
-		try
-		{ 
-			signedData = (new JSONObject(receipt)).getString("signedData");
+
+		try {
+
+            JSONObject receiptJson = new JSONObject(receipt);
+			signedData = receiptJson.getString("signedData");
 		}
-		catch (JSONException e)
-		{
+		catch (JSONException e) {
+
 			e.printStackTrace();
+            Extension.context.dispatchStatusEventAsync("CONSUME_ERROR", "JSONException");
 		}
 		
-		if (signedData == null)
-		{
+		if (signedData == null) {
+
 			Extension.log("Can't consume purchase with null signedData");
+            Extension.context.dispatchStatusEventAsync("CONSUME_ERROR", "null signedData");
 			return null;
 		}
 		
 		Extension.log("Consuming purchase with signedData: " + signedData);
 		
-		try
-		{
-			Purchase p = new Purchase(IabHelper.ITEM_TYPE_INAPP , signedData, null);
-			Extension.context.getIabHelper().consumeAsync(p, Extension.context);
+		try {
+
+			Purchase purchase = new Purchase(IabHelper.ITEM_TYPE_INAPP, signedData, null);
+			Extension.context.getIabHelper().consumeAsync(purchase, this);
 		}
-		catch (JSONException e)
-		{
+		catch (JSONException e) {
+
 			e.printStackTrace();
+            Extension.context.dispatchStatusEventAsync("CONSUME_ERROR", "JSONException");
 		}
 		
 		return null;
 	}
+
+    @Override
+    public void onConsumeFinished(Purchase purchase, IabResult result) {
+
+        if (result.isSuccess()) {
+
+            Extension.log("Successfully consumed: " + purchase);
+            String resultString = BillingActivity.purchaseToResultString(purchase);
+            Extension.context.dispatchStatusEventAsync("CONSUME_SUCCESSFUL", resultString);
+        }
+        else {
+
+            Extension.log("Failed to consume: " + purchase + ". Error: " + result.getMessage());
+            Extension.context.dispatchStatusEventAsync("CONSUME_ERROR", result.getMessage());
+        }
+    }
 }

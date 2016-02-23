@@ -31,24 +31,23 @@ import com.freshplanet.inapppurchase.functions.RemovePurchaseFromQueuePurchase;
 import com.freshplanet.inapppurchase.functions.RestoreTransactionFunction;
 import com.example.android.trivialdrivesample.util.IabHelper;
 import com.example.android.trivialdrivesample.util.IabResult;
-import com.example.android.trivialdrivesample.util.Inventory;
-import com.example.android.trivialdrivesample.util.Purchase;
 
-public class ExtensionContext extends FREContext implements IabHelper.OnIabSetupFinishedListener,
-						   			  						IabHelper.OnConsumeFinishedListener,
-						   			  						IabHelper.QueryInventoryFinishedListener
-{
-	public ExtensionContext() {}
-	
+public class ExtensionContext extends FREContext implements IabHelper.OnIabSetupFinishedListener {
+
+    private IabHelper _iabHelper;
+
+	public ExtensionContext() {
+
+    }
+
 	@Override
-	public void dispose()
-	{
+	public void dispose() {
 		Extension.context = null;
 	}
 
 	@Override
-	public Map<String, FREFunction> getFunctions()
-	{
+	public Map<String, FREFunction> getFunctions() {
+
 		Map<String, FREFunction> functionMap = new HashMap<String, FREFunction>();
 		
 		functionMap.put("initLib", new InitFunction());
@@ -60,64 +59,28 @@ public class ExtensionContext extends FREContext implements IabHelper.OnIabSetup
 		
 		return functionMap;	
 	}
-	
-	private IabHelper _iabHelper;
-	
-	public IabHelper getIabHelper()
-	{
+
+	public IabHelper getIabHelper() {
 		return _iabHelper;
 	}
 	
-	public void setupIab(String key, Boolean debug)
-	{
+	public void setupIab(String key, Boolean debug) {
+
 		Extension.log("Initializing IAB Helper with Key: " + key);
-		
+
 		if (_iabHelper != null)
-		{
 			_iabHelper.dispose();
-		}
-		
+
 		_iabHelper = new IabHelper(getActivity(), key);
 		_iabHelper.enableDebugLogging(debug);
 		_iabHelper.startSetup(this);
 	}
 	
-	public void onIabSetupFinished(IabResult result)
-    {
+	public void onIabSetupFinished(IabResult result) {
+
     	if (result.isSuccess())
-    	{
     		Extension.log("Initialized IAB Helper successfully");
-        }
     	else
-    	{
     		Extension.log("Failed to initialize IAB Helper: " + result.getMessage());
-    	}
-    }
-	
-	public void onConsumeFinished(Purchase purchase, IabResult result)
-	{
-		if (result.isSuccess())
-		{
-			Extension.log("Successfully consumed: " + purchase);
-		}
-		else
-		{
-			Extension.log("Failed to consume: " + purchase + ". Error: " + result.getMessage());
-		}
-    }
-	
-	public void onQueryInventoryFinished(IabResult result, Inventory inventory)
-	{	
-		if (result.isSuccess())
-		{
-			Extension.log("Query inventory successful: " + inventory);
-			String data = inventory != null ? inventory.toString() : "";
-	        dispatchStatusEventAsync("RESTORE_INFO_RECEIVED", data) ;
-		}
-		else
-		{
-			Extension.log("Failed to query inventory: " + result.getMessage());
-			dispatchStatusEventAsync("PRODUCT_INFO_ERROR", "ERROR");
-		}
     }
 }

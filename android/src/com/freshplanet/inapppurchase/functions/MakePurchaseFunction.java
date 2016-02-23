@@ -25,18 +25,19 @@ import com.adobe.fre.FREObject;
 import com.freshplanet.inapppurchase.Extension;
 import com.freshplanet.inapppurchase.activities.BillingActivity;
 
-public class MakePurchaseFunction extends BaseFunction
-{
+public class MakePurchaseFunction extends BaseFunction {
+
 	@Override
-	public FREObject call(FREContext context, FREObject[] args)
-	{	
+	public FREObject call(FREContext context, FREObject[] args) {
+
 		super.call(context, args);
 		
 		String purchaseId = getStringFromFREObject(args[0]);
-		if (purchaseId == null)
-		{
+
+		if (purchaseId == null) {
+
 			Extension.log("Can't make purchase with null purchaseId");
-			Extension.context.dispatchStatusEventAsync("PURCHASE_ERROR", "ERROR");
+			Extension.context.dispatchStatusEventAsync("PURCHASE_ERROR", "null purchaseId");
 			return null;
 		}
 		

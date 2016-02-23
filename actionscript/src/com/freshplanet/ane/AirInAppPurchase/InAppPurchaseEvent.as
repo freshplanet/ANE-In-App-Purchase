@@ -16,41 +16,53 @@
 //  
 //////////////////////////////////////////////////////////////////////////////////////
 
-package com.freshplanet.ane.AirInAppPurchase
-{
+package com.freshplanet.ane.AirInAppPurchase {
+
 	import flash.events.Event;
 	
-	public class InAppPurchaseEvent extends Event
-	{
-		
-		// init -> check if previously purchases not being processed by the app
-		public static const PURCHASE_SUCCESSFULL:String = "purchaseSuccesfull";
-		public static const PURCHASE_ERROR:String   	= "purchaseError";
-		
-		// user can make a purchase
-		public static const PURCHASE_ENABLED:String = "purchaseEnabled";
-		// user cannot make a purchase
-		public static const PURCHASE_DISABLED:String = "purchaseDisabled";
-		
-		// user can make a subscription
-		public static const SUBSCRIPTION_ENABLED:String = "subsEnabled";
-		// user cannot make a subscription
-		public static const SUBSCRIPTION_DISABLED:String = "subsDisabled";
+	public class InAppPurchaseEvent extends Event {
 
-		
-		
-		public static const PRODUCT_INFO_RECEIVED:String = "productInfoReceived";
-		public static const PRODUCT_INFO_ERROR:String = "productInfoError";
+        public static const INIT_SUCCESSFUL:String = "INIT_SUCCESSFUL";
+        public static const INIT_ERROR:String = "INIT_ERROR";
 
-		public static const RESTORE_INFO_RECEIVED:String = "restoreInfoReceived";
+        public static const PURCHASE_SUCCESSFUL:String = "PURCHASE_SUCCESSFUL";
+        public static const PURCHASE_ERROR:String = "PURCHASE_ERROR";
+
+        public static const CONSUME_SUCCESSFUL:String = "CONSUME_SUCCESSFUL";
+        public static const CONSUME_ERROR:String = "CONSUME_ERROR";
+
+		public static const PURCHASE_ENABLED:String = "PURCHASE_ENABLED";    // user can make a purchase
+		public static const PURCHASE_DISABLED:String = "PURCHASE_DISABLED";  // user cannot make a purchase
 		
-		// json encoded string (if any)
-		public var data:String;
+		public static const SUBSCRIPTION_ENABLED:String = "SUBSCRIPTION_ENABLED";    // user can make a subscription
+		public static const SUBSCRIPTION_DISABLED:String = "SUBSCRIPTION_DISABLED";  // user cannot make a subscription
+
+		public static const PRODUCT_INFO_RECEIVED:String = "PRODUCT_INFO_RECEIVED";
+		public static const PRODUCT_INFO_ERROR:String = "PRODUCT_INFO_ERROR";
+
+        public static const RESTORE_INFO_RECEIVED:String = "RESTORE_INFO_RECEIVED";
+        public static const RESTORE_INFO_ERROR:String = "RESTORE_INFO_ERROR";
 		
-		public function InAppPurchaseEvent(type:String, data:String = null, bubbles:Boolean=false, cancelable:Boolean=false)
-		{
-			this.data = data;
+		private var _data:String = null;
+
+        /**
+         *
+         * @param type
+         * @param eventData
+         * @param bubbles
+         * @param cancelable
+         */
+		public function InAppPurchaseEvent(type:String, eventData:String = null, bubbles:Boolean = false, cancelable:Boolean = false) {
+
+			_data = eventData;
 			super(type, bubbles, cancelable);
 		}
+
+        /**
+         * json encoded string (if any)
+         */
+        public function get data():String {
+            return _data;
+        }
 	}
 }
