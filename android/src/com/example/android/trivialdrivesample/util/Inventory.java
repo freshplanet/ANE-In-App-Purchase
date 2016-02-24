@@ -15,10 +15,6 @@
 
 package com.example.android.trivialdrivesample.util;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -92,46 +88,4 @@ public class Inventory {
     void addPurchase(Purchase p) {
         mPurchaseMap.put(p.getSku(), p);
     }
-
-    @Override
-    public String toString() {
-        JSONArray purchaseArray = new JSONArray();
-
-        for (Purchase p : mPurchaseMap.values()) {
-
-            try {
-               JSONObject purchaseObject = new JSONObject();
-               JSONObject purchaseInfoObject = new JSONObject();
-               purchaseInfoObject.put("signedData", p.getOriginalJson());
-               purchaseInfoObject.put("signature", p.getSignature());
-               purchaseObject.put("productId", p.getSku());
-               purchaseObject.put("receipt", purchaseInfoObject);
-               purchaseObject.put("receiptType", "GooglePlay");
-               purchaseArray.put(purchaseObject);
-            }
-            catch (JSONException e) {
-               e.printStackTrace();
-            }
-        }
-
-        JSONObject detailsObject = new JSONObject();
-        for (SkuDetails s : mSkuMap.values()) {
-           try {
-     		   detailsObject.put(s.getSku(), new JSONObject(s.getJson()));
-     	   } catch (JSONException e) {
-     		   e.printStackTrace();
-     	   }
-        }
-
-        JSONObject resultObject = new JSONObject();
-        try {
-  	        resultObject.put("purchases", purchaseArray);
-            resultObject.put("details", detailsObject);
-        }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return resultObject.toString();
-      }
 }
