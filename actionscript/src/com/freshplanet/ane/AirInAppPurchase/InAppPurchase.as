@@ -145,37 +145,8 @@ package com.freshplanet.ane.AirInAppPurchase {
 		}
 
         /**
-         *
-         */
-		public function userCanMakeAPurchase():void {
-
-            if (!isSupported) {
-
-                _dispatchEvent(InAppPurchaseEvent.PURCHASE_DISABLED, "InAppPurchase not supported");
-                return;
-            }
-
-            trace("[InAppPurchase] check user can make a purchase");
-            _context.call("userCanMakeAPurchase");
-		}
-
-        /**
-         *
-         */
-		public function userCanMakeASubscription():void {
-
-			if (Capabilities.manufacturer.indexOf('Android') > -1) {
-                
-				trace("[InAppPurchase] check user can make a purchase");
-				_context.call("userCanMakeASubscription");
-			}
-            else {
-                _dispatchEvent(InAppPurchaseEvent.PURCHASE_DISABLED, "subscriptions not supported");
-			}
-		}
-
-        /**
-         *
+         * PURCHASE_ERROR
+         * PURCHASE_ERROR
          * @param productId
          */
 		public function makeSubscription(productId:String):void {
@@ -191,7 +162,7 @@ package com.freshplanet.ane.AirInAppPurchase {
 		}
 
         /**
-         *
+         * RESTORE_INFO_RECEIVED
          */
 		public function restoreTransactions():void {
 
@@ -203,18 +174,6 @@ package com.freshplanet.ane.AirInAppPurchase {
 				var jsonData:String = "{ \"purchases\": " + jsonPurchases + "}";
 
                 _dispatchEvent(InAppPurchaseEvent.RESTORE_INFO_RECEIVED, jsonData);
-			}
-		}
-
-        /**
-         *
-         */
-		public function stop():void {
-
-			if (Capabilities.manufacturer.indexOf('Android') > -1) {
-
-				trace("[InAppPurchase] stop library");
-				_context.call("stopLib");
 			}
 		}
 
