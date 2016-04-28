@@ -1,4 +1,4 @@
-package com.freshplanet.inapppurchase.functions;
+package com.freshplanet.inapppurchase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,15 +7,12 @@ import com.adobe.fre.FREArray;
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
-import com.freshplanet.inapppurchase.Extension;
-import com.freshplanet.inapppurchase.ExtensionContext;
 
 public class BaseFunction implements FREFunction
 {
 	@Override
 	public FREObject call(FREContext context, FREObject[] args)
 	{
-		Extension.context = (ExtensionContext)context;
 		return null;
 	}
 	

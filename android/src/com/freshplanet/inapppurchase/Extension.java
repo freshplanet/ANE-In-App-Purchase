@@ -18,30 +18,32 @@
 
 package com.freshplanet.inapppurchase;
 
-import android.util.Log;
-
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREExtension;
 
 public class Extension implements FREExtension {
 
-	private static String TAG = "AirInAppPurchase";
+    private ExtensionContext _extensionContext = null;
 
-    public static ExtensionContext context;
+    /**
+     *
+     * FREExtension SETUP
+     *
+     */
 
     public void initialize() {
 
     }
 
-	public FREContext createContext(String extId) {
-		return context = new ExtensionContext();
-	}
-
 	public void dispose() {
-		context = null;
+        _extensionContext = null;
 	}
 
-	public static void log(String message) {
-		Log.d(TAG, message);
-	}
+    public FREContext createContext(String extId) {
+
+        if (_extensionContext != null)
+            _extensionContext = new ExtensionContext();
+
+        return _extensionContext;
+    }
 }
