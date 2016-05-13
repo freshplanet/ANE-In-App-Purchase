@@ -32,10 +32,6 @@ package com.freshplanet.ane.AirInAppPurchase {
 
         private static var _instance:InAppPurchase = null;
 
-        /**
-         *
-         * @param lock
-         */
 		public function InAppPurchase(lock:SingletonLock) {
 
             if (!isSupported)
@@ -49,9 +45,6 @@ package com.freshplanet.ane.AirInAppPurchase {
             _context.addEventListener(StatusEvent.STATUS, _onStatus);
 		}
 
-        /**
-         *
-         */
         public static function get instance():InAppPurchase {
 
             if (!_instance)
@@ -60,15 +53,21 @@ package com.freshplanet.ane.AirInAppPurchase {
             return _instance;
         }
 
-        /**
-         *
-         */
         public static function get isSupported():Boolean {
-            return Capabilities.manufacturer.indexOf('iOS') > -1 || Capabilities.manufacturer.indexOf('Android') > -1;
+            return _isIOS() || _isAndroid();
+        }
+
+        private static function _isIOS():Boolean {
+            return Capabilities.manufacturer.indexOf("iOS") > -1;
+        }
+
+        private static function _isAndroid():Boolean {
+            return Capabilities.manufacturer.indexOf("Android") > -1;
         }
 
         /**
-         *
+         * INIT_SUCCESSFUL
+         * INIT_ERROR
          * @param googlePlayKey
          * @param debug
          */
@@ -82,7 +81,8 @@ package com.freshplanet.ane.AirInAppPurchase {
 		}
 
         /**
-         *
+         * PURCHASE_SUCCESSFUL
+         * PURCHASE_ERROR
          * @param productId
          */
 		public function makePurchase(productId:String):void {
@@ -96,9 +96,27 @@ package com.freshplanet.ane.AirInAppPurchase {
             trace("[InAppPurchase] purchasing", productId);
             _context.call("makePurchase", productId);
 		}
+
+        /**
+         * PURCHASE_SUCCESSFUL
+         * PURCHASE_ERROR
+         * @param productId
+         */
+        public function makeSubscription(productId:String):void {
+
+            if (_isAndroid()) {
+
+                trace("[InAppPurchase] check user can make a subscription");
+                _context.call("makeSubscription", productId);
+            }
+            else {
+                _dispatchEvent(InAppPurchaseEvent.PURCHASE_ERROR, "subscriptions not supported");
+            }
+        }
 		
         /**
-         * receipt is for android device.
+         * CONSUME_SUCCESSFUL
+         * CONSUME_ERROR
          * @param productId
          * @param receipt
          */
@@ -110,25 +128,30 @@ package com.freshplanet.ane.AirInAppPurchase {
             trace("[InAppPurchase] removing product from queue", productId, receipt);
             _context.call("removePurchaseFromQueue", productId, receipt);
 
-            if (Capabilities.manufacturer.indexOf("iOS") > -1)
-            {
-                _iosPendingPurchases = _iosPendingPurchases.filter(function(jsonPurchase:String, index:int, purchases:Vector.<Object>):Boolean {
-                    try
-                    {
+            if (Capabilities.manufacturer.indexOf("iOS") > -1) {
+
+                var filterPurchase:Function = function(jsonPurchase:String, index:int, purchases:Vector.<Object>):Boolean {
+
+                    try {
+
                         var purchase:Object = JSON.parse(jsonPurchase);
                         return JSON.stringify(purchase.receipt) != receipt;
                     }
-                    catch(error:Error)
-                    {
+                    catch (error:Error) {
                         trace("[InAppPurchase] Couldn't parse purchase: " + jsonPurchase);
                     }
+
                     return false;
-                });
+                };
+
+                _iosPendingPurchases = _iosPendingPurchases.filter(filterPurchase);
+
             }
 		}
 
         /**
-         *
+         * PRODUCT_INFO_RECEIVED
+         * PRODUCT_INFO_ERROR
          * @param productsId
          * @param subscriptionIds
          */
@@ -145,30 +168,14 @@ package com.freshplanet.ane.AirInAppPurchase {
 		}
 
         /**
-         * PURCHASE_ERROR
-         * PURCHASE_ERROR
-         * @param productId
-         */
-		public function makeSubscription(productId:String):void {
-
-			if (Capabilities.manufacturer.indexOf('Android') > -1) {
-
-				trace("[InAppPurchase] check user can make a subscription");
-				_context.call("makeSubscription", productId);
-			}
-            else {
-                _dispatchEvent(InAppPurchaseEvent.PURCHASE_ERROR, "subscriptions not supported");
-			}
-		}
-
-        /**
          * RESTORE_INFO_RECEIVED
+         * RESTORE_INFO_ERROR
          */
 		public function restoreTransactions():void {
 
-			if (Capabilities.manufacturer.indexOf('Android') > -1)
+			if (_isAndroid())
 				_context.call("restoreTransaction");
-			else if (Capabilities.manufacturer.indexOf("iOS") > -1) {
+			else if (_isIOS()) {
 
 				var jsonPurchases:String = "[" + _iosPendingPurchases.join(",") + "]";
 				var jsonData:String = "{ \"purchases\": " + jsonPurchases + "}";
@@ -194,7 +201,7 @@ package com.freshplanet.ane.AirInAppPurchase {
 
 			trace(event);
 
-            if (event.code == InAppPurchaseEvent.PURCHASE_SUCCESSFUL && Capabilities.manufacturer.indexOf("iOS") > -1)
+            if (event.code == InAppPurchaseEvent.PURCHASE_SUCCESSFUL && _isIOS())
                 _iosPendingPurchases.push(event.level);
 
             _dispatchEvent(event.code, event.level);
