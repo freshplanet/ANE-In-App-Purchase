@@ -52,7 +52,7 @@
         </exec>
 
         <!-- compile the java code -->
-        <javac destdir="temp/android/build/" source="1.8" target="1.8" includeantruntime="false">
+        <javac destdir="temp/android/build/" source="1.7" target="1.7" includeantruntime="false">
             <src path="../android/src"/>
             <src path="../android/gen"/>
             <classpath>
