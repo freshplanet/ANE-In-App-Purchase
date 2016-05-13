@@ -117,14 +117,29 @@ public class ExtensionContext extends FREContext {
      *
      */
 
+    private static final String INIT_SUCCESSFUL = "INIT_SUCCESSFUL";
+    private static final String INIT_ERROR = "INIT_ERROR";
+
+    private static final String PURCHASE_SUCCESSFUL = "PURCHASE_SUCCESSFUL";
+    private static final String PURCHASE_ERROR = "PURCHASE_ERROR";
+
+    private static final String CONSUME_SUCCESSFUL = "CONSUME_SUCCESSFUL";
+    private static final String CONSUME_ERROR = "CONSUME_ERROR";
+
+    private static final String PRODUCT_INFO_RECEIVED = "PRODUCT_INFO_RECEIVED";
+    private static final String PRODUCT_INFO_ERROR = "PRODUCT_INFO_ERROR";
+
+    private static final String RESTORE_INFO_RECEIVED = "RESTORE_INFO_RECEIVED";
+    private static final String RESTORE_INFO_ERROR = "RESTORE_INFO_ERROR";
+
     private IabHelper.OnIabSetupFinishedListener _initLibListener = new IabHelper.OnIabSetupFinishedListener() {
         @Override
         public void onIabSetupFinished(IabResult result) {
 
             if (result.isSuccess())
-                _dispatchEvent("INIT_SUCCESSFUL", result.getMessage());
+                _dispatchEvent(INIT_SUCCESSFUL, result.getMessage());
             else
-                _dispatchEvent("INIT_ERROR", result.getMessage());
+                _dispatchEvent(INIT_ERROR, result.getMessage());
         }
     };
 
@@ -133,11 +148,11 @@ public class ExtensionContext extends FREContext {
         public void onQueryInventoryFinished(IabResult result, Inventory inv) {
 
             if (result.isFailure())
-                _dispatchEvent("PRODUCT_INFO_ERROR", result.getMessage());
+                _dispatchEvent(PRODUCT_INFO_ERROR, result.getMessage());
             else {
 
                 String data = inv != null ? inv.toString() : "";
-                _dispatchEvent("PRODUCT_INFO_RECEIVED", data);
+                _dispatchEvent(PRODUCT_INFO_RECEIVED, data);
             }
         }
     };
@@ -147,13 +162,13 @@ public class ExtensionContext extends FREContext {
         public void onIabPurchaseFinished(IabResult result, Purchase info) {
 
             if (result.getResponse() == IabHelper.IABHELPER_USER_CANCELLED)
-                _dispatchEvent("PURCHASE_ERROR", "RESULT_USER_CANCELED");
+                _dispatchEvent(PURCHASE_ERROR, "RESULT_USER_CANCELED");
             else if (result.isFailure())
-                _dispatchEvent("PURCHASE_ERROR", result.getMessage());
+                _dispatchEvent(PURCHASE_ERROR, result.getMessage());
             else {
 
                 String resultString = _purchaseToResultString(info);
-                _dispatchEvent("PURCHASE_SUCCESSFUL", resultString);
+                _dispatchEvent(PURCHASE_SUCCESSFUL, resultString);
             }
         }
     };
@@ -163,11 +178,11 @@ public class ExtensionContext extends FREContext {
         public void onQueryInventoryFinished(IabResult result, Inventory inv) {
 
             if (result.isFailure())
-                _dispatchEvent("RESTORE_INFO_ERROR", result.getMessage());
+                _dispatchEvent(RESTORE_INFO_ERROR, result.getMessage());
             else {
 
                 String data = inv != null ? inv.toString() : "";
-                _dispatchEvent("RESTORE_INFO_RECEIVED", data);
+                _dispatchEvent(RESTORE_INFO_RECEIVED, data);
             }
         }
     };
@@ -177,11 +192,11 @@ public class ExtensionContext extends FREContext {
         public void onConsumeFinished(Purchase purchase, IabResult result) {
 
             if (result.isFailure())
-                _dispatchEvent("CONSUME_ERROR", result.getMessage());
+                _dispatchEvent(CONSUME_ERROR, result.getMessage());
             else {
 
                 String resultString = _purchaseToResultString(purchase);
-                _dispatchEvent("CONSUME_SUCCESSFUL", resultString);
+                _dispatchEvent(CONSUME_SUCCESSFUL, resultString);
             }
         }
     };
@@ -233,7 +248,7 @@ public class ExtensionContext extends FREContext {
             String purchaseId = getStringFromFREObject(args[0]);
 
             if (purchaseId == null)
-                _dispatchEvent("PURCHASE_ERROR", "null purchaseId");
+                _dispatchEvent(PURCHASE_ERROR, "null purchaseId");
             else
                 _iabHelper.launchPurchaseFlow(_freActivity, purchaseId, RC_REQUEST, _onIabPurchaseFinishedListener);
 
@@ -248,7 +263,7 @@ public class ExtensionContext extends FREContext {
             String purchaseId = getStringFromFREObject(args[0]);
 
             if (purchaseId == null)
-                _dispatchEvent("PURCHASE_ERROR", "null purchaseId");
+                _dispatchEvent(PURCHASE_ERROR, "null purchaseId");
             else
                 _iabHelper.launchSubscriptionPurchaseFlow(_freActivity, purchaseId, RC_REQUEST, _onIabPurchaseFinishedListener);
 
@@ -285,7 +300,7 @@ public class ExtensionContext extends FREContext {
                 purchase = new Purchase(IabHelper.ITEM_TYPE_INAPP, signedData, null); // TODO ITEM_TYPE_SUBS for subs?
             }
             catch (JSONException jsonException) {
-                _dispatchEvent("CONSUME_ERROR", jsonException.getMessage());
+                _dispatchEvent(CONSUME_ERROR, jsonException.getMessage());
             }
 
             _iabHelper.consumeAsync(purchase, _removePurchaseFromQueueListener);
