@@ -41,7 +41,7 @@ public class Extension implements FREExtension {
 
     public FREContext createContext(String extId) {
 
-        if (_extensionContext != null)
+        if (_extensionContext == null)
             _extensionContext = new ExtensionContext();
 
         return _extensionContext;
