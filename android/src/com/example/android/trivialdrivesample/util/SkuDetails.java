@@ -56,6 +56,7 @@ public class SkuDetails {
     public String getPriceCurrencyCode() { return mPriceCurrencyCode; }
     public String getTitle() { return mTitle; }
     public String getDescription() { return mDescription; }
+    public String getJson() { return mJson; }
 
     @Override
     public String toString() {
