@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.content.ServiceConnection;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -57,7 +58,10 @@ import java.util.List;
  * to ensure proper cleanup. This object holds a binding to the in-app billing
  * service, which will leak unless you dispose of it correctly. If you created
  * the object on an Activity's onCreate method, then the recommended
- * place to dispose of it is the Activity's onDestroy method.
+ * place to dispose of it is the Activity's onDestroy method. It is invalid to
+ * dispose the object while an asynchronous operation is in progress. You can
+ * call {@link #disposeWhenFinished()} to ensure that any in-progress operation
+ * completes before the object is disposed.
  *
  * A note about threading: When using this object from a background thread, you may
  * call the blocking versions of methods; when using from a UI thread, call
@@ -78,6 +82,9 @@ public class IabHelper {
     // Has this object been disposed of? (If so, we should ignore callbacks, etc)
     boolean mDisposed = false;
 
+    // Do we need to dispose this object after an in-progress asynchronous operation?
+    boolean mDisposeAfterAsync = false;
+
     // Are subscriptions supported?
     boolean mSubscriptionsSupported = false;
 
@@ -87,6 +94,9 @@ public class IabHelper {
     // Is an asynchronous operation in progress?
     // (only one at a time can be in progress)
     boolean mAsyncInProgress = false;
+
+    // Ensure atomic access to mAsyncInProgress and mDisposeAfterAsync.
+    private final Object mAsyncInProgressLock = new Object();
 
     // (for logging/debugging)
     // if mAsyncInProgress == true, what asynchronous operation is in progress?
@@ -285,7 +295,8 @@ public class IabHelper {
 
         Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
         serviceIntent.setPackage("com.android.vending");
-        if (!mContext.getPackageManager().queryIntentServices(serviceIntent, 0).isEmpty()) {
+        List<ResolveInfo> intentServices = mContext.getPackageManager().queryIntentServices(serviceIntent, 0);
+        if (intentServices != null && !intentServices.isEmpty()) {
             // service available to handle that Intent
             mContext.bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
         }
@@ -305,7 +316,13 @@ public class IabHelper {
      * used by it such as service connections. Naturally, once the object is
      * disposed of, it can't be used again.
      */
-    public void dispose() {
+    public void dispose() throws IabAsyncInProgressException {
+        synchronized (mAsyncInProgressLock) {
+            if (mAsyncInProgress) {
+                throw new IabAsyncInProgressException("Can't dispose because an async operation " +
+                    "(" + mAsyncOperation + ") is in progress.");
+            }
+        }
         logDebug("Disposing.");
         mSetupDone = false;
         if (mServiceConn != null) {
@@ -317,6 +334,26 @@ public class IabHelper {
         mServiceConn = null;
         mService = null;
         mPurchaseListener = null;
+    }
+
+    /**
+     * Disposes of object, releasing resources. If there is an in-progress async operation, this
+     * method will queue the dispose to occur after the operation has finished.
+     */
+    public void disposeWhenFinished() {
+        synchronized (mAsyncInProgressLock) {
+            if (mAsyncInProgress) {
+                logDebug("Will dispose after async operation finishes.");
+                mDisposeAfterAsync = true;
+            } else {
+                try {
+                    dispose();
+                } catch (IabAsyncInProgressException e) {
+                    // Should never be thrown, because we call dispose() only after checking that
+                    // there's not already an async operation in progress.
+                }
+            }
+        }
     }
 
     private void checkNotDisposed() {
@@ -350,22 +387,25 @@ public class IabHelper {
     // the purchase finishes
     OnIabPurchaseFinishedListener mPurchaseListener;
 
-    public void launchPurchaseFlow(Activity act, String sku, int requestCode, OnIabPurchaseFinishedListener listener) {
+    public void launchPurchaseFlow(Activity act, String sku, int requestCode, OnIabPurchaseFinishedListener listener)
+        throws IabAsyncInProgressException {
         launchPurchaseFlow(act, sku, requestCode, listener, "");
     }
 
     public void launchPurchaseFlow(Activity act, String sku, int requestCode,
-            OnIabPurchaseFinishedListener listener, String extraData) {
+            OnIabPurchaseFinishedListener listener, String extraData)
+        throws IabAsyncInProgressException {
         launchPurchaseFlow(act, sku, ITEM_TYPE_INAPP, null, requestCode, listener, extraData);
     }
 
     public void launchSubscriptionPurchaseFlow(Activity act, String sku, int requestCode,
-            OnIabPurchaseFinishedListener listener) {
+            OnIabPurchaseFinishedListener listener) throws IabAsyncInProgressException {
         launchSubscriptionPurchaseFlow(act, sku, requestCode, listener, "");
     }
 
     public void launchSubscriptionPurchaseFlow(Activity act, String sku, int requestCode,
-            OnIabPurchaseFinishedListener listener, String extraData) {
+            OnIabPurchaseFinishedListener listener, String extraData)
+        throws IabAsyncInProgressException {
         launchPurchaseFlow(act, sku, ITEM_TYPE_SUBS, null, requestCode, listener, extraData);
     }
 
@@ -390,7 +430,8 @@ public class IabHelper {
      *      purchase and will always be returned when the purchase is queried.
      */
     public void launchPurchaseFlow(Activity act, String sku, String itemType, List<String> oldSkus,
-            int requestCode, OnIabPurchaseFinishedListener listener, String extraData) {
+            int requestCode, OnIabPurchaseFinishedListener listener, String extraData)
+        throws IabAsyncInProgressException {
         checkNotDisposed();
         checkSetupDone("launchPurchaseFlow");
         flagStartAsync("launchPurchaseFlow");
@@ -557,8 +598,8 @@ public class IabHelper {
         return true;
     }
 
-    public Inventory queryInventory(boolean querySkuDetails, List<String> moreSkus) throws IabException {
-        return queryInventory(querySkuDetails, moreSkus, null);
+    public Inventory queryInventory() throws IabException {
+        return queryInventory(false, null, null);
     }
 
     /**
@@ -600,7 +641,7 @@ public class IabHelper {
                 }
 
                 if (querySkuDetails) {
-                    r = querySkuDetails(ITEM_TYPE_SUBS, inv, moreItemSkus);
+                    r = querySkuDetails(ITEM_TYPE_SUBS, inv, moreSubsSkus);
                     if (r != BILLING_RESPONSE_RESULT_OK) {
                         throw new IabException(r, "Error refreshing inventory (querying prices of subscriptions).");
                     }
@@ -638,11 +679,13 @@ public class IabHelper {
      * call from a UI thread.
      *
      * @param querySkuDetails as in {@link #queryInventory}
-     * @param moreSkus as in {@link #queryInventory}
+     * @param moreItemSkus as in {@link #queryInventory}
+     * @param moreSubsSkus as in {@link #queryInventory}
      * @param listener The listener to notify when the refresh operation completes.
      */
-    public void queryInventoryAsync(final boolean querySkuDetails, final List<String> moreSkus,
-            final QueryInventoryFinishedListener listener) {
+    public void queryInventoryAsync(final boolean querySkuDetails, final List<String> moreItemSkus,
+            final List<String> moreSubsSkus, final QueryInventoryFinishedListener listener)
+        throws IabAsyncInProgressException {
         final Handler handler = new Handler();
         checkNotDisposed();
         checkSetupDone("queryInventory");
@@ -652,7 +695,7 @@ public class IabHelper {
                 IabResult result = new IabResult(BILLING_RESPONSE_RESULT_OK, "Inventory refresh successful.");
                 Inventory inv = null;
                 try {
-                    inv = queryInventory(querySkuDetails, moreSkus);
+                    inv = queryInventory(querySkuDetails, moreItemSkus, moreSubsSkus);
                 }
                 catch (IabException ex) {
                     result = ex.getResult();
@@ -673,14 +716,10 @@ public class IabHelper {
         })).start();
     }
 
-    public void queryInventoryAsync(QueryInventoryFinishedListener listener) {
-        queryInventoryAsync(true, null, listener);
+    public void queryInventoryAsync(QueryInventoryFinishedListener listener)
+        throws IabAsyncInProgressException{
+        queryInventoryAsync(false, null, null, listener);
     }
-
-    public void queryInventoryAsync(boolean querySkuDetails, QueryInventoryFinishedListener listener) {
-        queryInventoryAsync(querySkuDetails, null, listener);
-    }
-
 
     /**
      * Consumes a given in-app product. Consuming can only be done on an item
@@ -759,7 +798,8 @@ public class IabHelper {
      * @param purchase The purchase to be consumed.
      * @param listener The listener to notify when the consumption operation finishes.
      */
-    public void consumeAsync(Purchase purchase, OnConsumeFinishedListener listener) {
+    public void consumeAsync(Purchase purchase, OnConsumeFinishedListener listener)
+        throws IabAsyncInProgressException {
         checkNotDisposed();
         checkSetupDone("consume");
         List<Purchase> purchases = new ArrayList<Purchase>();
@@ -772,7 +812,8 @@ public class IabHelper {
      * @param purchases The list of PurchaseInfo objects representing the purchases to consume.
      * @param listener The listener to notify when the consumption operation finishes.
      */
-    public void consumeAsync(List<Purchase> purchases, OnConsumeMultiFinishedListener listener) {
+    public void consumeAsync(List<Purchase> purchases, OnConsumeMultiFinishedListener listener)
+        throws IabAsyncInProgressException {
         checkNotDisposed();
         checkSetupDone("consume");
         consumeAsyncInternal(purchases, null, listener);
@@ -853,20 +894,44 @@ public class IabHelper {
         }
     }
 
-    void flagStartAsync(String operation) {
-        if (mAsyncInProgress) throw new IllegalStateException("Can't start async operation (" +
-                operation + ") because another async operation(" + mAsyncOperation + ") is in progress.");
-        mAsyncOperation = operation;
-        mAsyncInProgress = true;
-        logDebug("Starting async operation: " + operation);
+    void flagStartAsync(String operation) throws IabAsyncInProgressException {
+        synchronized (mAsyncInProgressLock) {
+            if (mAsyncInProgress) {
+                throw new IabAsyncInProgressException("Can't start async operation (" +
+                    operation + ") because another async operation (" + mAsyncOperation +
+                    ") is in progress.");
+            }
+            mAsyncOperation = operation;
+            mAsyncInProgress = true;
+            logDebug("Starting async operation: " + operation);
+        }
     }
 
     void flagEndAsync() {
-        logDebug("Ending async operation: " + mAsyncOperation);
-        mAsyncOperation = "";
-        mAsyncInProgress = false;
+        synchronized (mAsyncInProgressLock) {
+            logDebug("Ending async operation: " + mAsyncOperation);
+            mAsyncOperation = "";
+            mAsyncInProgress = false;
+            if (mDisposeAfterAsync) {
+                try {
+                    dispose();
+                } catch (IabAsyncInProgressException e) {
+                    // Should not be thrown, because we reset mAsyncInProgress immediately before
+                    // calling dispose().
+                }
+            }
+        }
     }
 
+    /**
+     * Exception thrown when the requested operation cannot be started because an async operation
+     * is still in progress.
+     */
+    public static class IabAsyncInProgressException extends Exception {
+        public IabAsyncInProgressException(String message) {
+            super(message);
+        }
+    }
 
     int queryPurchases(Inventory inv, String itemType) throws JSONException, RemoteException {
         // Query purchases
@@ -1001,7 +1066,8 @@ public class IabHelper {
 
     void consumeAsyncInternal(final List<Purchase> purchases,
                               final OnConsumeFinishedListener singleListener,
-                              final OnConsumeMultiFinishedListener multiListener) {
+                              final OnConsumeMultiFinishedListener multiListener)
+        throws IabAsyncInProgressException {
         final Handler handler = new Handler();
         flagStartAsync("consume");
         (new Thread(new Runnable() {

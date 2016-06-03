@@ -214,8 +214,15 @@ public class ExtensionContext extends FREContext {
             String key = getStringFromFREObject(args[0]);
             Boolean debug = getBooleanFromFREObject(args[1]);
 
-            if (_iabHelper != null)
-                _iabHelper.dispose();
+            if (_iabHelper != null) {
+
+                try {
+                    _iabHelper.dispose();
+                }
+                catch (IabHelper.IabAsyncInProgressException exception) {
+                    _dispatchEvent(INIT_ERROR, exception.getMessage());
+                }
+            }
 
             _iabHelper = new IabHelper(_freActivity, key);
             _iabHelper.enableDebugLogging(debug, TAG);
@@ -232,10 +239,12 @@ public class ExtensionContext extends FREContext {
             List<String> skusName = getListOfStringFromFREArray((FREArray) args[0]);
             List<String> skusSubsName = getListOfStringFromFREArray((FREArray) args[1]);
 
-            List<String> allSkus = skusName.subList(0, skusName.size() - 1);
-            allSkus.addAll(skusSubsName);
-
-            _iabHelper.queryInventoryAsync(true, allSkus, _getProductsInfoListener);
+            try {
+                _iabHelper.queryInventoryAsync(true, skusName, skusSubsName, _getProductsInfoListener);
+            }
+            catch (IabHelper.IabAsyncInProgressException exception) {
+                _dispatchEvent(PRODUCT_INFO_ERROR, exception.getMessage());
+            }
 
             return null;
         }
@@ -249,8 +258,15 @@ public class ExtensionContext extends FREContext {
 
             if (purchaseId == null)
                 _dispatchEvent(PURCHASE_ERROR, "null purchaseId");
-            else
-                _iabHelper.launchPurchaseFlow(_freActivity, purchaseId, RC_REQUEST, _onIabPurchaseFinishedListener);
+            else {
+
+                try {
+                    _iabHelper.launchPurchaseFlow(_freActivity, purchaseId, RC_REQUEST, _onIabPurchaseFinishedListener);
+                }
+                catch (IabHelper.IabAsyncInProgressException exception) {
+                    _dispatchEvent(PURCHASE_ERROR, exception.getMessage());
+                }
+            }
 
             return null;
         }
@@ -264,8 +280,15 @@ public class ExtensionContext extends FREContext {
 
             if (purchaseId == null)
                 _dispatchEvent(PURCHASE_ERROR, "null purchaseId");
-            else
-                _iabHelper.launchSubscriptionPurchaseFlow(_freActivity, purchaseId, RC_REQUEST, _onIabPurchaseFinishedListener);
+            else {
+
+                try {
+                    _iabHelper.launchSubscriptionPurchaseFlow(_freActivity, purchaseId, RC_REQUEST, _onIabPurchaseFinishedListener);
+                }
+                catch (IabHelper.IabAsyncInProgressException exception) {
+                    _dispatchEvent(PURCHASE_ERROR, exception.getMessage());
+                }
+            }
 
             return null;
         }
@@ -275,7 +298,13 @@ public class ExtensionContext extends FREContext {
         @Override
         public FREObject call(FREContext ctx, FREObject[] args) {
 
-            _iabHelper.queryInventoryAsync(false, _restoreTransactionListener);
+            try {
+                _iabHelper.queryInventoryAsync(_restoreTransactionListener);
+            }
+            catch (IabHelper.IabAsyncInProgressException exception) {
+                _dispatchEvent(RESTORE_INFO_ERROR, exception.getMessage());
+            }
+
             return null;
         }
     };
@@ -303,7 +332,12 @@ public class ExtensionContext extends FREContext {
                 _dispatchEvent(CONSUME_ERROR, jsonException.getMessage());
             }
 
-            _iabHelper.consumeAsync(purchase, _removePurchaseFromQueueListener);
+            try {
+                _iabHelper.consumeAsync(purchase, _removePurchaseFromQueueListener);
+            }
+            catch (IabHelper.IabAsyncInProgressException exception) {
+                _dispatchEvent(CONSUME_ERROR, exception.getMessage());
+            }
 
             return null;
         }
@@ -321,7 +355,13 @@ public class ExtensionContext extends FREContext {
 
         if (_iabHelper != null) {
 
-            _iabHelper.dispose();
+            try {
+                _iabHelper.dispose();
+            }
+            catch (IabHelper.IabAsyncInProgressException exception) {
+                exception.printStackTrace();
+            }
+
             _iabHelper = null;
         }
 
