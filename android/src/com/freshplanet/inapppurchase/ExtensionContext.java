@@ -63,12 +63,25 @@ public class ExtensionContext extends FREContext {
      */
 
     private void _dispatchEvent(String type, String data) {
+        _dispatchEvent(type, data, false);
+    }
+
+    private void _dispatchEvent(String type, String data, Boolean isRetry) {
 
         try {
             dispatchStatusEventAsync(type, data);
         }
         catch (Exception exception) {
-            Log.e(TAG, exception.getMessage());
+
+            Log.e(TAG, "dispatchStatusEventAsync", exception);
+
+            if (!isRetry) {
+
+                if (data != null)
+                    _dispatchEvent(type, null, true);
+                else
+                    _dispatchEvent(type, "", true);
+            }
         }
     }
 
