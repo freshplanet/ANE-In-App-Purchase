@@ -65,10 +65,10 @@ public class ExtensionContext extends FREContext {
     private void _dispatchEvent(String type, String data) {
 
         try {
-            dispatchStatusEventAsync(type, data);
+            dispatchStatusEventAsync(type, "" + data);
         }
         catch (Exception exception) {
-            Log.e(TAG, exception.getMessage());
+            Log.e(TAG, "dispatchStatusEventAsync", exception);
         }
     }
 
