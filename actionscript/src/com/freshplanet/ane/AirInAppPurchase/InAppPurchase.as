@@ -219,7 +219,7 @@ package com.freshplanet.ane.AirInAppPurchase
 					e = new InAppPurchaseEvent(InAppPurchaseEvent.PURCHASE_DISABLED, event.level);
 					break;
 				case "PRODUCT_INFO_ERROR":
-					e = new InAppPurchaseEvent(InAppPurchaseEvent.PRODUCT_INFO_ERROR);
+					e = new InAppPurchaseEvent(InAppPurchaseEvent.PRODUCT_INFO_ERROR, event.level);
 					break;
 				case "SUBSCRIPTION_ENABLED":
 					e = new InAppPurchaseEvent(InAppPurchaseEvent.SUBSCRIPTION_ENABLED);
