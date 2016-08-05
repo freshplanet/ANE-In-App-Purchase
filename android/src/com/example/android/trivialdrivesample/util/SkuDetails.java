@@ -22,13 +22,16 @@ import org.json.JSONObject;
  * Represents an in-app product's listing details.
  */
 public class SkuDetails {
-    String mItemType;
-    String mSku;
-    String mType;
-    String mPrice;
-    String mTitle;
-    String mDescription;
-    String mJson;
+    private final String mItemType;
+    private final String mSku;
+    private final String mType;
+    private final String mPrice;
+    private final long mPriceAmountMicros;
+    private final String mPriceCurrencyCode;
+    private final String mTitle;
+    private final String mDescription;
+    private final String mJson;
+    private final JSONObject mJsonObject;
 
     public SkuDetails(String jsonSkuDetails) throws JSONException {
         this(IabHelper.ITEM_TYPE_INAPP, jsonSkuDetails);
@@ -37,20 +40,24 @@ public class SkuDetails {
     public SkuDetails(String itemType, String jsonSkuDetails) throws JSONException {
         mItemType = itemType;
         mJson = jsonSkuDetails;
-        JSONObject o = new JSONObject(mJson);
-        mSku = o.optString("productId");
-        mType = o.optString("type");
-        mPrice = o.optString("price");
-        mTitle = o.optString("title");
-        mDescription = o.optString("description");
+        mJsonObject = new JSONObject(mJson);
+        mSku = mJsonObject.optString("productId");
+        mType = mJsonObject.optString("type");
+        mPrice = mJsonObject.optString("price");
+        mPriceAmountMicros = mJsonObject.optLong("price_amount_micros");
+        mPriceCurrencyCode = mJsonObject.optString("price_currency_code");
+        mTitle = mJsonObject.optString("title");
+        mDescription = mJsonObject.optString("description");
     }
 
     public String getSku() { return mSku; }
     public String getType() { return mType; }
     public String getPrice() { return mPrice; }
+    public long getPriceAmountMicros() { return mPriceAmountMicros; }
+    public String getPriceCurrencyCode() { return mPriceCurrencyCode; }
     public String getTitle() { return mTitle; }
     public String getDescription() { return mDescription; }
-    public String getJson() { return mJson; }
+    public JSONObject getJson() { return mJsonObject; }
 
     @Override
     public String toString() {

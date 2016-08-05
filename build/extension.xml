@@ -16,7 +16,7 @@
 //  
 //////////////////////////////////////////////////////////////////////////////////////-->
 
-<extension xmlns="http://ns.adobe.com/air/extension/17.0">
+<extension xmlns="http://ns.adobe.com/air/extension/20.0">
     <id>com.freshplanet.AirInAppPurchase</id>
     <versionNumber>2.0.0</versionNumber>
     <platforms>

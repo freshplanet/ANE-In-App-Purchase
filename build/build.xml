@@ -52,12 +52,13 @@
         </exec>
 
         <!-- compile the java code -->
-        <javac destdir="temp/android/build/" source="1.6" target="1.6" includeantruntime="false" debug="${ANDROID_DEBUG}">
+        <javac destdir="temp/android/build/" source="1.7" target="1.7" includeantruntime="false">
             <src path="../android/src"/>
             <src path="../android/gen"/>
             <classpath>
                 <pathelement location="${android.platform.home}/android.jar"/>
                 <pathelement location="${air.sdk.home}/lib/android/FlashRuntimeExtensions.jar"/>
+                <pathelement location="${air.sdk.home}/lib/android/lib/runtimeClasses.jar"/>
             </classpath>
         </javac>
 

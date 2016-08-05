@@ -96,42 +96,38 @@ public class Inventory {
     @Override
     public String toString() {
         JSONArray purchaseArray = new JSONArray();
-
         for (Purchase p : mPurchaseMap.values()) {
-
             try {
-               JSONObject purchaseObject = new JSONObject();
-               JSONObject purchaseInfoObject = new JSONObject();
-               purchaseInfoObject.put("signedData", p.getOriginalJson());
-               purchaseInfoObject.put("signature", p.getSignature());
-               purchaseObject.put("productId", p.getSku());
-               purchaseObject.put("receipt", purchaseInfoObject);
-               purchaseObject.put("receiptType", "GooglePlay");
-               purchaseArray.put(purchaseObject);
-            }
-            catch (JSONException e) {
-               e.printStackTrace();
+                JSONObject purchaseObject = new JSONObject();
+                JSONObject purchaseInfoObject = new JSONObject();
+                purchaseInfoObject.put("signedData", p.getOriginalJson());
+                purchaseInfoObject.put("signature", p.getSignature());
+                purchaseObject.put("productId", p.getSku());
+                purchaseObject.put("receipt", purchaseInfoObject);
+                purchaseObject.put("receiptType", "GooglePlay");
+                purchaseArray.put(purchaseObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }
 
         JSONObject detailsObject = new JSONObject();
         for (SkuDetails s : mSkuMap.values()) {
-           try {
-     		   detailsObject.put(s.getSku(), new JSONObject(s.getJson()));
-     	   } catch (JSONException e) {
-     		   e.printStackTrace();
-     	   }
+            try {
+                detailsObject.put(s.getSku(), s.getJson());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         JSONObject resultObject = new JSONObject();
         try {
-  	        resultObject.put("purchases", purchaseArray);
+            resultObject.put("purchases", purchaseArray);
             resultObject.put("details", detailsObject);
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
         return resultObject.toString();
-      }
+    }
 }
