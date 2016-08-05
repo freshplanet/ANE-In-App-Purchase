@@ -24,7 +24,6 @@ void *AirInAppRefToSelf;
 
 #define DEFINE_ANE_FUNCTION(fn) FREObject (fn)(FREContext context, void* functionData, uint32_t argc, FREObject argv[])
 
-
 @implementation AirInAppPurchase
 
 - (id) init
@@ -52,6 +51,29 @@ void *AirInAppRefToSelf;
 - (void) registerObserver
 {
     [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
+
+    // We check if there is any purchase not completed here.
+    // seems to be ios9 bug
+    NSUInteger nbTransaction = [[SKPaymentQueue defaultQueue].transactions count];
+    if (nbTransaction > 0)
+    {
+        NSArray* transactions = [SKPaymentQueue defaultQueue].transactions;
+        NSString* pendingTransactionInformation = [NSString stringWithFormat:@"pending transaction - %@", [NSNumber numberWithUnsignedInteger:nbTransaction]];
+        FREDispatchStatusEventAsync(AirInAppCtx, (uint8_t*)"DEBUG", (uint8_t*) [pendingTransactionInformation UTF8String]  );
+
+        for ( SKPaymentTransaction* transaction in transactions)
+        {
+            switch (transaction.transactionState) {
+                case SKPaymentTransactionStatePurchased:
+                    [self completeTransaction:transaction];
+                    break;
+                default:
+                    FREDispatchStatusEventAsync(AirInAppCtx, (uint8_t*)"PURCHASE_UNKNOWN", (uint8_t*) [@"Unknown Reason" UTF8String]);
+                    break;
+            }
+        }
+    }
+
 }
 
 
