@@ -116,7 +116,12 @@ void *AirInAppRefToSelf;
     
     [dictionary setObject:productElement forKey:@"details"];
     
-    if ([NSJSONSerialization isValidJSONObject:dictionary])
+    if ([response invalidProductIdentifiers] != nil && [[response invalidProductIdentifiers] count] > 0)
+    {
+        NSString* jsonArray = [[response invalidProductIdentifiers] JSONString];
+        FREDispatchStatusEventAsync(AirInAppCtx ,(uint8_t*) "PRODUCT_INFO_ERROR", (uint8_t*) [jsonArray UTF8String] );
+    }
+    else if ([NSJSONSerialization isValidJSONObject:dictionary])
     {
         NSData *json;
         NSError *error = nil;
@@ -128,19 +133,9 @@ void *AirInAppRefToSelf;
         if (json != nil && error == nil)
         {
             NSString *jsonDictionary = [[NSString alloc] initWithData:json encoding:NSUTF8StringEncoding];
-            
             FREDispatchStatusEventAsync(AirInAppCtx ,(uint8_t*) "PRODUCT_INFO_RECEIVED", (uint8_t*) [jsonDictionary UTF8String] );
-            
-            if ([response invalidProductIdentifiers] != nil && [[response invalidProductIdentifiers] count] > 0)
-            {
-                NSString* jsonArray = [[response invalidProductIdentifiers] JSONString];
-                
-                FREDispatchStatusEventAsync(AirInAppCtx ,(uint8_t*) "PRODUCT_INFO_ERROR", (uint8_t*) [jsonArray UTF8String] );
-                
-            }
         }
     }
-    
 }
 
 // on product info finish
