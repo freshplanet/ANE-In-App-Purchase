@@ -118,6 +118,7 @@ void *AirInAppRefToSelf;
     
     if ([response invalidProductIdentifiers] != nil && [[response invalidProductIdentifiers] count] > 0)
     {
+        NSLog(@"+++ ALEX +++ Invalid Product Identifiers");
         NSString* jsonArray = [[response invalidProductIdentifiers] JSONString];
         FREDispatchStatusEventAsync(AirInAppCtx ,(uint8_t*) "PRODUCT_INFO_ERROR", (uint8_t*) [jsonArray UTF8String] );
     }
@@ -132,6 +133,7 @@ void *AirInAppRefToSelf;
         // If no errors, let's view the JSON
         if (json != nil && error == nil)
         {
+            NSLog(@"+++ ALEX +++ Product Infos are good!");
             NSString *jsonDictionary = [[NSString alloc] initWithData:json encoding:NSUTF8StringEncoding];
             FREDispatchStatusEventAsync(AirInAppCtx ,(uint8_t*) "PRODUCT_INFO_RECEIVED", (uint8_t*) [jsonDictionary UTF8String] );
         }
