@@ -52,9 +52,11 @@ void *AirInAppRefToSelf;
 {
     [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
 
+    
     // We check if there is any purchase not completed here.
     // seems to be ios9 bug
     NSUInteger nbTransaction = [[SKPaymentQueue defaultQueue].transactions count];
+    
     if (nbTransaction > 0)
     {
         NSArray* transactions = [SKPaymentQueue defaultQueue].transactions;
@@ -85,13 +87,13 @@ void *AirInAppRefToSelf;
 - (void) sendRequest:(SKRequest*)request AndContext:(FREContext*)ctx
 {
     request.delegate = self;
-    [request start];   
+    [request start];
 }
 
 // on product info received
 - (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response
 {
-    
+ 
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
     
@@ -114,17 +116,25 @@ void *AirInAppRefToSelf;
     
     [dictionary setObject:productElement forKey:@"details"];
     
-    
-    NSString* jsonDictionary = [dictionary JSONString];
-    
-    FREDispatchStatusEventAsync(AirInAppCtx ,(uint8_t*) "PRODUCT_INFO_RECEIVED", (uint8_t*) [jsonDictionary UTF8String] );
-    
     if ([response invalidProductIdentifiers] != nil && [[response invalidProductIdentifiers] count] > 0)
     {
         NSString* jsonArray = [[response invalidProductIdentifiers] JSONString];
-        
         FREDispatchStatusEventAsync(AirInAppCtx ,(uint8_t*) "PRODUCT_INFO_ERROR", (uint8_t*) [jsonArray UTF8String] );
+    }
+    else if ([NSJSONSerialization isValidJSONObject:dictionary])
+    {
+        NSData *json;
+        NSError *error = nil;
         
+        // Serialize the dictionary
+        json = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:&error];
+        
+        // If no errors, let's return the JSON
+        if (json != nil && error == nil)
+        {
+            NSString *jsonDictionary = [[NSString alloc] initWithData:json encoding:NSUTF8StringEncoding];
+            FREDispatchStatusEventAsync(AirInAppCtx ,(uint8_t*) "PRODUCT_INFO_RECEIVED", (uint8_t*) [jsonDictionary UTF8String] );
+        }
     }
 }
 
