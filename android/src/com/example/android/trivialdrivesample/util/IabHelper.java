@@ -734,6 +734,17 @@ public class IabHelper {
         checkNotDisposed();
         checkSetupDone("consume");
 
+        //Probably when this throws an NPE it's because mService is null, but let's just check Everything for debugging
+        if(mService == null) {
+            throw new IabException(IABHELPER_UNKNOWN_ERROR, "mService was null in IabHelper.consume()");
+        } else if (itemInfo == null) {
+            throw new IabException(IABHELPER_UNKNOWN_ERROR, "itemInfo was null in IabHelper.consume()");
+        } else if (mContext == null) {
+            throw new IabException(IABHELPER_UNKNOWN_ERROR, "mContext was null in IabHelper.consume()");
+        } else if (itemInfo.mItemType == null) {
+            throw new IabException(IABHELPER_UNKNOWN_ERROR, "itemInfo.itemType was null in IabHelper.consume()");
+        }
+
         if (!itemInfo.mItemType.equals(ITEM_TYPE_INAPP)) {
             throw new IabException(IABHELPER_INVALID_CONSUMPTION,
                     "Items of type '" + itemInfo.mItemType + "' can't be consumed.");
