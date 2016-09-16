@@ -148,6 +148,7 @@ void *AirInAppRefToSelf;
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error
 {
     FREDispatchStatusEventAsync(AirInAppCtx ,(uint8_t*) "DEBUG", (uint8_t*) [@"requestDidFailWithError" UTF8String] );
+    FREDispatchStatusEventAsync(AirInAppCtx ,(uint8_t*) "PRODUCT_INFO_ERROR", (uint8_t*) [error debugDescription] );
 }
 
 
