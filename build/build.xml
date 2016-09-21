@@ -6,6 +6,7 @@
 
     <!-- All -->
     <target name="all" depends="ios,android,swc,package" description="Full build of extension"/>
+    <target name="all-android-debug" depends="ios,android-debug,swc,package" description="Full build of extension w/debugging on Android"/>
 
     <!-- iOS -->
     <target name="ios" description="Build iOS Library">
@@ -36,7 +37,17 @@
     </target>
 
     <!-- Android -->
-    <target name="android" description="Build Android Library">
+    <target name="android" description="Build Android Library with debugging disabled">
+        <property name="ANDROID_DEBUG" value="false"/>
+        <antcall target="android-build"/>
+    </target>
+    <target name="android-debug" description="Build Android Library with debugging enabled">
+        <property name="ANDROID_DEBUG" value="true"/>
+        <antcall target="android-build"/>
+    </target>
+
+    <!-- Android -->
+    <target name="android-build" description="Build Android Library">
 
         <property name="android.platform.home" value="${android.sdk.home}/platforms/android-${android.platform}"/>
         <property name="android.build.tools.path" value="${android.sdk.home}/build-tools/${android.build.tools.version}"/>
@@ -52,7 +63,7 @@
         </exec>
 
         <!-- compile the java code -->
-        <javac destdir="temp/android/build/" source="1.7" target="1.7" includeantruntime="false">
+        <javac destdir="temp/android/build/" source="1.7" target="1.7" includeantruntime="false" debug="${ANDROID_DEBUG}">
             <src path="../android/src"/>
             <src path="../android/gen"/>
             <classpath>
