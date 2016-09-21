@@ -164,6 +164,8 @@ package com.freshplanet.ane.AirInAppPurchase {
             }
 
             trace("[InAppPurchase] get Products Info");
+            if(!productsId) productsId = [];
+            if(!subscriptionIds) subscriptionIds = [];
             _context.call("getProductsInfo", productsId, subscriptionIds);
 		}
 

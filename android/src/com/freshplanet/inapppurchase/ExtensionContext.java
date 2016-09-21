@@ -236,8 +236,15 @@ public class ExtensionContext extends FREContext {
         @Override
         public FREObject call(FREContext ctx, FREObject[] args) {
 
-            List<String> skusName = getListOfStringFromFREArray((FREArray) args[0]);
-            List<String> skusSubsName = getListOfStringFromFREArray((FREArray) args[1]);
+            List<String> skusName = null;
+            if(args[0] != null) {
+                skusName = getListOfStringFromFREArray((FREArray) args[0]);
+            }
+
+            List<String> skusSubsName = null;
+            if(args[1] != null) {
+                skusSubsName = getListOfStringFromFREArray((FREArray) args[1]);
+            }
 
             try {
                 _iabHelper.queryInventoryAsync(true, skusName, skusSubsName, _getProductsInfoListener);
