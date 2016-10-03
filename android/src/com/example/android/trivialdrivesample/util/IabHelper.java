@@ -34,6 +34,8 @@ import com.android.vending.billing.IInAppBillingService;
 
 import org.json.JSONException;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -700,6 +702,9 @@ public class IabHelper {
                 catch (IabException ex) {
                     result = ex.getResult();
                 }
+                catch (Exception e) {
+                    result = new IabResult(IABHELPER_UNKNOWN_ERROR, exceptionStacktraceToString(e));
+                }
 
                 flagEndAsync();
 
@@ -714,6 +719,15 @@ public class IabHelper {
                 }
             }
         })).start();
+    }
+
+    public static String exceptionStacktraceToString(Exception e)
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(baos);
+        e.printStackTrace(ps);
+        ps.close();
+        return baos.toString();
     }
 
     public void queryInventoryAsync(QueryInventoryFinishedListener listener)
@@ -1095,6 +1109,9 @@ public class IabHelper {
                     }
                     catch (IabException ex) {
                         results.add(ex.getResult());
+                    }
+                    catch (Exception e) {
+                        results.add(new IabResult(IABHELPER_UNKNOWN_ERROR, exceptionStacktraceToString(e)));
                     }
                 }
 
