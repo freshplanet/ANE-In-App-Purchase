@@ -104,14 +104,7 @@ package com.freshplanet.ane.AirInAppPurchase {
          */
         public function makeSubscription(productId:String):void {
 
-            if (_isAndroid()) {
-
-                trace("[InAppPurchase] check user can make a subscription");
-                _context.call("makeSubscription", productId);
-            }
-            else {
-                _dispatchEvent(InAppPurchaseEvent.PURCHASE_ERROR, "subscriptions not supported");
-            }
+            _context.call("makeSubscription", productId);
         }
 		
         /**

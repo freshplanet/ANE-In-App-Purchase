@@ -281,6 +281,41 @@ DEFINE_ANE_FUNCTION(AirInAppPurchaseInit)
     return nil;
 }
 
+
+
+// make a subscription purchase
+DEFINE_ANE_FUNCTION(makeSubscription)
+{
+    
+    uint32_t stringLength;
+    const uint8_t *string1;
+    //FREDispatchStatusEventAsync(context, (uint8_t*) "DEBUG", (uint8_t*) [@"purchase: getting product id" UTF8String]);
+    
+    if (FREGetObjectAsUTF8(argv[0], &stringLength, &string1) != FRE_OK)
+    {
+        return nil;
+    }
+    
+    //FREDispatchStatusEventAsync(context, (uint8_t*) "DEBUG", (uint8_t*) [@"purchase: convert product id" UTF8String]);
+    
+    NSString *productIdentifier = [NSString stringWithUTF8String:(char*)string1];
+    
+    FREDispatchStatusEventAsync(context, (uint8_t*) "DEBUG", (uint8_t*) [productIdentifier UTF8String]);
+    
+    SKPayment* payment = [SKPayment paymentWithProductIdentifier:productIdentifier];
+    
+    FREDispatchStatusEventAsync(context, (uint8_t*) "DEBUG", (uint8_t*) [[payment productIdentifier] UTF8String]);
+    
+    //   [[SKPaymentQueue defaultQueue] removeTransactionObserver:self];
+    
+    
+    [[SKPaymentQueue defaultQueue] addPayment:payment];
+    
+    return nil;
+}
+
+
+
 // make a purchase
 DEFINE_ANE_FUNCTION(makePurchase)
 {
@@ -428,7 +463,7 @@ void AirInAppContextInitializer(void* extData, const uint8_t* ctxType, FREContex
                              uint32_t* numFunctionsToTest, const FRENamedFunction** functionsToSet) 
 {    
     // Register the links btwn AS3 and ObjC. (dont forget to modify the nbFuntionsToLink integer if you are adding/removing functions)
-    NSInteger nbFuntionsToLink = 5;
+    NSInteger nbFuntionsToLink = 6;
     *numFunctionsToTest = nbFuntionsToLink;
     
     FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * nbFuntionsToLink);
@@ -452,6 +487,10 @@ void AirInAppContextInitializer(void* extData, const uint8_t* ctxType, FREContex
     func[4].name = (const uint8_t*) "removePurchaseFromQueue";
     func[4].functionData = NULL;
     func[4].function = &removePurchaseFromQueue;
+    
+    func[5].name = (const uint8_t*) "makeSubscription";
+    func[5].functionData = NULL;
+    func[5].function = &makeSubscription;
     
     *functionsToSet = func;
     
