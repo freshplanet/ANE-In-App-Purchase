@@ -67,6 +67,10 @@ void *AirInAppRefToSelf;
         {
             switch (transaction.transactionState) {
                 case SKPaymentTransactionStatePurchased:
+                    NSLog(@"%@", transaction.payment.productIdentifier);
+                    NSLog(@"%@", transaction.originalTransaction);
+                    NSLog(@"%@", transaction.transactionDate);
+                    NSLog(@"%@", transaction.transactionIdentifier);
                     [self completeTransaction:transaction];
                     break;
                 default:
@@ -159,6 +163,7 @@ void *AirInAppRefToSelf;
 // complete a transaction (item has been purchased, need to check the receipt)
 - (void) completeTransaction:(SKPaymentTransaction*)transaction
 {
+
     NSMutableDictionary *data;
 
     // purchase done
@@ -169,7 +174,8 @@ void *AirInAppRefToSelf;
     NSString* receiptString = [[[NSString alloc] initWithData:transaction.transactionReceipt encoding:NSUTF8StringEncoding] autorelease];
     [data setValue:receiptString forKey:@"receipt"];
     [data setValue:@"AppStore"   forKey:@"receiptType"];
-    
+    [data setValue:[NSString stringWithFormat: @"%f", [transaction.transactionDate timeIntervalSince1970]] forKey:@"timestamp"];
+
     FREDispatchStatusEventAsync(AirInAppCtx, (uint8_t*)"PURCHASE_SUCCESSFUL", (uint8_t*)[[data JSONString] UTF8String]); 
 }
 
