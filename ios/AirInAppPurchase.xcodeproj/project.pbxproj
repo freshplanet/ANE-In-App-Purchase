@@ -7,108 +7,103 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5AC18A8B152A0AED007399DB /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AC18A89152A0AED007399DB /* JSONKit.h */; };
-		5AC18A8C152A0AED007399DB /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AC18A8A152A0AED007399DB /* JSONKit.m */; };
-		BFA8AB071527AFB700845071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFA8AB061527AFB700845071 /* Foundation.framework */; };
-		BFA8AB0D1527AFB700845071 /* AirInAppPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = BFA8AB0C1527AFB700845071 /* AirInAppPurchase.m */; };
-		BFA8AB141527B02300845071 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFA8AB131527B02300845071 /* StoreKit.framework */; };
-		FA82D92D17B00A3500792905 /* FlashRuntimeExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = FA82D92C17B00A3500792905 /* FlashRuntimeExtensions.h */; };
+		16BE0E521E81BB0E00254FF3 /* AirInAppPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BE0E511E81BB0E00254FF3 /* AirInAppPurchase.m */; };
+		16BE0E531E81BB0E00254FF3 /* AirInAppPurchase.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 16BE0E501E81BB0E00254FF3 /* AirInAppPurchase.h */; };
+		F5984B7D75AB202DD0B48DE6 /* libPods-AirInAppPurchase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EFE35A8FB8D81D5962B8DCBA /* libPods-AirInAppPurchase.a */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		16BE0E4B1E81BB0E00254FF3 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				16BE0E531E81BB0E00254FF3 /* AirInAppPurchase.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		5AC18A89152A0AED007399DB /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSONKit.h; path = JSONKit/JSONKit.h; sourceTree = SOURCE_ROOT; };
-		5AC18A8A152A0AED007399DB /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSONKit.m; path = JSONKit/JSONKit.m; sourceTree = SOURCE_ROOT; };
-		BFA8AB031527AFB700845071 /* libAirInAppPurchase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAirInAppPurchase.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		BFA8AB061527AFB700845071 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		BFA8AB0A1527AFB700845071 /* AirInAppPurchase-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AirInAppPurchase-Prefix.pch"; sourceTree = "<group>"; };
-		BFA8AB0B1527AFB700845071 /* AirInAppPurchase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AirInAppPurchase.h; sourceTree = "<group>"; };
-		BFA8AB0C1527AFB700845071 /* AirInAppPurchase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AirInAppPurchase.m; sourceTree = "<group>"; };
-		BFA8AB131527B02300845071 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
-		FA82D92C17B00A3500792905 /* FlashRuntimeExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlashRuntimeExtensions.h; sourceTree = SOURCE_ROOT; };
+		16BE0E4D1E81BB0E00254FF3 /* libAirInAppPurchase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAirInAppPurchase.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		16BE0E501E81BB0E00254FF3 /* AirInAppPurchase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AirInAppPurchase.h; sourceTree = "<group>"; };
+		16BE0E511E81BB0E00254FF3 /* AirInAppPurchase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AirInAppPurchase.m; sourceTree = "<group>"; };
+		16BE0E621E81BC6400254FF3 /* FlashRuntimeExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlashRuntimeExtensions.h; sourceTree = SOURCE_ROOT; };
+		4F5EEECECF41468977B23870 /* Pods-AirInAppPurchase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirInAppPurchase.release.xcconfig"; path = "Pods/Target Support Files/Pods-AirInAppPurchase/Pods-AirInAppPurchase.release.xcconfig"; sourceTree = "<group>"; };
+		73A52F4802CB8303AF16A808 /* Pods-AirInAppPurchase.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirInAppPurchase.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AirInAppPurchase/Pods-AirInAppPurchase.debug.xcconfig"; sourceTree = "<group>"; };
+		EFE35A8FB8D81D5962B8DCBA /* libPods-AirInAppPurchase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AirInAppPurchase.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		BFA8AB001527AFB700845071 /* Frameworks */ = {
+		16BE0E4A1E81BB0E00254FF3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BFA8AB141527B02300845071 /* StoreKit.framework in Frameworks */,
-				BFA8AB071527AFB700845071 /* Foundation.framework in Frameworks */,
+				F5984B7D75AB202DD0B48DE6 /* libPods-AirInAppPurchase.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		BFA8AAF81527AFB700845071 = {
+		16BE0E441E81BB0E00254FF3 = {
 			isa = PBXGroup;
 			children = (
-				BFA8AB081527AFB700845071 /* AirInAppPurchase */,
-				BFA8AB051527AFB700845071 /* Frameworks */,
-				BFA8AB041527AFB700845071 /* Products */,
+				16BE0E4F1E81BB0E00254FF3 /* AirInAppPurchase */,
+				16BE0E4E1E81BB0E00254FF3 /* Products */,
+				A3ACC40760CB03005046AC1F /* Pods */,
+				DBB5F3703B3BCF13344FD756 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
-		BFA8AB041527AFB700845071 /* Products */ = {
+		16BE0E4E1E81BB0E00254FF3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BFA8AB031527AFB700845071 /* libAirInAppPurchase.a */,
+				16BE0E4D1E81BB0E00254FF3 /* libAirInAppPurchase.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		BFA8AB051527AFB700845071 /* Frameworks */ = {
+		16BE0E4F1E81BB0E00254FF3 /* AirInAppPurchase */ = {
 			isa = PBXGroup;
 			children = (
-				BFA8AB131527B02300845071 /* StoreKit.framework */,
-				BFA8AB061527AFB700845071 /* Foundation.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		BFA8AB081527AFB700845071 /* AirInAppPurchase */ = {
-			isa = PBXGroup;
-			children = (
-				5AC18A89152A0AED007399DB /* JSONKit.h */,
-				5AC18A8A152A0AED007399DB /* JSONKit.m */,
-				BFA8AB0B1527AFB700845071 /* AirInAppPurchase.h */,
-				BFA8AB0C1527AFB700845071 /* AirInAppPurchase.m */,
-				BFA8AB091527AFB700845071 /* Supporting Files */,
+				16BE0E621E81BC6400254FF3 /* FlashRuntimeExtensions.h */,
+				16BE0E501E81BB0E00254FF3 /* AirInAppPurchase.h */,
+				16BE0E511E81BB0E00254FF3 /* AirInAppPurchase.m */,
 			);
 			path = AirInAppPurchase;
 			sourceTree = "<group>";
 		};
-		BFA8AB091527AFB700845071 /* Supporting Files */ = {
+		A3ACC40760CB03005046AC1F /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				FA82D92C17B00A3500792905 /* FlashRuntimeExtensions.h */,
-				BFA8AB0A1527AFB700845071 /* AirInAppPurchase-Prefix.pch */,
+				73A52F4802CB8303AF16A808 /* Pods-AirInAppPurchase.debug.xcconfig */,
+				4F5EEECECF41468977B23870 /* Pods-AirInAppPurchase.release.xcconfig */,
 			);
-			name = "Supporting Files";
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		DBB5F3703B3BCF13344FD756 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EFE35A8FB8D81D5962B8DCBA /* libPods-AirInAppPurchase.a */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
-/* Begin PBXHeadersBuildPhase section */
-		BFA8AB011527AFB700845071 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				5AC18A8B152A0AED007399DB /* JSONKit.h in Headers */,
-				FA82D92D17B00A3500792905 /* FlashRuntimeExtensions.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
 /* Begin PBXNativeTarget section */
-		BFA8AB021527AFB700845071 /* AirInAppPurchase */ = {
+		16BE0E4C1E81BB0E00254FF3 /* AirInAppPurchase */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BFA8AB101527AFB700845071 /* Build configuration list for PBXNativeTarget "AirInAppPurchase" */;
+			buildConfigurationList = 16BE0E561E81BB0E00254FF3 /* Build configuration list for PBXNativeTarget "AirInAppPurchase" */;
 			buildPhases = (
-				BFA8AAFF1527AFB700845071 /* Sources */,
-				BFA8AB001527AFB700845071 /* Frameworks */,
-				BFA8AB011527AFB700845071 /* Headers */,
+				AA70E979001BE4848FA1FDF0 /* [CP] Check Pods Manifest.lock */,
+				16BE0E491E81BB0E00254FF3 /* Sources */,
+				16BE0E4A1E81BB0E00254FF3 /* Frameworks */,
+				16BE0E4B1E81BB0E00254FF3 /* CopyFiles */,
+				16C84524FE13B7BE3CEF7EE0 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -116,115 +111,188 @@
 			);
 			name = AirInAppPurchase;
 			productName = AirInAppPurchase;
-			productReference = BFA8AB031527AFB700845071 /* libAirInAppPurchase.a */;
+			productReference = 16BE0E4D1E81BB0E00254FF3 /* libAirInAppPurchase.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		BFA8AAFA1527AFB700845071 /* Project object */ = {
+		16BE0E451E81BB0E00254FF3 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = "Freshplanet, Inc.";
+				TargetAttributes = {
+					16BE0E4C1E81BB0E00254FF3 = {
+						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Automatic;
+					};
+				};
 			};
-			buildConfigurationList = BFA8AAFD1527AFB700845071 /* Build configuration list for PBXProject "AirInAppPurchase" */;
+			buildConfigurationList = 16BE0E481E81BB0E00254FF3 /* Build configuration list for PBXProject "AirInAppPurchase" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 			);
-			mainGroup = BFA8AAF81527AFB700845071;
-			productRefGroup = BFA8AB041527AFB700845071 /* Products */;
+			mainGroup = 16BE0E441E81BB0E00254FF3;
+			productRefGroup = 16BE0E4E1E81BB0E00254FF3 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				BFA8AB021527AFB700845071 /* AirInAppPurchase */,
+				16BE0E4C1E81BB0E00254FF3 /* AirInAppPurchase */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		16C84524FE13B7BE3CEF7EE0 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AirInAppPurchase/Pods-AirInAppPurchase-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AA70E979001BE4848FA1FDF0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
-		BFA8AAFF1527AFB700845071 /* Sources */ = {
+		16BE0E491E81BB0E00254FF3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BFA8AB0D1527AFB700845071 /* AirInAppPurchase.m in Sources */,
-				5AC18A8C152A0AED007399DB /* JSONKit.m in Sources */,
+				16BE0E521E81BB0E00254FF3 /* AirInAppPurchase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		BFA8AB0E1527AFB700845071 /* Debug */ = {
+		16BE0E541E81BB0E00254FF3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};
-		BFA8AB0F1527AFB700845071 /* Release */ = {
+		16BE0E551E81BB0E00254FF3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CLANG_ENABLE_OBJC_ARC = NO;
-				COPY_PHASE_STRIP = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		BFA8AB111527AFB700845071 /* Debug */ = {
+		16BE0E571E81BB0E00254FF3 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 73A52F4802CB8303AF16A808 /* Pods-AirInAppPurchase.debug.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
-				DSTROOT = /tmp/AirInAppPurchase.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "AirInAppPurchase/AirInAppPurchase-Prefix.pch";
-				GCC_VERSION = "";
-				INSTALL_PATH = ../;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
 		};
-		BFA8AB121527AFB700845071 /* Release */ = {
+		16BE0E581E81BB0E00254FF3 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F5EEECECF41468977B23870 /* Pods-AirInAppPurchase.release.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
-				DSTROOT = /tmp/AirInAppPurchase.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "AirInAppPurchase/AirInAppPurchase-Prefix.pch";
-				GCC_VERSION = "";
-				INSTALL_PATH = ../;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -234,25 +302,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		BFA8AAFD1527AFB700845071 /* Build configuration list for PBXProject "AirInAppPurchase" */ = {
+		16BE0E481E81BB0E00254FF3 /* Build configuration list for PBXProject "AirInAppPurchase" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				BFA8AB0E1527AFB700845071 /* Debug */,
-				BFA8AB0F1527AFB700845071 /* Release */,
+				16BE0E541E81BB0E00254FF3 /* Debug */,
+				16BE0E551E81BB0E00254FF3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BFA8AB101527AFB700845071 /* Build configuration list for PBXNativeTarget "AirInAppPurchase" */ = {
+		16BE0E561E81BB0E00254FF3 /* Build configuration list for PBXNativeTarget "AirInAppPurchase" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				BFA8AB111527AFB700845071 /* Debug */,
-				BFA8AB121527AFB700845071 /* Release */,
+				16BE0E571E81BB0E00254FF3 /* Debug */,
+				16BE0E581E81BB0E00254FF3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = BFA8AAFA1527AFB700845071 /* Project object */;
+	rootObject = 16BE0E451E81BB0E00254FF3 /* Project object */;
 }
