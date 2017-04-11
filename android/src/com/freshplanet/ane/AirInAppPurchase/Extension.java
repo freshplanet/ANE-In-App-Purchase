@@ -12,7 +12,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.adobe.air;
+package com.freshplanet.ane.AirInAppPurchase;
 
-public interface AirInAppPurchaseInputEventCallback extends AndroidActivityWrapper.InputEventCallback {
+import com.adobe.fre.FREContext;
+import com.adobe.fre.FREExtension;
+
+public class Extension implements FREExtension {
+
+    private ExtensionContext _extensionContext = null;
+
+    /**
+     *
+     * FREExtension SETUP
+     *
+     */
+
+    public void initialize() {
+
+    }
+
+	public void dispose() {
+        _extensionContext = null;
+	}
+
+    public FREContext createContext(String extId) {
+
+        if (_extensionContext == null)
+            _extensionContext = new ExtensionContext();
+
+        return _extensionContext;
+    }
 }

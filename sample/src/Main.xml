@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<application xmlns="http://ns.adobe.com/air/application/25.0">
+
+	<id>com.freshplanet.sample</id>
+	<filename>sample</filename>
+	<name>sample</name>
+	<versionNumber>000.001.001</versionNumber>
+	<versionLabel>0.0.1</versionLabel>
+
+	<initialWindow>
+		<content>[This value will be overwritten by Flash Builder in the output app.xml]</content>
+		<aspectRatio>portrait</aspectRatio>
+		<autoOrients>true</autoOrients>
+		<renderMode>direct</renderMode>
+		<fullScreen>true</fullScreen>
+		<visible>true</visible>
+	</initialWindow>
+
+	<android>
+		<manifestAdditions><![CDATA[
+			<manifest android:installLocation="auto">
+
+				<uses-sdk android:minSdkVersion="16" android:targetSdkVersion="22"></uses-sdk>
+				<uses-permission android:name="com.android.vending.BILLING" />
+
+			</manifest>
+		]]></manifestAdditions>
+		<!--<colorDepth>16bit</colorDepth>-->
+	</android>
+
+	<iPhone>
+		<InfoAdditions><![CDATA[
+        	<key>MinimumOSVersion</key>
+        	<string>8.0</string>
+			<key>UIViewControllerBasedStatusBarAppearance</key>
+			<false/>
+
+          	<key>UILaunchImageFile</key>
+            <string>Splash</string>
+            
+		]]></InfoAdditions>
+
+		<Entitlements><![CDATA[
+			<key>aps-environment</key>
+			    <string>production</string>
+			<key>get-task-allow</key><false/>
+        ]]></Entitlements>
+	</iPhone>
+
+	<extensions>
+		<extensionID>com.freshplanet.ane.AirInAppPurchase</extensionID>
+	</extensions>
+</application>
