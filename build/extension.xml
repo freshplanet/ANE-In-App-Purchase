@@ -24,15 +24,16 @@
         <platform name="iPhone-ARM">
                 <applicationDeployment>
                     <nativeLibrary>libAirInAppPurchase.a</nativeLibrary>
-                    <initializer>AirInAppInitializer</initializer> 
+                    <initializer>AirInAppPurchaseInitializer</initializer> 
+                    <finalizer>AirInAppPurchaseFinalizer</finalizer>
                 </applicationDeployment>
         </platform>
 
         <platform name="Android-ARM"> 
             <applicationDeployment> 
                 <nativeLibrary>libAirInAppPurchase.jar</nativeLibrary> 
-                <initializer>com.freshplanet.inapppurchase.Extension</initializer> 
-                <finalizer>com.freshplanet.inapppurchase.Extension</finalizer> 
+                <initializer>com.freshplanet.ane.AirInAppPurchase.Extension</initializer> 
+                <finalizer>com.freshplanet.ane.AirInAppPurchase.Extension</finalizer> 
             </applicationDeployment> 
         </platform> 
 
