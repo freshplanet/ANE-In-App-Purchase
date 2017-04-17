@@ -73,3 +73,8 @@ Authors
 
 This ANE has been written by [Thibaut Crenn](https://github.com/titi-us) and [Adam Schlesinger](https://github.com/AdamFP).
 
+Hi when I try to package ane to my project in flash builder I see many errors. Can you help me? I can not see your e-mail. Can you send me your e-mail for contacting?
+
+Thanks,
+Artem
+
