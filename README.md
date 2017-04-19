@@ -73,7 +73,25 @@ Authors
 
 This ANE has been written by [Thibaut Crenn](https://github.com/titi-us) and [Adam Schlesinger](https://github.com/AdamFP).
 
-Hi when I try to package ane to my project in flash builder I see many errors. Can you help me? I can not see your e-mail. Can you send me your e-mail for contacting?
+Hi guys,
+
+When I try to package ane to my project in flash builder I see many errors. Can you help me? I can not see your e-mail. Can you send me your e-mail for contacting? My e-mail artem@crimea-sudak.net
+
+Can you help me please. Can you show me instructions, how I can use this ANE. I download last version this ANE (using AIR25 for last version) but when I try to include to package I see many errors (I can't attache screenshot) somethink like:
+
+C:\Users\artem\AppData\Local\Temp\b9e17647-6fd0-4c7e-b50d-ba3e11d88129\app_entry_res\values\strings.xml:48: error: Resource at IDA_CURL_INTERFACE_ALLSESS appears in overlay but not in the base package; use to add.
+
+C:\Users\artem\AppData\Local\Temp\b9e17647-6fd0-4c7e-b50d-ba3e11d88129\app_entry_res\values\strings.xml:49: error: Resource at IDA_CURL_INTERFACE_SERVER appears in overlay but not in the base package; use to add.
+
+C:\Users\artem\AppData\Local\Temp\b9e17647-6fd0-4c7e-b50d-ba3e11d88129\app_entry_res\values\strings.xml:50: error: Resource at IDA_CURL_INTERFACE_TRUSTSER appears in overlay but not in the base package; use to add.
+
+C:\Users\artem\AppData\Local\Temp\b9e17647-6fd0-4c7e-b50d-ba3e11d88129\app_entry_res\values\strings.xml:51: error: Resource at IDA_CURL_INTERFACE_CNAME_MSG appears in overlay but not in the base package; use to add.
+
+C:\Users\artem\AppData\Local\Temp\b9e17647-6fd0-4c7e-b50d-ba3e11d88129\app_entry_res\values\strings.xml:52: error: Resource at IDA_CURL_INTERFACE_VIEW_CERT appears in overlay but not in the base package; use to add.
+
+.....
+
+Can you help with this please?
 
 Thanks,
 Artem
