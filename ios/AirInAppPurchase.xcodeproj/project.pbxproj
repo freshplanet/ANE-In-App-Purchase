@@ -286,7 +286,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 73A52F4802CB8303AF16A808 /* Pods-AirInAppPurchase.debug.xcconfig */;
 			buildSettings = {
-				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -296,7 +295,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4F5EEECECF41468977B23870 /* Pods-AirInAppPurchase.release.xcconfig */;
 			buildSettings = {
-				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
