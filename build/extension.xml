@@ -35,7 +35,23 @@
                 <initializer>com.freshplanet.ane.AirInAppPurchase.Extension</initializer> 
                 <finalizer>com.freshplanet.ane.AirInAppPurchase.Extension</finalizer> 
             </applicationDeployment> 
-        </platform> 
+        </platform>
+
+        <platform name="Android-ARM64">
+            <applicationDeployment>
+                <nativeLibrary>libAirInAppPurchase.jar</nativeLibrary>
+                <initializer>com.freshplanet.ane.AirInAppPurchase.Extension</initializer>
+                <finalizer>com.freshplanet.ane.AirInAppPurchase.Extension</finalizer>
+            </applicationDeployment>
+        </platform>
+
+        <platform name="Android-x86">
+            <applicationDeployment>
+                <nativeLibrary>libAirInAppPurchase.jar</nativeLibrary>
+                <initializer>com.freshplanet.ane.AirInAppPurchase.Extension</initializer>
+                <finalizer>com.freshplanet.ane.AirInAppPurchase.Extension</finalizer>
+            </applicationDeployment>
+        </platform>
 
         <platform name="default"> 
             <applicationDeployment/> 
