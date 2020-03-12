@@ -18,38 +18,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
-import com.adobe.air.AirInAppPurchaseActivityResultCallback;
-import com.adobe.air.AndroidActivityWrapper;
 import com.adobe.fre.FREArray;
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
-import com.example.android.trivialdrivesample.util.Inventory;
-import com.example.android.trivialdrivesample.util.Purchase;
-import com.example.android.trivialdrivesample.util.IabHelper;
-import com.example.android.trivialdrivesample.util.IabResult;
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.ConsumeResponseListener;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ExtensionContext extends FREContext {
 
     private static final String TAG = "AirInAppPurchase";
-    private static final int RC_REQUEST = 10001;
 
-    private IabHelper _iabHelper = null;
+    private BillingManager _billingManager;
 
-    private AndroidActivityWrapper aaw = null;
-    private Activity _freActivity = null;
-
-    public ExtensionContext() {
-
-        aaw = AndroidActivityWrapper.GetAndroidActivityWrapper();
-        aaw.addActivityResultListener(_activityResultCallback);
-
-        _freActivity = aaw.getActivity();
+    ExtensionContext() {
     }
 
     /**
@@ -92,20 +82,6 @@ public class ExtensionContext extends FREContext {
         return resultString;
     }
 
-    /**
-     *
-     * ADOBE HACKERY
-     *
-     */
-
-    private AirInAppPurchaseActivityResultCallback _activityResultCallback = new AirInAppPurchaseActivityResultCallback() {
-        @Override
-        public void onActivityResult(int i, int i1, Intent intent) {
-
-            if (_iabHelper != null)
-                _iabHelper.handleActivityResult(i, i1, intent);
-        }
-    };
 
     /**
      *
@@ -128,74 +104,84 @@ public class ExtensionContext extends FREContext {
     private static final String RESTORE_INFO_RECEIVED = "RESTORE_INFO_RECEIVED";
     private static final String RESTORE_INFO_ERROR = "RESTORE_INFO_ERROR";
 
-    private IabHelper.OnIabSetupFinishedListener _initLibListener = new IabHelper.OnIabSetupFinishedListener() {
+    private BillingManager.SetupFinishedListener _initLibListener = new BillingManager.SetupFinishedListener() {
         @Override
-        public void onIabSetupFinished(IabResult result) {
+        public void SetupFinished(Boolean success) {
 
-            if (result.isSuccess())
-                _dispatchEvent(INIT_SUCCESSFUL, result.getMessage());
+            if(success)
+                _dispatchEvent(INIT_SUCCESSFUL, "");
             else
-                _dispatchEvent(INIT_ERROR, result.getMessage());
+                _dispatchEvent(INIT_ERROR, "");
         }
     };
 
-    private IabHelper.QueryInventoryFinishedListener _getProductsInfoListener = new IabHelper.QueryInventoryFinishedListener() {
+    private PurchasesUpdatedListener _purchaseUpdatedListener = new PurchasesUpdatedListener() {
         @Override
-        public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+        public void onPurchasesUpdated(BillingResult billingResult, List<com.android.billingclient.api.Purchase> list) {
 
-            if (result.isFailure())
-                _dispatchEvent(PRODUCT_INFO_ERROR, result.getMessage());
+
+            if (billingResult.getResponseCode() ==  BillingClient.BillingResponseCode.OK && list != null && list.size() > 0) {
+                _purchaseFinishedListener.onPurchasesFinished(true, _purchaseToResultString(list.get(0)));
+            }
+            else if(billingResult.getResponseCode() ==  BillingClient.BillingResponseCode.USER_CANCELED){
+                _dispatchEvent(PURCHASE_ERROR, "RESULT_USER_CANCELED");
+            }
             else {
+                _dispatchEvent(PURCHASE_ERROR, billingResult.getDebugMessage());
+            }
+        }
+    };
 
-                String data = inv != null ? inv.toString() : "";
+    private BillingManager.PurchaseFinishedListener _purchaseFinishedListener = new BillingManager.PurchaseFinishedListener() {
+        @Override
+        public void onPurchasesFinished(Boolean success, String data) {
+
+            if(success)
+                _dispatchEvent(PURCHASE_SUCCESSFUL, data);
+            else
+                _dispatchEvent(PURCHASE_ERROR, data != null ? data : "");
+        }
+    };
+
+    private ConsumeResponseListener _consumeResponseListener = new ConsumeResponseListener() {
+        @Override
+        public void onConsumeResponse(BillingResult billingResult, String purchaseToken) {
+            if (billingResult.getResponseCode() ==  BillingClient.BillingResponseCode.OK) {
+                _dispatchEvent(CONSUME_SUCCESSFUL, purchaseToken);
+            }
+            else {
+                _dispatchEvent(CONSUME_ERROR, billingResult.getDebugMessage());
+            }
+        }
+    };
+
+
+
+    private BillingManager.QueryInventoryFinishedListener _getProductsInfoListener = new BillingManager.QueryInventoryFinishedListener() {
+        @Override
+        public void onQueryInventoryFinished(Boolean success, String data) {
+
+            if(success) {
                 _dispatchEvent(PRODUCT_INFO_RECEIVED, data);
             }
-        }
-    };
-
-    private IabHelper.OnIabPurchaseFinishedListener _onIabPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
-        @Override
-        public void onIabPurchaseFinished(IabResult result, Purchase info) {
-
-            if (result.getResponse() == IabHelper.IABHELPER_USER_CANCELLED)
-                _dispatchEvent(PURCHASE_ERROR, "RESULT_USER_CANCELED");
-            else if (result.isFailure())
-                _dispatchEvent(PURCHASE_ERROR, result.getMessage());
             else {
-
-                String resultString = _purchaseToResultString(info);
-                _dispatchEvent(PURCHASE_SUCCESSFUL, resultString);
+                _dispatchEvent(PRODUCT_INFO_ERROR, data);
             }
         }
     };
 
-    private IabHelper.QueryInventoryFinishedListener _restoreTransactionListener = new IabHelper.QueryInventoryFinishedListener() {
+    private BillingManager.QueryPurchasesFinishedListener _getPurchasesListener = new BillingManager.QueryPurchasesFinishedListener() {
         @Override
-        public void onQueryInventoryFinished(IabResult result, Inventory inv) {
-
-            if (result.isFailure())
-                _dispatchEvent(RESTORE_INFO_ERROR, result.getMessage());
-            else {
-
-                String data = inv != null ? inv.toString() : "";
+        public void onQueryPurchasesFinished(Boolean success, String data) {
+            if(success) {
                 _dispatchEvent(RESTORE_INFO_RECEIVED, data);
             }
-        }
-    };
-
-    private IabHelper.OnConsumeFinishedListener _removePurchaseFromQueueListener = new IabHelper.OnConsumeFinishedListener() {
-        @Override
-        public void onConsumeFinished(Purchase purchase, IabResult result) {
-
-            if (result.isFailure())
-                _dispatchEvent(CONSUME_ERROR, result.getMessage());
             else {
-
-                String resultString = _purchaseToResultString(purchase);
-                _dispatchEvent(CONSUME_SUCCESSFUL, resultString);
+                _dispatchEvent(RESTORE_INFO_ERROR, data);
             }
         }
     };
+
 
     /**
      *
@@ -207,22 +193,16 @@ public class ExtensionContext extends FREContext {
         @Override
         public FREObject call(FREContext ctx, FREObject[] args) {
 
-            String key = getStringFromFREObject(args[0]);
             Boolean debug = getBooleanFromFREObject(args[1]);
 
-            if (_iabHelper != null) {
-
-                try {
-                    _iabHelper.dispose();
-                }
-                catch (IabHelper.IabAsyncInProgressException exception) {
-                    _dispatchEvent(INIT_ERROR, exception.getMessage());
-                }
+            if(_billingManager != null) {
+                _billingManager.dispose();
             }
 
-            _iabHelper = new IabHelper(_freActivity, key);
-            _iabHelper.enableDebugLogging(debug, TAG);
-            _iabHelper.startSetup(_initLibListener);
+            _billingManager = new BillingManager(ctx.getActivity());
+            _billingManager.enableDebugLogging(debug, TAG);
+            _billingManager.initialize(_initLibListener, _purchaseUpdatedListener);
+
 
             return null;
         }
@@ -242,12 +222,8 @@ public class ExtensionContext extends FREContext {
                 skusSubsName = getListOfStringFromFREArray((FREArray) args[1]);
             }
 
-            try {
-                _iabHelper.queryInventoryAsync(true, skusName, skusSubsName, _getProductsInfoListener);
-            }
-            catch (IabHelper.IabAsyncInProgressException exception) {
-                _dispatchEvent(PRODUCT_INFO_ERROR, exception.getMessage());
-            }
+            _billingManager.queryInventory(skusName, skusSubsName, _getProductsInfoListener);
+
 
             return null;
         }
@@ -255,20 +231,21 @@ public class ExtensionContext extends FREContext {
 
     private FREFunction makePurchase = new BaseFunction() {
         @Override
-        public FREObject call(FREContext ctx, FREObject[] args) {
+        public FREObject call(final FREContext ctx, FREObject[] args) {
 
-            String purchaseId = getStringFromFREObject(args[0]);
+            final String purchaseId = getStringFromFREObject(args[0]);
 
             if (purchaseId == null)
-                _dispatchEvent(PURCHASE_ERROR, "null purchaseId");
+                _dispatchEvent(PURCHASE_ERROR, "Null purchaseId");
             else {
 
-                try {
-                    _iabHelper.launchPurchaseFlow(_freActivity, purchaseId, RC_REQUEST, _onIabPurchaseFinishedListener);
-                }
-                catch (IabHelper.IabAsyncInProgressException exception) {
-                    _dispatchEvent(PURCHASE_ERROR, exception.getMessage());
-                }
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        _billingManager.purchaseProduct(ctx.getActivity(), purchaseId, BillingClient.SkuType.INAPP, _purchaseFinishedListener);
+                    }
+                });
+
             }
 
             return null;
@@ -277,20 +254,20 @@ public class ExtensionContext extends FREContext {
 
     private FREFunction makeSubscription = new BaseFunction() {
         @Override
-        public FREObject call(FREContext ctx, FREObject[] args) {
+        public FREObject call(final FREContext ctx, FREObject[] args) {
 
-            String purchaseId = getStringFromFREObject(args[0]);
+            final String purchaseId = getStringFromFREObject(args[0]);
 
             if (purchaseId == null)
                 _dispatchEvent(PURCHASE_ERROR, "null purchaseId");
             else {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        _billingManager.purchaseProduct(ctx.getActivity(), purchaseId, BillingClient.SkuType.SUBS, _purchaseFinishedListener);
+                    }
+                });
 
-                try {
-                    _iabHelper.launchSubscriptionPurchaseFlow(_freActivity, purchaseId, RC_REQUEST, _onIabPurchaseFinishedListener);
-                }
-                catch (IabHelper.IabAsyncInProgressException exception) {
-                    _dispatchEvent(PURCHASE_ERROR, exception.getMessage());
-                }
             }
 
             return null;
@@ -301,12 +278,7 @@ public class ExtensionContext extends FREContext {
         @Override
         public FREObject call(FREContext ctx, FREObject[] args) {
 
-            try {
-                _iabHelper.queryInventoryAsync(_restoreTransactionListener);
-            }
-            catch (IabHelper.IabAsyncInProgressException exception) {
-                _dispatchEvent(RESTORE_INFO_ERROR, exception.getMessage());
-            }
+            _billingManager.queryPurchases(_getPurchasesListener);
 
             return null;
         }
@@ -317,9 +289,12 @@ public class ExtensionContext extends FREContext {
         public FREObject call(FREContext ctx, FREObject[] args) {
 
             String receipt = getStringFromFREObject(args[1]);
+            String developerPayload = getStringFromFREObject(args[2]);
             JSONObject receiptJson = null;
             String signedData = null;
-            Purchase purchase = null;
+            JSONObject signedDataJson = null;
+            String purchaseToken = null;
+
 
             try {
 
@@ -329,17 +304,15 @@ public class ExtensionContext extends FREContext {
                 if (signedData == null)
                     throw new JSONException("null signedData");
 
-                purchase = new Purchase(IabHelper.ITEM_TYPE_INAPP, signedData, null); // TODO ITEM_TYPE_SUBS for subs?
+                signedDataJson = new JSONObject(signedData);
+                purchaseToken = signedDataJson.getString("purchaseToken");
+
+
+                _billingManager.consumePurchase(purchaseToken, developerPayload, _consumeResponseListener);
+
             }
             catch (JSONException jsonException) {
                 _dispatchEvent(CONSUME_ERROR, jsonException.getMessage());
-            }
-
-            try {
-                _iabHelper.consumeAsync(purchase, _removePurchaseFromQueueListener);
-            }
-            catch (IabHelper.IabAsyncInProgressException exception) {
-                _dispatchEvent(CONSUME_ERROR, exception.getMessage());
             }
 
             return null;
@@ -357,25 +330,11 @@ public class ExtensionContext extends FREContext {
      */
     public void dispose() {
 
-        _freActivity = null;
+        if(_billingManager != null)
+            _billingManager.dispose();
 
-        if (_iabHelper != null) {
+        _billingManager = null;
 
-            try {
-                _iabHelper.dispose();
-            }
-            catch (IabHelper.IabAsyncInProgressException exception) {
-                exception.printStackTrace();
-            }
-
-            _iabHelper = null;
-        }
-
-        if (aaw != null) {
-
-            aaw.removeActivityResultListener(_activityResultCallback);
-            aaw = null;
-        }
     }
 
     /**
