@@ -1,6 +1,6 @@
 <platform xmlns="http://ns.adobe.com/air/extension/22.0">
     <packagedDependencies>
-
+        <packagedDependency>billing-2.0.0.jar</packagedDependency>
     </packagedDependencies> 
     <packagedResources>
 
