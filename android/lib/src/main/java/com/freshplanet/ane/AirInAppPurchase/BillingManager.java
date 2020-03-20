@@ -16,6 +16,7 @@ import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -208,7 +209,21 @@ public class BillingManager {
             Purchase.PurchasesResult purchasesResult = _billingClient.queryPurchases(BillingClient.SkuType.INAPP);
 
             if(purchasesResult.getBillingResult().getResponseCode() == BillingClient.BillingResponseCode.OK) {
-                purchases.addAll(purchasesResult.getPurchasesList());
+                for (Purchase p : purchasesResult.getPurchasesList()) {
+                    if(p.isAcknowledged()) {
+                        // just consume
+                        consumePurchase(p.getPurchaseToken(), null, new ConsumeResponseListener() {
+                            @Override
+                            public void onConsumeResponse(BillingResult billingResult, String purchaseToken) {
+                                // do nothing, if consume didnt work, it should work on next restore
+                            }
+                        });
+                    }
+                    else {
+                        purchases.add(p);
+                    }
+                }
+
             }
             else {
                 // report errors
@@ -219,7 +234,12 @@ public class BillingManager {
 
             Purchase.PurchasesResult subscriptionsResult = _billingClient.queryPurchases(BillingClient.SkuType.SUBS);
             if(subscriptionsResult.getBillingResult().getResponseCode() == BillingClient.BillingResponseCode.OK) {
-                purchases.addAll(subscriptionsResult.getPurchasesList());
+
+                for (Purchase p : purchasesResult.getPurchasesList()) {
+                    if(!p.isAcknowledged()) {
+                        purchases.add(p);
+                    }
+                }
             }
             else {
                 // report errors
@@ -229,19 +249,23 @@ public class BillingManager {
 
 
             final JSONObject resultObject = new JSONObject();
-            final JSONObject purchasesObject = new JSONObject();
+            final JSONArray purchasesArray = new JSONArray();
 
             for (Purchase p : purchases) {
 
                 try {
-                    purchasesObject.put(p.getSku(), new JSONObject(p.getOriginalJson()));
+                    JSONObject purchaseJSON = new JSONObject();
+                    purchaseJSON.put("productId", p.getSku());
+                    purchaseJSON.put("receipt", p.getOriginalJson());
+                    purchasesArray.put(purchaseJSON);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
             }
 
-            resultObject.put("purchases", purchasesObject);
+            resultObject.put("purchases", purchasesArray);
             listener.onQueryPurchasesFinished(true, resultObject.toString());
 
         }
@@ -302,6 +326,7 @@ public class BillingManager {
             if(developerPayload != null && !developerPayload.equals("")) {
                 paramsBuilder.setDeveloperPayload(developerPayload);
             }
+
 
             _billingClient.consumeAsync(paramsBuilder.build(),listener);
         }
