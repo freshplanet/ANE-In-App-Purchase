@@ -58,29 +58,7 @@ public class ExtensionContext extends FREContext {
         }
     }
 
-    private String _purchaseToResultString(Purchase purchase) {
 
-        String resultString = null;
-
-        try {
-
-            JSONObject receiptObject = new JSONObject();
-            receiptObject.put("signedData", purchase.getOriginalJson());
-            receiptObject.put("signature", purchase.getSignature());
-
-            JSONObject resultObject = new JSONObject();
-            resultObject.put("productId", purchase.getSku());
-            resultObject.put("receiptType", "GooglePlay");
-            resultObject.put("receipt", receiptObject);
-
-            resultString = resultObject.toString();
-        }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return resultString;
-    }
 
 
     /**
@@ -121,7 +99,7 @@ public class ExtensionContext extends FREContext {
 
 
             if (billingResult.getResponseCode() ==  BillingClient.BillingResponseCode.OK && list != null && list.size() > 0) {
-                _purchaseFinishedListener.onPurchasesFinished(true, _purchaseToResultString(list.get(0)));
+                _purchaseFinishedListener.onPurchasesFinished(true, _billingManager.purchaseToJSON(list.get(0)).toString());
             }
             else if(billingResult.getResponseCode() ==  BillingClient.BillingResponseCode.USER_CANCELED){
                 _dispatchEvent(PURCHASE_ERROR, "RESULT_USER_CANCELED");

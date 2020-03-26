@@ -235,7 +235,7 @@ public class BillingManager {
             Purchase.PurchasesResult subscriptionsResult = _billingClient.queryPurchases(BillingClient.SkuType.SUBS);
             if(subscriptionsResult.getBillingResult().getResponseCode() == BillingClient.BillingResponseCode.OK) {
 
-                for (Purchase p : purchasesResult.getPurchasesList()) {
+                for (Purchase p : subscriptionsResult.getPurchasesList()) {
                     if(!p.isAcknowledged()) {
                         purchases.add(p);
                     }
@@ -243,7 +243,7 @@ public class BillingManager {
             }
             else {
                 // report errors
-                listener.onQueryPurchasesFinished(false, purchasesResult.getBillingResult().getDebugMessage());
+                listener.onQueryPurchasesFinished(false, subscriptionsResult.getBillingResult().getDebugMessage());
                 return;
             }
 
@@ -253,14 +253,9 @@ public class BillingManager {
 
             for (Purchase p : purchases) {
 
-                try {
-                    JSONObject purchaseJSON = new JSONObject();
-                    purchaseJSON.put("productId", p.getSku());
-                    purchaseJSON.put("receipt", p.getOriginalJson());
-                    purchasesArray.put(purchaseJSON);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                JSONObject purchaseJSON = purchaseToJSON(p);
+                if(purchaseJSON != null) {
+                    purchasesArray.put(purchaseToJSON(p));
                 }
 
             }
@@ -334,6 +329,29 @@ public class BillingManager {
             BillingResult result = BillingResult.newBuilder().setDebugMessage(e.getLocalizedMessage()).setResponseCode(BillingClient.BillingResponseCode.ERROR).build();
             listener.onConsumeResponse(result,result.getDebugMessage());
         }
+    }
+
+    public JSONObject purchaseToJSON(Purchase purchase) {
+
+        JSONObject resultObject = null;
+
+        try {
+
+            JSONObject receiptObject = new JSONObject();
+            receiptObject.put("signedData", purchase.getOriginalJson());
+            receiptObject.put("signature", purchase.getSignature());
+
+            resultObject = new JSONObject();
+            resultObject.put("productId", purchase.getSku());
+            resultObject.put("receiptType", "GooglePlay");
+            resultObject.put("receipt", receiptObject);
+
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return resultObject;
     }
 
 
