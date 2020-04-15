@@ -78,9 +78,11 @@ public class BillingManager {
 
     void initialize(final SetupFinishedListener setupFinishedListener, final PurchasesUpdatedListener purchasesUpdatedListener) {
 
-        checkNotDisposed();
-        if (_setupDone) throw new IllegalStateException("BillingManager is already set up.");
         try {
+
+            checkNotDisposed();
+            if (_setupDone) throw new IllegalStateException("BillingManager is already set up.");
+
             _billingClient = BillingClient.newBuilder(_context)
                     .setListener(purchasesUpdatedListener)
                     .enablePendingPurchases()
@@ -89,12 +91,18 @@ public class BillingManager {
                 @Override
                 public void onBillingSetupFinished(BillingResult billingResult) {
 
+                    if (_disposed) return;
+
+
                     if (billingResult.getResponseCode() ==  BillingClient.BillingResponseCode.OK) {
                         // The BillingClient is ready. You can query purchases here.
                         logDebug("BillingManager connected");
+                        _setupDone = true;
                         setupFinishedListener.SetupFinished(true);
 
-
+                    }
+                    else {
+                        setupFinishedListener.SetupFinished(false);
                     }
                 }
                 @Override
@@ -105,38 +113,65 @@ public class BillingManager {
                     if (_disposed) return;
 
                     setupFinishedListener.SetupFinished(false);
-                    _billingClient = null;
-                    _setupDone = true;
+
 
                 }
             });
         }
         catch (Exception e) {
             logDebug("Error initializing BillingManager " + e.getLocalizedMessage());
+            setupFinishedListener.SetupFinished(false);
         }
 
     }
 
-    void queryInventory(List<String> skuList, final List<String> skuSubsList, final QueryInventoryFinishedListener listener) {
+    private void startServiceConnectionIfNeeded(final Runnable executeOnSuccess, final Runnable executeOnError) {
 
-        try {
-            checkNotDisposed();
-            final List<SkuDetails> result = new ArrayList<SkuDetails>();
+        if(_disposed || _billingClient == null)
+            return;
 
 
-            SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
-            params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP);
-
-            getProductInfo(params.build(), new GetProductInfoFinishedListener() {
+        if (_billingClient.isReady()) {
+            if (executeOnSuccess != null) {
+                executeOnSuccess.run();
+            }
+        } else {
+            _billingClient.startConnection(new BillingClientStateListener() {
                 @Override
-                public void onGetProductInfoFinishedListener(List<SkuDetails> skuDetailsList) {
+                public void onBillingSetupFinished(BillingResult billingResult) {
+                    if (billingResult.getResponseCode() ==  BillingClient.BillingResponseCode.OK) {
 
-                    if(skuDetailsList != null) {
-                        result.addAll(skuDetailsList);
+                        if (executeOnSuccess != null) {
+                            executeOnSuccess.run();
+                        }
+                    } else {
+                        if (executeOnError != null) {
+                            executeOnError.run();
+                        }
                     }
+                }
+                @Override
+                public void onBillingServiceDisconnected() {
+                    if (executeOnError != null) {
+                        executeOnError.run();
+                    }
+                }
+            });
+        }
+    }
+
+    void queryInventory(final List<String> skuList, final List<String> skuSubsList, final QueryInventoryFinishedListener listener) {
+
+        Runnable executeOnConnectedService = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    checkNotDisposed();
+                    final List<SkuDetails> result = new ArrayList<SkuDetails>();
+
 
                     SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
-                    params.setSkusList(skuSubsList).setType(BillingClient.SkuType.SUBS);
+                    params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP);
 
                     getProductInfo(params.build(), new GetProductInfoFinishedListener() {
                         @Override
@@ -146,189 +181,273 @@ public class BillingManager {
                                 result.addAll(skuDetailsList);
                             }
 
+                            SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
+                            params.setSkusList(skuSubsList).setType(BillingClient.SkuType.SUBS);
 
-                            JSONObject detailsObject = new JSONObject();
+                            getProductInfo(params.build(), new GetProductInfoFinishedListener() {
+                                @Override
+                                public void onGetProductInfoFinishedListener(List<SkuDetails> skuDetailsList) {
 
-                            for (SkuDetails skuDetails : result) {
-                                try {
-                                    detailsObject.put(skuDetails.getSku(), new JSONObject(skuDetails.getOriginalJson()));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                                    if(skuDetailsList != null) {
+                                        result.addAll(skuDetailsList);
+                                    }
+
+
+                                    JSONObject detailsObject = new JSONObject();
+
+                                    for (SkuDetails skuDetails : result) {
+                                        try {
+                                            detailsObject.put(skuDetails.getSku(), new JSONObject(skuDetails.getOriginalJson()));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                    JSONObject resultObject = new JSONObject();
+                                    try {
+                                        resultObject.put("details", detailsObject);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    listener.onQueryInventoryFinished(true, resultObject.toString());
+
                                 }
-                            }
+                            });
 
-                            JSONObject resultObject = new JSONObject();
-                            try {
-                                resultObject.put("details", detailsObject);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                            listener.onQueryInventoryFinished(true, resultObject.toString());
 
                         }
                     });
 
-
                 }
-            });
+                catch (Exception e) {
+                    listener.onQueryInventoryFinished(false, e.getLocalizedMessage());
+                }
+            }
+        };
 
-        }
-        catch (Exception e) {
-            listener.onQueryInventoryFinished(false, e.getLocalizedMessage());
-        }
+        Runnable executeOnDisconnectedService = new Runnable() {
+            @Override
+            public void run() {
+                listener.onQueryInventoryFinished(false, "Service disconnected.");
+            }
+        };
+
+        startServiceConnectionIfNeeded(executeOnConnectedService, executeOnDisconnectedService);
+
+
 
     }
 
-    private void getProductInfo(SkuDetailsParams params, final GetProductInfoFinishedListener listener) {
+    private void getProductInfo(final SkuDetailsParams params, final GetProductInfoFinishedListener listener) {
 
-        try {
-            checkNotDisposed();
-            _billingClient.querySkuDetailsAsync(params,
-                    new SkuDetailsResponseListener() {
-                        @Override
-                        public void onSkuDetailsResponse(BillingResult billingResult,
-                                                         List<SkuDetails> skuDetailsList) {
-                            // Process the result.
-                            listener.onGetProductInfoFinishedListener(skuDetailsList);
-                        }
-                    });
-        }
-        catch (Exception e) {
-            listener.onGetProductInfoFinishedListener(null);
-        }
+        Runnable executeOnConnectedService = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    checkNotDisposed();
+                    _billingClient.querySkuDetailsAsync(params,
+                            new SkuDetailsResponseListener() {
+                                @Override
+                                public void onSkuDetailsResponse(BillingResult billingResult,
+                                                                 List<SkuDetails> skuDetailsList) {
+                                    // Process the result.
+                                    listener.onGetProductInfoFinishedListener(skuDetailsList);
+                                }
+                            });
+                }
+                catch (Exception e) {
+                    listener.onGetProductInfoFinishedListener(null);
+                }
+            }
+        };
+
+        Runnable executeOnDisconnectedService = new Runnable() {
+            @Override
+            public void run() {
+                listener.onGetProductInfoFinishedListener(null);
+            }
+        };
+
+        startServiceConnectionIfNeeded(executeOnConnectedService, executeOnDisconnectedService);
+
+
     }
 
     void queryPurchases(final QueryPurchasesFinishedListener listener) {
 
-        try {
-            checkNotDisposed();
+        Runnable executeOnConnectedService = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    checkNotDisposed();
 
-            List<Purchase> purchases = new ArrayList<Purchase>();
+                    List<Purchase> purchases = new ArrayList<Purchase>();
 
-            Purchase.PurchasesResult purchasesResult = _billingClient.queryPurchases(BillingClient.SkuType.INAPP);
+                    Purchase.PurchasesResult purchasesResult = _billingClient.queryPurchases(BillingClient.SkuType.INAPP);
 
-            if(purchasesResult.getBillingResult().getResponseCode() == BillingClient.BillingResponseCode.OK) {
-                for (Purchase p : purchasesResult.getPurchasesList()) {
-                    if(p.isAcknowledged()) {
-                        // just consume
-                        consumePurchase(p.getPurchaseToken(), null, new ConsumeResponseListener() {
-                            @Override
-                            public void onConsumeResponse(BillingResult billingResult, String purchaseToken) {
-                                // do nothing, if consume didnt work, it should work on next restore
+                    if(purchasesResult.getBillingResult().getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                        for (Purchase p : purchasesResult.getPurchasesList()) {
+                            if(p.isAcknowledged()) {
+                                // just consume
+                                consumePurchase(p.getPurchaseToken(), null, new ConsumeResponseListener() {
+                                    @Override
+                                    public void onConsumeResponse(BillingResult billingResult, String purchaseToken) {
+                                        // do nothing, if consume didnt work, it should work on next restore
+                                    }
+                                });
                             }
-                        });
-                    }
-                    else {
-                        purchases.add(p);
-                    }
-                }
-
-            }
-            else {
-                // report errors
-                listener.onQueryPurchasesFinished(false, purchasesResult.getBillingResult().getDebugMessage());
-                return;
-
-            }
-
-            Purchase.PurchasesResult subscriptionsResult = _billingClient.queryPurchases(BillingClient.SkuType.SUBS);
-            if(subscriptionsResult.getBillingResult().getResponseCode() == BillingClient.BillingResponseCode.OK) {
-
-                for (Purchase p : subscriptionsResult.getPurchasesList()) {
-                    if(!p.isAcknowledged()) {
-                        purchases.add(p);
-                    }
-                }
-            }
-            else {
-                // report errors
-                listener.onQueryPurchasesFinished(false, subscriptionsResult.getBillingResult().getDebugMessage());
-                return;
-            }
-
-
-            final JSONObject resultObject = new JSONObject();
-            final JSONArray purchasesArray = new JSONArray();
-
-            for (Purchase p : purchases) {
-
-                JSONObject purchaseJSON = purchaseToJSON(p);
-                if(purchaseJSON != null) {
-                    purchasesArray.put(purchaseToJSON(p));
-                }
-
-            }
-
-            resultObject.put("purchases", purchasesArray);
-            listener.onQueryPurchasesFinished(true, resultObject.toString());
-
-        }
-        catch (Exception e) {
-            listener.onQueryPurchasesFinished(false,e.getLocalizedMessage());
-        }
-
-
-    }
-
-    void purchaseProduct(final Activity activity, String skuID, String productType, final PurchaseFinishedListener listener) {
-
-        try {
-            if(!productType.equals(BillingClient.SkuType.INAPP) && !productType.equals(BillingClient.SkuType.SUBS)) {
-                listener.onPurchasesFinished(false, "Unknown product type");
-                return;
-            }
-
-            if(productType.equals(BillingClient.SkuType.SUBS) && _billingClient.isFeatureSupported(BillingClient.FeatureType.SUBSCRIPTIONS).getResponseCode() != BillingClient.BillingResponseCode.OK) {
-                listener.onPurchasesFinished(false, "Subscriptions are not available.");
-                return;
-            }
-
-            final SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
-            params.setSkusList(Arrays.asList(skuID)).setType(productType);
-            getProductInfo(params.build(), new GetProductInfoFinishedListener() {
-                @Override
-                public void onGetProductInfoFinishedListener(List<SkuDetails> skuDetailsList) {
-                    if(skuDetailsList != null && skuDetailsList.size() > 0) {
-
-                        SkuDetails details = skuDetailsList.get(0);
-                        BillingFlowParams flowParams = BillingFlowParams.newBuilder()
-                                .setSkuDetails(details)
-                                .build();
-                        _billingClient.launchBillingFlow(activity, flowParams);
+                            else {
+                                purchases.add(p);
+                            }
+                        }
 
                     }
                     else {
-                        listener.onPurchasesFinished(false, "Unknown product");
-                    }
-                }
-            });
-        }
-        catch (Exception e) {
-            listener.onPurchasesFinished(false,e.getLocalizedMessage());
-        }
+                        // report errors
+                        listener.onQueryPurchasesFinished(false, purchasesResult.getBillingResult().getDebugMessage());
+                        return;
 
+                    }
+
+                    Purchase.PurchasesResult subscriptionsResult = _billingClient.queryPurchases(BillingClient.SkuType.SUBS);
+                    if(subscriptionsResult.getBillingResult().getResponseCode() == BillingClient.BillingResponseCode.OK) {
+
+                        for (Purchase p : subscriptionsResult.getPurchasesList()) {
+                            if(!p.isAcknowledged()) {
+                                purchases.add(p);
+                            }
+                        }
+                    }
+                    else {
+                        // report errors
+                        listener.onQueryPurchasesFinished(false, subscriptionsResult.getBillingResult().getDebugMessage());
+                        return;
+                    }
+
+
+                    final JSONObject resultObject = new JSONObject();
+                    final JSONArray purchasesArray = new JSONArray();
+
+                    for (Purchase p : purchases) {
+
+                        JSONObject purchaseJSON = purchaseToJSON(p);
+                        if(purchaseJSON != null) {
+                            purchasesArray.put(purchaseToJSON(p));
+                        }
+
+                    }
+
+                    resultObject.put("purchases", purchasesArray);
+                    listener.onQueryPurchasesFinished(true, resultObject.toString());
+
+                }
+                catch (Exception e) {
+                    listener.onQueryPurchasesFinished(false,e.getLocalizedMessage());
+                }
+
+            }
+        };
+
+        Runnable executeOnDisconnectedService = new Runnable() {
+            @Override
+            public void run() {
+                listener.onQueryPurchasesFinished(false,"Service disconnected");
+            }
+        };
+
+        startServiceConnectionIfNeeded(executeOnConnectedService, executeOnDisconnectedService);
+
+    }
+
+    void purchaseProduct(final Activity activity, final String skuID, final String productType, final PurchaseFinishedListener listener) {
+
+        Runnable executeOnConnectedService = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if(!productType.equals(BillingClient.SkuType.INAPP) && !productType.equals(BillingClient.SkuType.SUBS)) {
+                        listener.onPurchasesFinished(false, "Unknown product type");
+                        return;
+                    }
+
+                    if(productType.equals(BillingClient.SkuType.SUBS) && _billingClient.isFeatureSupported(BillingClient.FeatureType.SUBSCRIPTIONS).getResponseCode() != BillingClient.BillingResponseCode.OK) {
+                        listener.onPurchasesFinished(false, "Subscriptions are not available.");
+                        return;
+                    }
+
+                    final SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
+                    params.setSkusList(Arrays.asList(skuID)).setType(productType);
+                    getProductInfo(params.build(), new GetProductInfoFinishedListener() {
+                        @Override
+                        public void onGetProductInfoFinishedListener(List<SkuDetails> skuDetailsList) {
+                            if(skuDetailsList != null && skuDetailsList.size() > 0) {
+
+                                SkuDetails details = skuDetailsList.get(0);
+                                BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                                        .setSkuDetails(details)
+                                        .build();
+                                _billingClient.launchBillingFlow(activity, flowParams);
+
+                            }
+                            else {
+                                listener.onPurchasesFinished(false, "Unknown product");
+                            }
+                        }
+                    });
+                }
+                catch (Exception e) {
+                    listener.onPurchasesFinished(false,e.getLocalizedMessage());
+                }
+
+            }
+        };
+
+        Runnable executeOnDisconnectedService = new Runnable() {
+            @Override
+            public void run() {
+                listener.onPurchasesFinished(false, "Service disconnected");
+            }
+        };
+
+        startServiceConnectionIfNeeded(executeOnConnectedService, executeOnDisconnectedService);
 
     }
 
 
-    void consumePurchase(String purchaseToken, String developerPayload, ConsumeResponseListener listener) {
-        try {
-            checkNotDisposed();
-            ConsumeParams.Builder paramsBuilder = ConsumeParams.newBuilder()
-                    .setPurchaseToken(purchaseToken);
+    void consumePurchase(final String purchaseToken, final String developerPayload, final ConsumeResponseListener listener) {
 
-            if(developerPayload != null && !developerPayload.equals("")) {
-                paramsBuilder.setDeveloperPayload(developerPayload);
+        Runnable executeOnConnectedService = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    checkNotDisposed();
+                    ConsumeParams.Builder paramsBuilder = ConsumeParams.newBuilder()
+                            .setPurchaseToken(purchaseToken);
+
+                    if(developerPayload != null && !developerPayload.equals("")) {
+                        paramsBuilder.setDeveloperPayload(developerPayload);
+                    }
+
+
+                    _billingClient.consumeAsync(paramsBuilder.build(),listener);
+                }
+                catch (Exception e) {
+                    BillingResult result = BillingResult.newBuilder().setDebugMessage(e.getLocalizedMessage()).setResponseCode(BillingClient.BillingResponseCode.ERROR).build();
+                    listener.onConsumeResponse(result,result.getDebugMessage());
+                }
             }
+        };
 
+        Runnable executeOnDisconnectedService = new Runnable() {
+            @Override
+            public void run() {
+                BillingResult result = BillingResult.newBuilder().setDebugMessage("Service disconnected").setResponseCode(BillingClient.BillingResponseCode.ERROR).build();
+                listener.onConsumeResponse(result,result.getDebugMessage());
+            }
+        };
 
-            _billingClient.consumeAsync(paramsBuilder.build(),listener);
-        }
-        catch (Exception e) {
-            BillingResult result = BillingResult.newBuilder().setDebugMessage(e.getLocalizedMessage()).setResponseCode(BillingClient.BillingResponseCode.ERROR).build();
-            listener.onConsumeResponse(result,result.getDebugMessage());
-        }
+        startServiceConnectionIfNeeded(executeOnConnectedService, executeOnDisconnectedService);
     }
 
     public JSONObject purchaseToJSON(Purchase purchase) {
