@@ -78,9 +78,11 @@ public class BillingManager {
 
     void initialize(final SetupFinishedListener setupFinishedListener, final PurchasesUpdatedListener purchasesUpdatedListener) {
 
-        checkNotDisposed();
-        if (_setupDone) throw new IllegalStateException("BillingManager is already set up.");
         try {
+
+            checkNotDisposed();
+            if (_setupDone) throw new IllegalStateException("BillingManager is already set up.");
+
             _billingClient = BillingClient.newBuilder(_context)
                     .setListener(purchasesUpdatedListener)
                     .enablePendingPurchases()
@@ -89,12 +91,18 @@ public class BillingManager {
                 @Override
                 public void onBillingSetupFinished(BillingResult billingResult) {
 
+                    if (_disposed) return;
+
+
                     if (billingResult.getResponseCode() ==  BillingClient.BillingResponseCode.OK) {
                         // The BillingClient is ready. You can query purchases here.
                         logDebug("BillingManager connected");
+                        _setupDone = true;
                         setupFinishedListener.SetupFinished(true);
 
-
+                    }
+                    else {
+                        setupFinishedListener.SetupFinished(false);
                     }
                 }
                 @Override
@@ -105,14 +113,14 @@ public class BillingManager {
                     if (_disposed) return;
 
                     setupFinishedListener.SetupFinished(false);
-                    _billingClient = null;
-                    _setupDone = true;
+
 
                 }
             });
         }
         catch (Exception e) {
             logDebug("Error initializing BillingManager " + e.getLocalizedMessage());
+            setupFinishedListener.SetupFinished(false);
         }
 
     }
