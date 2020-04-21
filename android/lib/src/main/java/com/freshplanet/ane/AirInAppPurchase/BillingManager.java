@@ -360,7 +360,7 @@ public class BillingManager {
 
     }
 
-    void purchaseProduct(final Activity activity, final String skuID, final String productType, final PurchaseFinishedListener listener) {
+    void purchaseProduct(final Activity activity, final String skuID, final String oldSkuID, final String productType, final PurchaseFinishedListener listener) {
 
         Runnable executeOnConnectedService = new Runnable() {
             @Override
@@ -384,10 +384,14 @@ public class BillingManager {
                             if(skuDetailsList != null && skuDetailsList.size() > 0) {
 
                                 SkuDetails details = skuDetailsList.get(0);
-                                BillingFlowParams flowParams = BillingFlowParams.newBuilder()
-                                        .setSkuDetails(details)
-                                        .build();
-                                _billingClient.launchBillingFlow(activity, flowParams);
+                                BillingFlowParams.Builder flowParamsBuilder = BillingFlowParams.newBuilder()
+                                        .setSkuDetails(details);
+
+                                if(oldSkuID != null && !oldSkuID.equals("")) {
+                                    flowParamsBuilder.setOldSku(oldSkuID);
+                                }
+
+                                _billingClient.launchBillingFlow(activity, flowParamsBuilder.build());
 
                             }
                             else {

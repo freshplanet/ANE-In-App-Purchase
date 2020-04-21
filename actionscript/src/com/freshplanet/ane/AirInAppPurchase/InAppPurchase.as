@@ -80,13 +80,14 @@ package com.freshplanet.ane.AirInAppPurchase {
          * PURCHASE_SUCCESSFUL
          * PURCHASE_ERROR
          * @param productId
+         * @param oldProductId used on Android when upgrading/downgrading subscription - pass in the productId of current user subscription
          */
-        public function makeSubscription(productId:String):void {
+        public function makeSubscription(productId:String, oldProductId:String = null):void {
 
             if (!isSupported)
                 _dispatchEvent(InAppPurchaseEvent.PURCHASE_ERROR, "InAppPurchase not supported");
             else
-                _context.call("makeSubscription", productId);
+                _context.call("makeSubscription", productId, oldProductId ? oldProductId : "");
         }
 
         /**

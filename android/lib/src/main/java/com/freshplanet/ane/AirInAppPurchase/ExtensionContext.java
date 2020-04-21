@@ -220,7 +220,7 @@ public class ExtensionContext extends FREContext {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        _billingManager.purchaseProduct(ctx.getActivity(), purchaseId, BillingClient.SkuType.INAPP, _purchaseFinishedListener);
+                        _billingManager.purchaseProduct(ctx.getActivity(), purchaseId, null, BillingClient.SkuType.INAPP, _purchaseFinishedListener);
                     }
                 });
 
@@ -235,6 +235,8 @@ public class ExtensionContext extends FREContext {
         public FREObject call(final FREContext ctx, FREObject[] args) {
 
             final String purchaseId = getStringFromFREObject(args[0]);
+            final String oldPurchaseId = getStringFromFREObject(args[1]);
+
 
             if (purchaseId == null)
                 _dispatchEvent(PURCHASE_ERROR, "null purchaseId");
@@ -242,7 +244,7 @@ public class ExtensionContext extends FREContext {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        _billingManager.purchaseProduct(ctx.getActivity(), purchaseId, BillingClient.SkuType.SUBS, _purchaseFinishedListener);
+                        _billingManager.purchaseProduct(ctx.getActivity(), purchaseId, oldPurchaseId, BillingClient.SkuType.SUBS, _purchaseFinishedListener);
                     }
                 });
 
