@@ -77,4 +77,15 @@ public class BaseFunction implements FREFunction {
 		
 		return result;
 	}
+
+	protected int getIntFromFREObject(FREObject object) {
+
+		try {
+			return object.getAsInt();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
 }
