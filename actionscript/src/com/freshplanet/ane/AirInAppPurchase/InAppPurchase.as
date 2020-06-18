@@ -147,11 +147,11 @@ package com.freshplanet.ane.AirInAppPurchase {
          * RESTORE_INFO_RECEIVED
          * RESTORE_INFO_ERROR
          */
-        public function restoreTransactions():void {
+        public function restoreTransactions(restoreIOSHistory:Boolean=false):void {
 
             if (!isSupported)
                 _dispatchEvent(InAppPurchaseEvent.RESTORE_INFO_ERROR, "InAppPurchase not supported");
-            else if (_isAndroid())
+            else if (_isAndroid() || restoreIOSHistory)
                 _context.call("restoreTransaction");
             else if (_isIOS()) {
 

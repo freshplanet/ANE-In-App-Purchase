@@ -254,13 +254,25 @@
 
 - (void)paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue*)queue {
     [self sendEvent:@"DEBUG" level:@"restoreCompletedTransactions"];
+    NSMutableArray * purchases = [[NSMutableArray alloc] init];
+    for (SKPaymentTransaction* transaction in [queue transactions]) {
+        [purchases addObject:[self getDataForTransaction:transaction]];
+        [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+    }
+    NSMutableDictionary * toReturn = [[NSMutableDictionary alloc] init];
+    [toReturn setValue:purchases forKey:@"purchases"];
+    [self sendEvent:@"RESTORE_INFO_RECEIVED" level:[self jsonStringFromData:toReturn]];
 }
 
 - (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error {
     [self sendEvent:@"DEBUG" level:@"restoreFailed"];
+    [self sendEvent:@"RESTORE_INFO_ERROR" level:[error description]];
 }
 
 - (void)paymentQueue:(SKPaymentQueue *)queue removedTransactions:(NSArray*)transactions {
+    for (SKPaymentTransaction* transaction in transactions) {
+        [self sendEvent:@"CONSUME_SUCCESS" level:[self getJsonForTransaction:transaction]];
+    }
     [self sendEvent:@"DEBUG" level:@"removeTransaction"];
 }
 
@@ -411,6 +423,11 @@ DEFINE_ANE_FUNCTION(removePurchaseFromQueue) {
     return nil;
 }
 
+DEFINE_ANE_FUNCTION(restoreTransaction) {
+    [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
+    return nil;
+}
+
 void AirInAppPurchaseContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx, uint32_t* numFunctionsToTest, const FRENamedFunction** functionsToSet) {
     
     static FRENamedFunction functions[] = {
@@ -419,7 +436,8 @@ void AirInAppPurchaseContextInitializer(void* extData, const uint8_t* ctxType, F
         MAP_FUNCTION(userCanMakeAPurchase, NULL),
         MAP_FUNCTION(getProductsInfo, NULL),
         MAP_FUNCTION(removePurchaseFromQueue, NULL),
-        MAP_FUNCTION(makeSubscription, NULL)
+        MAP_FUNCTION(makeSubscription, NULL),
+        MAP_FUNCTION(restoreTransaction, NULL)
     };
     
     *numFunctionsToTest = sizeof(functions) / sizeof(FRENamedFunction);
