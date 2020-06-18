@@ -269,9 +269,6 @@
 }
 
 - (void)paymentQueue:(SKPaymentQueue *)queue removedTransactions:(NSArray*)transactions {
-    for (SKPaymentTransaction* transaction in transactions) {
-        [self sendEvent:@"CONSUME_SUCCESS" level:[self getJsonForTransaction:transaction]];
-    }
     [self sendEvent:@"DEBUG" level:@"removeTransaction"];
 }
 
