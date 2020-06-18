@@ -377,7 +377,16 @@ DEFINE_ANE_FUNCTION(getProductsInfo) {
     return nil;
 }
 
-// remove purchase from queue.
+// remove all transactions from the queue before purchasing
+DEFINE_ANE_FUNCTION(clearTransactions) {
+    NSArray* transactions = [[SKPaymentQueue defaultQueue] transactions];
+    for (SKPaymentTransaction* transaction in transactions) {
+        [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+    }
+    FREDispatchStatusEventAsync(context, (uint8_t*) "DEBUG", (uint8_t*) "removing purchases from queue");
+    return nil;
+}
+
 DEFINE_ANE_FUNCTION(removePurchaseFromQueue) {
     
     uint32_t stringLength;
@@ -436,7 +445,8 @@ void AirInAppPurchaseContextInitializer(void* extData, const uint8_t* ctxType, F
         MAP_FUNCTION(getProductsInfo, NULL),
         MAP_FUNCTION(removePurchaseFromQueue, NULL),
         MAP_FUNCTION(makeSubscription, NULL),
-        MAP_FUNCTION(restoreTransaction, NULL)
+        MAP_FUNCTION(restoreTransaction, NULL),
+        MAP_FUNCTION(clearTransactions, NULL)
     };
     
     *numFunctionsToTest = sizeof(functions) / sizeof(FRENamedFunction);

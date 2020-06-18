@@ -162,6 +162,17 @@ package com.freshplanet.ane.AirInAppPurchase {
             }
         }
 
+
+        public function clearTransactions():void 
+        {
+            _iosPendingPurchases = new Vector.<Object>();
+            if (!isSupported || _isAndroid()) {
+                _dispatchEvent(InAppPurchaseEvent.CLEAR_TRANSACTIONS_ERROR, "clear transactions not supported");
+            } else if (_isIOS()) {
+                _context.call("clearTransactions");
+            }
+        }
+
         // --------------------------------------------------------------------------------------//
         //																						 //
         // 									 	PRIVATE API										 //
