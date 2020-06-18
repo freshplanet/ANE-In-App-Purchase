@@ -377,10 +377,17 @@ DEFINE_ANE_FUNCTION(getProductsInfo) {
 // remove all transactions from the queue before purchasing
 DEFINE_ANE_FUNCTION(clearTransactions) {
     NSArray* transactions = [[SKPaymentQueue defaultQueue] transactions];
-    for (SKPaymentTransaction* transaction in transactions) {
-        [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
-    }
     FREDispatchStatusEventAsync(context, (uint8_t*) "DEBUG", (uint8_t*) "removing purchases from queue");
+    for (SKPaymentTransaction* transaction in transactions) {
+        @try {
+            if ([transaction transactionState] != SKPaymentTransactionStatePurchasing) {
+                [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+            }
+        }
+        @catch (NSException *e) {
+            FREDispatchStatusEventAsync(context, (uint8_t*)"DEBUG", (uint8_t*) [[NSString stringWithFormat:@"Error in clearTransactions: %@", e] UTF8String]);
+        }
+    }
     return nil;
 }
 
