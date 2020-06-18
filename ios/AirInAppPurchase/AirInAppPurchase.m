@@ -218,8 +218,8 @@
     [self sendEvent:@"TRANSACTION_RESTORED" level:[[transaction error] localizedDescription]];
     
     
-//    // conclude the transaction
-//    [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+    // conclude the transaction
+    [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
 }
 
 
