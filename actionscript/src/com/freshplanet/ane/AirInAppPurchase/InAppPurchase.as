@@ -158,7 +158,7 @@ package com.freshplanet.ane.AirInAppPurchase {
                 var jsonPurchases:String = "[" + _iosPendingPurchases.join(",") + "]";
                 var jsonData:String = "{ \"purchases\": " + jsonPurchases + "}";
 
-                _dispatchEvent(InAppPurchaseEvent.RESTORE_INFO_RECEIVED, jsonData);
+                _dispatchEvent(InAppPurchaseEvent.RESåTORE_INFO_RECEIVED, jsonData);
             }
         }
 
@@ -167,7 +167,7 @@ package com.freshplanet.ane.AirInAppPurchase {
         {
             _iosPendingPurchases = new Vector.<Object>();
             if (!isSupported || _isAndroid()) {
-                _dispatchEvent(InAppPurchaseEvent.CLEAR_TRANSACTIONS_ERROR, "clear transactions not supported");
+                _dispatchEvent("CLEAR_TRANSACTIONS_ERROR", "clear transactions not supported");
             } else if (_isIOS()) {
                 _context.call("clearTransactions");
             }
