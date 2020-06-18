@@ -218,8 +218,8 @@
     [self sendEvent:@"TRANSACTION_RESTORED" level:[[transaction error] localizedDescription]];
     
     
-    // conclude the transaction
-    [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+//    // conclude the transaction
+//    [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
 }
 
 
@@ -257,7 +257,6 @@
     NSMutableArray * purchases = [[NSMutableArray alloc] init];
     for (SKPaymentTransaction* transaction in [queue transactions]) {
         [purchases addObject:[self getDataForTransaction:transaction]];
-        [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
     }
     NSMutableDictionary * toReturn = [[NSMutableDictionary alloc] init];
     [toReturn setValue:purchases forKey:@"purchases"];
