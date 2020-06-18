@@ -158,7 +158,7 @@ package com.freshplanet.ane.AirInAppPurchase {
                 var jsonPurchases:String = "[" + _iosPendingPurchases.join(",") + "]";
                 var jsonData:String = "{ \"purchases\": " + jsonPurchases + "}";
 
-                _dispatchEvent(InAppPurchaseEvent.RESåTORE_INFO_RECEIVED, jsonData);
+                _dispatchEvent(InAppPurchaseEvent.RESTORE_INFO_RECEIVED, jsonData);
             }
         }
 
