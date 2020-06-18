@@ -153,21 +153,7 @@
 
 // complete a transaction (item has been purchased, need to check the receipt)
 - (void) completeTransaction:(SKPaymentTransaction*)transaction {
-
-    NSMutableDictionary *data;
-
-    // purchase done
-    // dispatch event
-    data = [[NSMutableDictionary alloc] init];
-    [data setValue:[[transaction payment] productIdentifier] forKey:@"productId"];
-    
-    NSString* receiptString = [[NSString alloc] initWithData:transaction.transactionReceipt encoding:NSUTF8StringEncoding];
-    [data setValue:receiptString forKey:@"receipt"];
-    [data setValue:@"AppStore"   forKey:@"receiptType"];
-    [data setValue:[NSString stringWithFormat: @"%f", [transaction.transactionDate timeIntervalSince1970]] forKey:@"timestamp"];
-
-    NSString* jsonString = [self jsonStringFromData:data];
-    
+    NSString* jsonString = [self getJsonForTransaction:transaction];
     [self sendEvent:@"PURCHASE_SUCCESSFUL" level:jsonString];
 }
 
@@ -194,7 +180,26 @@
     
     // dispatch event
     [self sendEvent:@"PURCHASE_ERROR" level:error];
+}
+
+- (NSMutableDictionary *) getDataForTransaction: (SKPaymentTransaction*) transaction {
+    NSMutableDictionary *data;
+    data = [[NSMutableDictionary alloc] init];
+    [data setValue:[[transaction payment] productIdentifier] forKey:@"productId"];
+    [data setValue:[transaction transactionIdentifier] forKey:@"transactionId"];
     
+    NSString* receiptString = [[NSString alloc] initWithData:transaction.transactionReceipt encoding:NSUTF8StringEncoding];
+    [data setValue:receiptString forKey:@"receipt"];
+    [data setValue:@"AppStore"   forKey:@"receiptType"];
+    [data setValue:[NSString stringWithFormat: @"%f", [transaction.transactionDate timeIntervalSince1970]] forKey:@"timestamp"];
+    
+    return data;
+}
+
+- (NSString *) getJsonForTransaction: (SKPaymentTransaction*) transaction {
+    NSMutableDictionary *data = [self getDataForTransaction:transaction];
+    NSString* jsonString = [self jsonStringFromData:data];
+    return jsonString;
 }
 
 // transaction is being purchasing, logging the info.
