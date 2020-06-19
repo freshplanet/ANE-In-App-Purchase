@@ -176,7 +176,14 @@
     NSString* error = transaction.error.code == SKErrorPaymentCancelled ? @"RESULT_USER_CANCELED" : jsonString;
     
     // conclude the transaction
-    [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+     @try {
+        if ([transaction transactionState] != SKPaymentTransactionStatePurchasing) {
+               [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+        }
+    }
+     @catch (NSException *e) {
+         [self sendEvent:@"DEBUG" level:[NSString stringWithFormat:@"Error in failedTransaction: %@", e]];
+     }
     
     // dispatch event
     [self sendEvent:@"PURCHASE_ERROR" level:error];
@@ -219,7 +226,14 @@
     
     
     // conclude the transaction
-    [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+    @try {
+        if ([transaction transactionState] != SKPaymentTransactionStatePurchasing) {
+               [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+        }
+    }
+     @catch (NSException *e) {
+         [self sendEvent:@"DEBUG" level:[NSString stringWithFormat:@"Error in restoreTransaction: %@", e]];
+     }
 }
 
 
@@ -376,8 +390,13 @@ DEFINE_ANE_FUNCTION(getProductsInfo) {
 
 // remove all transactions from the queue before purchasing
 DEFINE_ANE_FUNCTION(clearTransactions) {
+    AirInAppPurchase* controller = getAirInAppPurchaseContextNativeData(context);
+    
+    if (!controller)
+        return nil;
+    
     NSArray* transactions = [[SKPaymentQueue defaultQueue] transactions];
-    FREDispatchStatusEventAsync(context, (uint8_t*) "DEBUG", (uint8_t*) "removing purchases from queue");
+    [controller sendEvent:@"DEBUG" level:@"removing purchases from queue"];
     for (SKPaymentTransaction* transaction in transactions) {
         @try {
             if ([transaction transactionState] != SKPaymentTransactionStatePurchasing) {
@@ -385,7 +404,7 @@ DEFINE_ANE_FUNCTION(clearTransactions) {
             }
         }
         @catch (NSException *e) {
-            FREDispatchStatusEventAsync(context, (uint8_t*)"DEBUG", (uint8_t*) [[NSString stringWithFormat:@"Error in clearTransactions: %@", e] UTF8String]);
+            [controller sendEvent:@"DEBUG" level:[NSString stringWithFormat:@"Error in clearTransactions: %@", e]];
         }
     }
     return nil;
@@ -397,6 +416,11 @@ DEFINE_ANE_FUNCTION(removePurchaseFromQueue) {
     const uint8_t* string1;
     
     if (FREGetObjectAsUTF8(argv[0], &stringLength, &string1) != FRE_OK)
+        return nil;
+    
+    AirInAppPurchase* controller = getAirInAppPurchaseContextNativeData(context);
+    
+    if (!controller)
         return nil;
     
     NSString* productIdentifier = [NSString stringWithUTF8String:(char*)string1];
@@ -426,8 +450,16 @@ DEFINE_ANE_FUNCTION(removePurchaseFromQueue) {
 
         if ([transaction transactionState] == SKPaymentTransactionStatePurchased && [[[transaction payment] productIdentifier] isEqualToString:productIdentifier]) {
             
-            [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
-            FREDispatchStatusEventAsync(context, (uint8_t*) "DEBUG", (uint8_t*) [@"Conluding transaction" UTF8String]);
+            @try {
+                   if ([transaction transactionState] != SKPaymentTransactionStatePurchasing) {
+                          [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+                   }
+               }
+                @catch (NSException *e) {
+                    [controller sendEvent:@"DEBUG" level:[NSString stringWithFormat:@"Error in removePurchaseFromQueue: %@", e]];
+                }
+            
+            [controller sendEvent:@"DEBUG" level:[NSString stringWithFormat:@"Conluding transaction"]];
             break;
         }
     }
