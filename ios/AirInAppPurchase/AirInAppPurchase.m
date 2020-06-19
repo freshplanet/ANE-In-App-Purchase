@@ -153,21 +153,7 @@
 
 // complete a transaction (item has been purchased, need to check the receipt)
 - (void) completeTransaction:(SKPaymentTransaction*)transaction {
-
-    NSMutableDictionary *data;
-
-    // purchase done
-    // dispatch event
-    data = [[NSMutableDictionary alloc] init];
-    [data setValue:[[transaction payment] productIdentifier] forKey:@"productId"];
-    
-    NSString* receiptString = [[NSString alloc] initWithData:transaction.transactionReceipt encoding:NSUTF8StringEncoding];
-    [data setValue:receiptString forKey:@"receipt"];
-    [data setValue:@"AppStore"   forKey:@"receiptType"];
-    [data setValue:[NSString stringWithFormat: @"%f", [transaction.transactionDate timeIntervalSince1970]] forKey:@"timestamp"];
-
-    NSString* jsonString = [self jsonStringFromData:data];
-    
+    NSString* jsonString = [self getJsonForTransaction:transaction];
     [self sendEvent:@"PURCHASE_SUCCESSFUL" level:jsonString];
 }
 
@@ -190,11 +176,37 @@
     NSString* error = transaction.error.code == SKErrorPaymentCancelled ? @"RESULT_USER_CANCELED" : jsonString;
     
     // conclude the transaction
-    [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+     @try {
+        if ([transaction transactionState] != SKPaymentTransactionStatePurchasing) {
+               [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+        }
+    }
+     @catch (NSException *e) {
+         [self sendEvent:@"DEBUG" level:[NSString stringWithFormat:@"Error in failedTransaction: %@", e]];
+     }
     
     // dispatch event
     [self sendEvent:@"PURCHASE_ERROR" level:error];
+}
+
+- (NSMutableDictionary *) getDataForTransaction: (SKPaymentTransaction*) transaction {
+    NSMutableDictionary *data;
+    data = [[NSMutableDictionary alloc] init];
+    [data setValue:[[transaction payment] productIdentifier] forKey:@"productId"];
+    [data setValue:[transaction transactionIdentifier] forKey:@"transactionId"];
     
+    NSString* receiptString = [[NSString alloc] initWithData:transaction.transactionReceipt encoding:NSUTF8StringEncoding];
+    [data setValue:receiptString forKey:@"receipt"];
+    [data setValue:@"AppStore"   forKey:@"receiptType"];
+    [data setValue:[NSString stringWithFormat: @"%f", [transaction.transactionDate timeIntervalSince1970]] forKey:@"timestamp"];
+    
+    return data;
+}
+
+- (NSString *) getJsonForTransaction: (SKPaymentTransaction*) transaction {
+    NSMutableDictionary *data = [self getDataForTransaction:transaction];
+    NSString* jsonString = [self jsonStringFromData:data];
+    return jsonString;
 }
 
 // transaction is being purchasing, logging the info.
@@ -214,7 +226,14 @@
     
     
     // conclude the transaction
-    [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+    @try {
+        if ([transaction transactionState] != SKPaymentTransactionStatePurchasing) {
+               [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+        }
+    }
+     @catch (NSException *e) {
+         [self sendEvent:@"DEBUG" level:[NSString stringWithFormat:@"Error in restoreTransaction: %@", e]];
+     }
 }
 
 
@@ -249,10 +268,18 @@
 
 - (void)paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue*)queue {
     [self sendEvent:@"DEBUG" level:@"restoreCompletedTransactions"];
+    NSMutableArray * purchases = [[NSMutableArray alloc] init];
+    for (SKPaymentTransaction* transaction in [queue transactions]) {
+        [purchases addObject:[self getDataForTransaction:transaction]];
+    }
+    NSMutableDictionary * toReturn = [[NSMutableDictionary alloc] init];
+    [toReturn setValue:purchases forKey:@"purchases"];
+    [self sendEvent:@"RESTORE_INFO_RECEIVED" level:[self jsonStringFromData:toReturn]];
 }
 
 - (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error {
     [self sendEvent:@"DEBUG" level:@"restoreFailed"];
+    [self sendEvent:@"RESTORE_INFO_ERROR" level:[error description]];
 }
 
 - (void)paymentQueue:(SKPaymentQueue *)queue removedTransactions:(NSArray*)transactions {
@@ -361,13 +388,39 @@ DEFINE_ANE_FUNCTION(getProductsInfo) {
     return nil;
 }
 
-// remove purchase from queue.
+// remove all transactions from the queue before purchasing
+DEFINE_ANE_FUNCTION(clearTransactions) {
+    AirInAppPurchase* controller = getAirInAppPurchaseContextNativeData(context);
+    
+    if (!controller)
+        return nil;
+    
+    NSArray* transactions = [[SKPaymentQueue defaultQueue] transactions];
+    [controller sendEvent:@"DEBUG" level:@"removing purchases from queue"];
+    for (SKPaymentTransaction* transaction in transactions) {
+        @try {
+            if ([transaction transactionState] != SKPaymentTransactionStatePurchasing) {
+                [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+            }
+        }
+        @catch (NSException *e) {
+            [controller sendEvent:@"DEBUG" level:[NSString stringWithFormat:@"Error in clearTransactions: %@", e]];
+        }
+    }
+    return nil;
+}
+
 DEFINE_ANE_FUNCTION(removePurchaseFromQueue) {
     
     uint32_t stringLength;
     const uint8_t* string1;
     
     if (FREGetObjectAsUTF8(argv[0], &stringLength, &string1) != FRE_OK)
+        return nil;
+    
+    AirInAppPurchase* controller = getAirInAppPurchaseContextNativeData(context);
+    
+    if (!controller)
         return nil;
     
     NSString* productIdentifier = [NSString stringWithUTF8String:(char*)string1];
@@ -397,12 +450,25 @@ DEFINE_ANE_FUNCTION(removePurchaseFromQueue) {
 
         if ([transaction transactionState] == SKPaymentTransactionStatePurchased && [[[transaction payment] productIdentifier] isEqualToString:productIdentifier]) {
             
-            [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
-            FREDispatchStatusEventAsync(context, (uint8_t*) "DEBUG", (uint8_t*) [@"Conluding transaction" UTF8String]);
+            @try {
+                   if ([transaction transactionState] != SKPaymentTransactionStatePurchasing) {
+                          [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+                   }
+               }
+                @catch (NSException *e) {
+                    [controller sendEvent:@"DEBUG" level:[NSString stringWithFormat:@"Error in removePurchaseFromQueue: %@", e]];
+                }
+            
+            [controller sendEvent:@"DEBUG" level:[NSString stringWithFormat:@"Conluding transaction"]];
             break;
         }
     }
     
+    return nil;
+}
+
+DEFINE_ANE_FUNCTION(restoreTransaction) {
+    [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
     return nil;
 }
 
@@ -414,7 +480,9 @@ void AirInAppPurchaseContextInitializer(void* extData, const uint8_t* ctxType, F
         MAP_FUNCTION(userCanMakeAPurchase, NULL),
         MAP_FUNCTION(getProductsInfo, NULL),
         MAP_FUNCTION(removePurchaseFromQueue, NULL),
-        MAP_FUNCTION(makeSubscription, NULL)
+        MAP_FUNCTION(makeSubscription, NULL),
+        MAP_FUNCTION(restoreTransaction, NULL),
+        MAP_FUNCTION(clearTransactions, NULL)
     };
     
     *numFunctionsToTest = sizeof(functions) / sizeof(FRENamedFunction);
