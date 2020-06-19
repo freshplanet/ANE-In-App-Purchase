@@ -222,6 +222,8 @@ package com.freshplanet.ane.AirInAppPurchase {
 
             if (event.code == InAppPurchaseEvent.PURCHASE_SUCCESSFUL && _isIOS())
                 _iosPendingPurchases.push(event.level);
+            else if(event.code == "DEBUG")
+                _log("DEBUG", event.level);
 
             _dispatchEvent(event.code, event.level);
 		}
