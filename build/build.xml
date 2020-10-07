@@ -67,7 +67,7 @@
 
         <!-- paths -->
         <property name="build.intermediates" value="../android/lib/build/intermediates"/>
-        <property name="build.release" value="${build.intermediates}/bundles/release"/>
+        <property name="build.release" value="${build.intermediates}/aar_main_jar/release"/>
 
         <!-- make the build directory -->
         <mkdir dir="temp/android"/>

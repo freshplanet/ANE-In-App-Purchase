@@ -149,11 +149,11 @@ package com.freshplanet.ane.AirInAppPurchase {
          * RESTORE_INFO_RECEIVED
          * RESTORE_INFO_ERROR
          */
-        public function restoreTransactions():void {
+        public function restoreTransactions(restoreIOSHistory:Boolean=false):void {
 
             if (!isSupported)
                 _dispatchEvent(InAppPurchaseEvent.RESTORE_INFO_ERROR, "InAppPurchase not supported");
-            else if (_isAndroid())
+            else if (_isAndroid() || restoreIOSHistory)
                 _context.call("restoreTransaction");
             else if (_isIOS()) {
 
@@ -161,6 +161,17 @@ package com.freshplanet.ane.AirInAppPurchase {
                 var jsonData:String = "{ \"purchases\": " + jsonPurchases + "}";
 
                 _dispatchEvent(InAppPurchaseEvent.RESTORE_INFO_RECEIVED, jsonData);
+            }
+        }
+
+
+        public function clearTransactions():void 
+        {
+            _iosPendingPurchases = new Vector.<Object>();
+            if (!isSupported || _isAndroid()) {
+                _dispatchEvent("CLEAR_TRANSACTIONS_ERROR", "clear transactions not supported");
+            } else if (_isIOS()) {
+                _context.call("clearTransactions");
             }
         }
 
@@ -213,6 +224,8 @@ package com.freshplanet.ane.AirInAppPurchase {
 
             if (event.code == InAppPurchaseEvent.PURCHASE_SUCCESSFUL && _isIOS())
                 _iosPendingPurchases.push(event.level);
+            else if(event.code == "DEBUG")
+                _log("DEBUG", event.level);
 
             _dispatchEvent(event.code, event.level);
 		}
