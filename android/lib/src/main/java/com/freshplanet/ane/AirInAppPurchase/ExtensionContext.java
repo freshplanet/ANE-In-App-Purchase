@@ -28,7 +28,6 @@ import com.adobe.fre.FREObject;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.ConsumeResponseListener;
-import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -97,9 +96,14 @@ public class ExtensionContext extends FREContext {
         @Override
         public void onPurchasesUpdated(BillingResult billingResult, List<com.android.billingclient.api.Purchase> list) {
 
+            if (billingResult.getResponseCode() ==  BillingClient.BillingResponseCode.OK ) {
+                if(list != null && list.size() > 0) {
+                    _purchaseFinishedListener.onPurchasesFinished(true, _billingManager.purchaseToJSON(list.get(0)).toString());
+                }
+                else {
+                    _purchaseFinishedListener.onPurchasesFinished(true, new JSONObject().toString());
+                }
 
-            if (billingResult.getResponseCode() ==  BillingClient.BillingResponseCode.OK && list != null && list.size() > 0) {
-                _purchaseFinishedListener.onPurchasesFinished(true, _billingManager.purchaseToJSON(list.get(0)).toString());
             }
             else if(billingResult.getResponseCode() ==  BillingClient.BillingResponseCode.USER_CANCELED){
                 _dispatchEvent(PURCHASE_ERROR, "RESULT_USER_CANCELED");
