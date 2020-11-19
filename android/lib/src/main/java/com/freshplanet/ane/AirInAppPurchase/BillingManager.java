@@ -376,6 +376,7 @@ public class BillingManager {
                         return;
                     }
 
+
                     final SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
                     params.setSkusList(Arrays.asList(skuID)).setType(productType);
                     getProductInfo(params.build(), new GetProductInfoFinishedListener() {
@@ -405,7 +406,7 @@ public class BillingManager {
                     });
                 }
                 catch (Exception e) {
-                    listener.onPurchasesFinished(false,e.getLocalizedMessage());
+                    listener.onPurchasesFinished(false,e.toString());
                 }
 
             }
