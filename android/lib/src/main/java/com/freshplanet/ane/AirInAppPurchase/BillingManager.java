@@ -400,7 +400,7 @@ public class BillingManager {
 
                             }
                             else {
-                                listener.onPurchasesFinished(false, "Unknown product");
+                                listener.onPurchasesFinished(false, "Unable to get productInfo for purchasing skuID " + skuID);
                             }
                         }
                     });
