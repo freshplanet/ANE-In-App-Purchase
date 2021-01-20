@@ -14,6 +14,7 @@
  */
 package com.freshplanet.ane.AirInAppPurchase;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -118,11 +119,21 @@ public class ExtensionContext extends FREContext {
     private BillingManager.PurchaseFinishedListener _purchaseFinishedListener = new BillingManager.PurchaseFinishedListener() {
         @Override
         public void onPurchasesFinished(Boolean success, String data) {
-
             if(success)
                 _dispatchEvent(PURCHASE_SUCCESSFUL, data);
-            else
-                _dispatchEvent(PURCHASE_ERROR, data != null ? data : "");
+            else {
+
+                String errorMessage;
+                if(data != null && !data.isEmpty()) {
+                    errorMessage = data;
+                }
+                else {
+                    String stackTrace = Arrays.toString(Thread.currentThread().getStackTrace());
+                    errorMessage = "No data received for purchase error! Stack trace: " + stackTrace;
+                }
+                _dispatchEvent(PURCHASE_ERROR, errorMessage);
+
+            }
         }
     };
 
