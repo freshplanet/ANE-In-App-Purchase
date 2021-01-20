@@ -119,7 +119,7 @@ public class BillingManager {
             });
         }
         catch (Exception e) {
-            logDebug("Error initializing BillingManager " + e.getLocalizedMessage());
+            logDebug("Error initializing BillingManager " + e.toString());
             setupFinishedListener.SetupFinished(false);
         }
 
@@ -221,7 +221,7 @@ public class BillingManager {
 
                 }
                 catch (Exception e) {
-                    listener.onQueryInventoryFinished(false, e.getLocalizedMessage());
+                    listener.onQueryInventoryFinished(false, e.toString());
                 }
             }
         };
@@ -343,7 +343,7 @@ public class BillingManager {
 
                 }
                 catch (Exception e) {
-                    listener.onQueryPurchasesFinished(false,e.getLocalizedMessage());
+                    listener.onQueryPurchasesFinished(false,e.toString());
                 }
 
             }
@@ -400,7 +400,7 @@ public class BillingManager {
 
                             }
                             else {
-                                listener.onPurchasesFinished(false, "Unknown product");
+                                listener.onPurchasesFinished(false, "Unable to get productInfo for purchasing skuID " + skuID);
                             }
                         }
                     });
@@ -442,7 +442,7 @@ public class BillingManager {
                     _billingClient.consumeAsync(paramsBuilder.build(),listener);
                 }
                 catch (Exception e) {
-                    BillingResult result = BillingResult.newBuilder().setDebugMessage(e.getLocalizedMessage()).setResponseCode(BillingClient.BillingResponseCode.ERROR).build();
+                    BillingResult result = BillingResult.newBuilder().setDebugMessage(e.toString()).setResponseCode(BillingClient.BillingResponseCode.ERROR).build();
                     listener.onConsumeResponse(result,result.getDebugMessage());
                 }
             }
