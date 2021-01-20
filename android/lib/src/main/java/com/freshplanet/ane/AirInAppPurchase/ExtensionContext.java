@@ -109,7 +109,8 @@ public class ExtensionContext extends FREContext {
                 _dispatchEvent(PURCHASE_ERROR, "RESULT_USER_CANCELED");
             }
             else {
-                _dispatchEvent(PURCHASE_ERROR, billingResult.getDebugMessage());
+                String errorLog = "Error: " + billingResult.getDebugMessage() + ", BillingResponseCode: " + billingResult.getResponseCode();
+                _dispatchEvent(PURCHASE_ERROR, errorLog);
             }
         }
     };
