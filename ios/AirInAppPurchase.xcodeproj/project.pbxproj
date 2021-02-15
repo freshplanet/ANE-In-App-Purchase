@@ -10,6 +10,11 @@
 		16BE0E521E81BB0E00254FF3 /* AirInAppPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BE0E511E81BB0E00254FF3 /* AirInAppPurchase.m */; };
 		16BE0E531E81BB0E00254FF3 /* AirInAppPurchase.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 16BE0E501E81BB0E00254FF3 /* AirInAppPurchase.h */; };
 		F5984B7D75AB202DD0B48DE6 /* libPods-AirInAppPurchase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EFE35A8FB8D81D5962B8DCBA /* libPods-AirInAppPurchase.a */; };
+		FACB290525CDA8C5005D3825 /* FlashRuntimeExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 16BE0E621E81BC6400254FF3 /* FlashRuntimeExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FACB290625CDA8C5005D3825 /* AirInAppPurchase.h in Headers */ = {isa = PBXBuildFile; fileRef = 16BE0E501E81BB0E00254FF3 /* AirInAppPurchase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FACB290925CDA8CE005D3825 /* AirInAppPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BE0E511E81BB0E00254FF3 /* AirInAppPurchase.m */; };
+		FACB290E25CDA8E4005D3825 /* Adobe AIR in Frameworks */ = {isa = PBXBuildFile; fileRef = FACB290C25CDA8E4005D3825 /* Adobe AIR */; };
+		FACB290F25CDA8E4005D3825 /* Adobe AIR_64 in Frameworks */ = {isa = PBXBuildFile; fileRef = FACB290D25CDA8E4005D3825 /* Adobe AIR_64 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,6 +38,10 @@
 		4F5EEECECF41468977B23870 /* Pods-AirInAppPurchase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirInAppPurchase.release.xcconfig"; path = "Pods/Target Support Files/Pods-AirInAppPurchase/Pods-AirInAppPurchase.release.xcconfig"; sourceTree = "<group>"; };
 		73A52F4802CB8303AF16A808 /* Pods-AirInAppPurchase.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirInAppPurchase.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AirInAppPurchase/Pods-AirInAppPurchase.debug.xcconfig"; sourceTree = "<group>"; };
 		EFE35A8FB8D81D5962B8DCBA /* libPods-AirInAppPurchase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AirInAppPurchase.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FACB28F925CDA8AD005D3825 /* AirInAppPurchaseMac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AirInAppPurchaseMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FACB28FC25CDA8AD005D3825 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FACB290C25CDA8E4005D3825 /* Adobe AIR */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "Adobe AIR"; path = "../../../SDKs/AIRSDK_33.1.1.345/runtimes/air/mac/Adobe AIR.framework/Versions/1.0/Adobe AIR"; sourceTree = "<group>"; };
+		FACB290D25CDA8E4005D3825 /* Adobe AIR_64 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "Adobe AIR_64"; path = "../../../SDKs/AIRSDK_33.1.1.345/runtimes/air/mac/Adobe AIR.framework/Versions/1.0/Adobe AIR_64"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +53,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FACB28F625CDA8AD005D3825 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FACB290E25CDA8E4005D3825 /* Adobe AIR in Frameworks */,
+				FACB290F25CDA8E4005D3825 /* Adobe AIR_64 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -51,6 +69,7 @@
 			isa = PBXGroup;
 			children = (
 				16BE0E4F1E81BB0E00254FF3 /* AirInAppPurchase */,
+				FACB28FA25CDA8AD005D3825 /* AirInAppPurchaseMac */,
 				16BE0E4E1E81BB0E00254FF3 /* Products */,
 				A3ACC40760CB03005046AC1F /* Pods */,
 				DBB5F3703B3BCF13344FD756 /* Frameworks */,
@@ -61,6 +80,7 @@
 			isa = PBXGroup;
 			children = (
 				16BE0E4D1E81BB0E00254FF3 /* libAirInAppPurchase.a */,
+				FACB28F925CDA8AD005D3825 /* AirInAppPurchaseMac.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -87,12 +107,34 @@
 		DBB5F3703B3BCF13344FD756 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FACB290C25CDA8E4005D3825 /* Adobe AIR */,
+				FACB290D25CDA8E4005D3825 /* Adobe AIR_64 */,
 				EFE35A8FB8D81D5962B8DCBA /* libPods-AirInAppPurchase.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		FACB28FA25CDA8AD005D3825 /* AirInAppPurchaseMac */ = {
+			isa = PBXGroup;
+			children = (
+				FACB28FC25CDA8AD005D3825 /* Info.plist */,
+			);
+			path = AirInAppPurchaseMac;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		FACB28F425CDA8AD005D3825 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FACB290525CDA8C5005D3825 /* FlashRuntimeExtensions.h in Headers */,
+				FACB290625CDA8C5005D3825 /* AirInAppPurchase.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		16BE0E4C1E81BB0E00254FF3 /* AirInAppPurchase */ = {
@@ -114,6 +156,24 @@
 			productReference = 16BE0E4D1E81BB0E00254FF3 /* libAirInAppPurchase.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		FACB28F825CDA8AD005D3825 /* AirInAppPurchaseMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FACB290025CDA8AD005D3825 /* Build configuration list for PBXNativeTarget "AirInAppPurchaseMac" */;
+			buildPhases = (
+				FACB28F425CDA8AD005D3825 /* Headers */,
+				FACB28F525CDA8AD005D3825 /* Sources */,
+				FACB28F625CDA8AD005D3825 /* Frameworks */,
+				FACB28F725CDA8AD005D3825 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AirInAppPurchaseMac;
+			productName = AirInAppPurchaseMac;
+			productReference = FACB28F925CDA8AD005D3825 /* AirInAppPurchaseMac.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -127,6 +187,10 @@
 						CreatedOnToolsVersion = 8.2.1;
 						ProvisioningStyle = Automatic;
 					};
+					FACB28F825CDA8AD005D3825 = {
+						CreatedOnToolsVersion = 12.4;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = 16BE0E481E81BB0E00254FF3 /* Build configuration list for PBXProject "AirInAppPurchase" */;
@@ -134,6 +198,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 16BE0E441E81BB0E00254FF3;
@@ -142,9 +207,20 @@
 			projectRoot = "";
 			targets = (
 				16BE0E4C1E81BB0E00254FF3 /* AirInAppPurchase */,
+				FACB28F825CDA8AD005D3825 /* AirInAppPurchaseMac */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FACB28F725CDA8AD005D3825 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		16C84524FE13B7BE3CEF7EE0 /* [CP] Copy Pods Resources */ = {
@@ -185,6 +261,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				16BE0E521E81BB0E00254FF3 /* AirInAppPurchase.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FACB28F525CDA8AD005D3825 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FACB290925CDA8CE005D3825 /* AirInAppPurchase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,6 +383,85 @@
 			};
 			name = Release;
 		};
+		FACB28FE25CDA8AD005D3825 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				EXCLUDED_ARCHS = arm64;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = AirInAppPurchaseMac/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.freshplanet.ane.AirInAppPurchaseMac;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		FACB28FF25CDA8AD005D3825 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				EXCLUDED_ARCHS = arm64;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = AirInAppPurchaseMac/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.freshplanet.ane.AirInAppPurchaseMac;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -316,6 +479,15 @@
 			buildConfigurations = (
 				16BE0E571E81BB0E00254FF3 /* Debug */,
 				16BE0E581E81BB0E00254FF3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FACB290025CDA8AD005D3825 /* Build configuration list for PBXNativeTarget "AirInAppPurchaseMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FACB28FE25CDA8AD005D3825 /* Debug */,
+				FACB28FF25CDA8AD005D3825 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
