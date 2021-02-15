@@ -39,7 +39,7 @@ package com.freshplanet.ane.AirInAppPurchase {
          *
          */
         public static function get isSupported():Boolean {
-            return _isIOS() || _isAndroid();
+            return _isIOSOrMacOS() || _isAndroid();
         }
 
         /**
@@ -106,7 +106,7 @@ package com.freshplanet.ane.AirInAppPurchase {
 
                 _context.call("removePurchaseFromQueue", productId, receipt, developerPayload ? developerPayload : "");
 
-                if (_isIOS()) {
+                if (_isIOSOrMacOS()) {
 
                     var filterPurchase:Function = function(jsonPurchase:String, index:int, purchases:Vector.<Object>):Boolean {
 
@@ -155,7 +155,7 @@ package com.freshplanet.ane.AirInAppPurchase {
                 _dispatchEvent(InAppPurchaseEvent.RESTORE_INFO_ERROR, "InAppPurchase not supported");
             else if (_isAndroid() || restoreIOSHistory)
                 _context.call("restoreTransaction");
-            else if (_isIOS()) {
+            else if (_isIOSOrMacOS()) {
 
                 var jsonPurchases:String = "[" + _iosPendingPurchases.join(",") + "]";
                 var jsonData:String = "{ \"purchases\": " + jsonPurchases + "}";
@@ -170,7 +170,7 @@ package com.freshplanet.ane.AirInAppPurchase {
             _iosPendingPurchases = new Vector.<Object>();
             if (!isSupported || _isAndroid()) {
                 _dispatchEvent("CLEAR_TRANSACTIONS_ERROR", "clear transactions not supported");
-            } else if (_isIOS()) {
+            } else if (_isIOSOrMacOS()) {
                 _context.call("clearTransactions");
             }
         }
@@ -222,7 +222,7 @@ package com.freshplanet.ane.AirInAppPurchase {
          */
 		private function _onStatus(event:StatusEvent):void {
 
-            if (event.code == InAppPurchaseEvent.PURCHASE_SUCCESSFUL && _isIOS())
+            if (event.code == InAppPurchaseEvent.PURCHASE_SUCCESSFUL && _isIOSOrMacOS())
                 _iosPendingPurchases.push(event.level);
             else if(event.code == "DEBUG")
                 _log("DEBUG", event.level);
@@ -247,8 +247,8 @@ package com.freshplanet.ane.AirInAppPurchase {
          *
          * @return
          */
-        private static function _isIOS():Boolean {
-			return Capabilities.manufacturer.indexOf("iOS") > -1 && Capabilities.os.indexOf("x86_64") < 0 && Capabilities.os.indexOf("i386") < 0;
+        private static function _isIOSOrMacOS():Boolean {
+			return Capabilities.os.indexOf("Mac OS") > -1 || (Capabilities.manufacturer.indexOf("iOS") > -1 && Capabilities.os.indexOf("x86_64") < 0 && Capabilities.os.indexOf("i386") < 0);
         }
 
         /**
