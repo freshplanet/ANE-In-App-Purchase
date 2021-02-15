@@ -29,6 +29,14 @@
                 </applicationDeployment>
         </platform>
 
+        <platform name="MacOS-x86-64">
+            <applicationDeployment>
+                <nativeLibrary>AirInAppPurchaseMac.framework</nativeLibrary>
+                <initializer>AirInAppPurchaseInitializer</initializer>
+                <finalizer>AirInAppPurchaseFinalizer</finalizer>
+            </applicationDeployment>
+        </platform>
+
         <platform name="Android-ARM"> 
             <applicationDeployment> 
                 <nativeLibrary>libAirInAppPurchase.jar</nativeLibrary> 
