@@ -252,18 +252,23 @@
     for (SKPaymentTransaction* transaction in transactions) {
         switch (transaction.transactionState) {
             case SKPaymentTransactionStatePurchased:
+                [self sendEvent:@"DEBUG" level:[NSString stringWithFormat:@"transactions updated PURCHASED"]];
                 [self completeTransaction:transaction];
                 break;
             case SKPaymentTransactionStateFailed:
+                [self sendEvent:@"DEBUG" level:[NSString stringWithFormat:@"transactions updated FAILED"]];
                 [self failedTransaction:transaction];
                 break;
             case SKPaymentTransactionStatePurchasing:
+                [self sendEvent:@"DEBUG" level:[NSString stringWithFormat:@"transactions updated PURCHASING"]];
                 [self purchasingTransaction:transaction];
                 break;
             case SKPaymentTransactionStateRestored:
+                [self sendEvent:@"DEBUG" level:[NSString stringWithFormat:@"transactions updated RESTORED"]];
                 [self restoreTransaction:transaction];
                 break;
             default:
+                [self sendEvent:@"DEBUG" level:[NSString stringWithFormat:@"transactions updated UNKNOWN"]];
                 [self sendEvent:@"PURCHASE_UNKNOWN" level:@"Unknown Reason"];
                 break;
         }
@@ -481,6 +486,7 @@ DEFINE_ANE_FUNCTION(removePurchaseFromQueue) {
             
             @try {
                    if ([transaction transactionState] != SKPaymentTransactionStatePurchasing) {
+                          [controller sendEvent:@"DEBUG" level:@"finishingTransaction"];
                           [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
                    }
                }
