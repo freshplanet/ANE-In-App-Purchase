@@ -226,8 +226,8 @@
     
     // transaction restored
     // dispatch event
-    [self sendEvent:@"TRANSACTION_RESTORED" level:[[transaction error] localizedDescription]];
-    
+    NSString* jsonString = [self getJsonForTransaction:transaction];
+    [self sendEvent:@"TRANSACTION_RESTORED" level:jsonString];
     
     // conclude the transaction
     @try {
