@@ -195,10 +195,13 @@
     [data setValue:[[transaction payment] productIdentifier] forKey:@"productId"];
     [data setValue:[transaction transactionIdentifier] forKey:@"transactionId"];
     
-//    NSString* receiptString = [[NSString alloc] initWithData:transaction.transactionReceipt encoding:NSUTF8StringEncoding];
-
-    NSData *receiptData = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] appStoreReceiptURL]];
-    NSString *receiptString = [receiptData base64EncodedStringWithOptions:0];
+    NSString* receiptString = nil;
+    #if TARGET_OS_IPHONE
+        receiptString = [[NSString alloc] initWithData:transaction.transactionReceipt encoding:NSUTF8StringEncoding];
+    #elif TARGET_OS_OSX
+        NSData *receiptData = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] appStoreReceiptURL]];
+        receiptString = [receiptData base64EncodedStringWithOptions:0];
+    #endif
     
     [data setValue:receiptString forKey:@"receipt"];
     [data setValue:@"AppStore"   forKey:@"receiptType"];
