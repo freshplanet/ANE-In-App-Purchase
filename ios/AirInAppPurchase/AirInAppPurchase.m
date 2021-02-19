@@ -20,6 +20,7 @@
 
 @implementation AirInAppPurchase
 
+static NSString * _purchasingProductId = nil;
 
 
 - (id) initWithContext:(FREContext)extensionContext {
@@ -246,6 +247,10 @@
 
 // list of transactions has been updated.
 - (void) paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray*)transactions {
+    BOOL isMac = false;
+    #if TARGET_OS_OSX
+        isMac = true;
+    #endif
     
     [self sendEvent:@"DEBUG" level:[NSString stringWithFormat:@"transactions updated"]];
     NSUInteger nbTransaction = [transactions count];
@@ -256,19 +261,31 @@
         switch (transaction.transactionState) {
             case SKPaymentTransactionStatePurchased:
                 [self sendEvent:@"DEBUG" level:[NSString stringWithFormat:@"transactions updated PURCHASED"]];
-                [self completeTransaction:transaction];
+                if(!isMac || (isMac && _purchasingProductId && [transaction.payment.productIdentifier isEqualToString:_purchasingProductId] )) {
+                    _purchasingProductId = nil;
+                    [self completeTransaction:transaction];
+                }
                 break;
             case SKPaymentTransactionStateFailed:
                 [self sendEvent:@"DEBUG" level:[NSString stringWithFormat:@"transactions updated FAILED"]];
-                [self failedTransaction:transaction];
+                if(!isMac || (isMac && _purchasingProductId && [transaction.payment.productIdentifier isEqualToString:_purchasingProductId] )) {
+                    _purchasingProductId = nil;
+                    [self failedTransaction:transaction];
+                }
                 break;
             case SKPaymentTransactionStatePurchasing:
                 [self sendEvent:@"DEBUG" level:[NSString stringWithFormat:@"transactions updated PURCHASING"]];
-                [self purchasingTransaction:transaction];
+                if(!isMac || (isMac && _purchasingProductId && [transaction.payment.productIdentifier isEqualToString:_purchasingProductId] )) {
+                    [self purchasingTransaction:transaction];
+                }
+                
                 break;
             case SKPaymentTransactionStateRestored:
                 [self sendEvent:@"DEBUG" level:[NSString stringWithFormat:@"transactions updated RESTORED"]];
-                [self restoreTransaction:transaction];
+                if(!isMac || (isMac && _purchasingProductId && [transaction.payment.productIdentifier isEqualToString:_purchasingProductId] )) {
+                    _purchasingProductId = nil;
+                    [self restoreTransaction:transaction];
+                }
                 break;
             default:
                 [self sendEvent:@"DEBUG" level:[NSString stringWithFormat:@"transactions updated UNKNOWN"]];
@@ -329,9 +346,9 @@ DEFINE_ANE_FUNCTION(makeSubscription) {
     if (!controller)
         return nil; // todo - error
     
-    NSString *productIdentifier = [NSString stringWithUTF8String:(char*)string1];
+    _purchasingProductId = [NSString stringWithUTF8String:(char*)string1];
     
-    SKProduct *product = [controller.iapProducts valueForKey:productIdentifier];
+    SKProduct *product = [controller.iapProducts valueForKey:_purchasingProductId];
     if(!product) {
         [controller sendEvent:@"PURCHASE_ERROR" level:@"Unknow product id"];
         return nil;
@@ -341,7 +358,7 @@ DEFINE_ANE_FUNCTION(makeSubscription) {
     SKPayment* payment = [SKPayment paymentWithProduct:product];
 //    SKPayment* payment = [SKPayment paymentWithProductIdentifier:productIdentifier];
     
-    FREDispatchStatusEventAsync(context, (uint8_t*) "DEBUG", (uint8_t*) [productIdentifier UTF8String]);
+    FREDispatchStatusEventAsync(context, (uint8_t*) "DEBUG", (uint8_t*) [_purchasingProductId UTF8String]);
     FREDispatchStatusEventAsync(context, (uint8_t*) "DEBUG", (uint8_t*) [[payment productIdentifier] UTF8String]);
    
     [[SKPaymentQueue defaultQueue] addPayment:payment];
@@ -362,9 +379,9 @@ DEFINE_ANE_FUNCTION(makePurchase) {
     if (!controller)
         return nil; // todo - error
 
-    NSString *productIdentifier = [NSString stringWithUTF8String:(char*)string1];
+    _purchasingProductId = [NSString stringWithUTF8String:(char*)string1];
     
-    SKProduct *product = [controller.iapProducts valueForKey:productIdentifier];
+    SKProduct *product = [controller.iapProducts valueForKey:_purchasingProductId];
     if(!product) {
         [controller sendEvent:@"PURCHASE_ERROR" level:@"Unknow product id"];
         return nil;
@@ -373,7 +390,7 @@ DEFINE_ANE_FUNCTION(makePurchase) {
 //    SKPayment* payment = [SKPayment paymentWithProductIdentifier:productIdentifier];
     SKPayment* payment = [SKPayment paymentWithProduct:product];
   
-    FREDispatchStatusEventAsync(context, (uint8_t*) "DEBUG", (uint8_t*) [productIdentifier UTF8String]);
+    FREDispatchStatusEventAsync(context, (uint8_t*) "DEBUG", (uint8_t*) [_purchasingProductId UTF8String]);
     FREDispatchStatusEventAsync(context, (uint8_t*) "DEBUG", (uint8_t*) [[payment productIdentifier] UTF8String]);
     
     [[SKPaymentQueue defaultQueue] addPayment:payment];
