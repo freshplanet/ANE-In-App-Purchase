@@ -21,6 +21,7 @@
 @implementation AirInAppPurchase
 
 static NSString * _purchasingProductId = nil;
+static SKPayment * _promotionPayment = nil;
 
 
 - (id) initWithContext:(FREContext)extensionContext {
@@ -314,6 +315,10 @@ static NSString * _purchasingProductId = nil;
     [self sendEvent:@"DEBUG" level:@"removeTransaction"];
 }
 
+- (BOOL)paymentQueue:(SKPaymentQueue *)queue shouldAddStorePayment:(SKPayment *)payment forProduct:(SKProduct *)product {
+    _promotionPayment = payment;
+    return false;
+}
 @end
 
 AirInAppPurchase* getAirInAppPurchaseContextNativeData(FREContext context) {
@@ -525,6 +530,18 @@ DEFINE_ANE_FUNCTION(restoreTransaction) {
     return nil;
 }
 
+DEFINE_ANE_FUNCTION(getPendingAppStorePurchase) {
+    if(_promotionPayment != nil) {
+      
+        FREObject result;
+        FRENewObjectFromUTF8((int)_promotionPayment.productIdentifier.length, (const uint8_t *)[_promotionPayment.productIdentifier UTF8String], &result);
+        _promotionPayment = nil;
+        return result;
+    }
+    
+    return nil;
+}
+
 void AirInAppPurchaseContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx, uint32_t* numFunctionsToTest, const FRENamedFunction** functionsToSet) {
     
     static FRENamedFunction functions[] = {
@@ -535,7 +552,8 @@ void AirInAppPurchaseContextInitializer(void* extData, const uint8_t* ctxType, F
         MAP_FUNCTION(removePurchaseFromQueue, NULL),
         MAP_FUNCTION(makeSubscription, NULL),
         MAP_FUNCTION(restoreTransaction, NULL),
-        MAP_FUNCTION(clearTransactions, NULL)
+        MAP_FUNCTION(clearTransactions, NULL),
+        MAP_FUNCTION(getPendingAppStorePurchase, NULL)
     };
     
     *numFunctionsToTest = sizeof(functions) / sizeof(FRENamedFunction);

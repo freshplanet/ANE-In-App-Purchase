@@ -175,6 +175,14 @@ package com.freshplanet.ane.AirInAppPurchase {
             }
         }
 
+        public function getPendingAppStorePurchase():String {
+            if (_isIOSOrMacOS()) {
+                return _context.call("getPendingAppStorePurchase") as String;
+            }
+
+            return null;
+        }
+
         // --------------------------------------------------------------------------------------//
         //																						 //
         // 									 	PRIVATE API										 //
