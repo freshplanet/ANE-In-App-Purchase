@@ -96,15 +96,14 @@ package com.freshplanet.ane.AirInAppPurchase {
          * CONSUME_ERROR
          * @param productId
          * @param receipt
-         * @param developerPayload used on Android
          */
-        public function removePurchaseFromQueue(productId:String, receipt:String, developerPayload:String = null):void {
+        public function removePurchaseFromQueue(productId:String, receipt:String):void {
 
             if (!isSupported)
                 _dispatchEvent(InAppPurchaseEvent.CONSUME_ERROR, "InAppPurchase not supported");
             else {
 
-                _context.call("removePurchaseFromQueue", productId, receipt, developerPayload ? developerPayload : "");
+                _context.call("removePurchaseFromQueue", productId, receipt);
 
                 if (_isIOSOrMacOS()) {
 

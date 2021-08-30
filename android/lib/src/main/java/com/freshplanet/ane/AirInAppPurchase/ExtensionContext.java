@@ -286,7 +286,6 @@ public class ExtensionContext extends FREContext {
         public FREObject call(FREContext ctx, FREObject[] args) {
 
             String receipt = getStringFromFREObject(args[1]);
-            String developerPayload = getStringFromFREObject(args[2]);
             JSONObject receiptJson = null;
             String signedData = null;
             JSONObject signedDataJson = null;
@@ -305,7 +304,7 @@ public class ExtensionContext extends FREContext {
                 purchaseToken = signedDataJson.getString("purchaseToken");
 
 
-                _billingManager.consumePurchase(purchaseToken, developerPayload, _consumeResponseListener);
+                _billingManager.consumePurchase(purchaseToken, _consumeResponseListener);
 
             }
             catch (JSONException jsonException) {
