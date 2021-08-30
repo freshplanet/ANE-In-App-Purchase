@@ -11,6 +11,7 @@ import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.ConsumeParams;
 import com.android.billingclient.api.ConsumeResponseListener;
 import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesResponseListener;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
@@ -49,6 +50,11 @@ public class BillingManager {
     public interface QueryPurchasesFinishedListener {
 
         void onQueryPurchasesFinished(Boolean success, String data);
+    }
+
+    private interface QueryPurchasesInternalListener {
+
+        void onQueryPurchasesFinished(Boolean success, String error);
     }
 
     public interface PurchaseFinishedListener{
@@ -282,65 +288,52 @@ public class BillingManager {
                 try {
                     checkNotDisposed();
 
-                    List<Purchase> purchases = new ArrayList<Purchase>();
+                    final List<Purchase> purchases = new ArrayList<Purchase>();
 
-                    Purchase.PurchasesResult purchasesResult = _billingClient.queryPurchases(BillingClient.SkuType.INAPP);
-
-                    if(purchasesResult.getBillingResult().getResponseCode() == BillingClient.BillingResponseCode.OK) {
-                        for (Purchase p : purchasesResult.getPurchasesList()) {
-                            if(p.isAcknowledged()) {
-                                // just consume
-                                consumePurchase(p.getPurchaseToken(), null, new ConsumeResponseListener() {
-                                    @Override
-                                    public void onConsumeResponse(BillingResult billingResult, String purchaseToken) {
-                                        // do nothing, if consume didnt work, it should work on next restore
+                    // fetch inapp
+                    queryPurchasesInternal(BillingClient.SkuType.INAPP, purchases, false, new QueryPurchasesInternalListener() {
+                        @Override
+                        public void onQueryPurchasesFinished(Boolean success, String error) {
+                            if(!success || error != null) {
+                                listener.onQueryPurchasesFinished(false, error);
+                                return;
+                            }
+                            // now fetch subs
+                            queryPurchasesInternal(BillingClient.SkuType.SUBS, purchases, false, new QueryPurchasesInternalListener() {
+                                @Override
+                                public void onQueryPurchasesFinished(Boolean success, String error) {
+                                    if(!success || error != null) {
+                                        listener.onQueryPurchasesFinished(false, error);
+                                        return;
                                     }
-                                });
-                            }
-                            else {
-                                purchases.add(p);
-                            }
+
+                                    final JSONObject resultObject = new JSONObject();
+                                    final JSONArray purchasesArray = new JSONArray();
+
+                                    for (Purchase p : purchases) {
+
+                                        JSONObject purchaseJSON = purchaseToJSON(p);
+                                        if(purchaseJSON != null) {
+                                            purchasesArray.put(purchaseToJSON(p));
+                                        }
+
+                                    }
+
+                                    try {
+                                        resultObject.put("purchases", purchasesArray);
+                                    }
+                                    catch (JSONException e) {
+                                        listener.onQueryPurchasesFinished(false, e.getMessage());
+                                        return;
+                                    }
+
+                                    listener.onQueryPurchasesFinished(true, resultObject.toString());
+
+                                }
+                            });
+
                         }
-
-                    }
-                    else {
-                        // report errors
-                        listener.onQueryPurchasesFinished(false, purchasesResult.getBillingResult().getDebugMessage());
-                        return;
-
-                    }
-
-                    Purchase.PurchasesResult subscriptionsResult = _billingClient.queryPurchases(BillingClient.SkuType.SUBS);
-                    if(subscriptionsResult.getBillingResult().getResponseCode() == BillingClient.BillingResponseCode.OK) {
-
-                        for (Purchase p : subscriptionsResult.getPurchasesList()) {
-                            if(!p.isAcknowledged()) {
-                                purchases.add(p);
-                            }
-                        }
-                    }
-                    else {
-                        // report errors
-                        listener.onQueryPurchasesFinished(false, subscriptionsResult.getBillingResult().getDebugMessage());
-                        return;
-                    }
-
-
-                    final JSONObject resultObject = new JSONObject();
-                    final JSONArray purchasesArray = new JSONArray();
-
-                    for (Purchase p : purchases) {
-
-                        JSONObject purchaseJSON = purchaseToJSON(p);
-                        if(purchaseJSON != null) {
-                            purchasesArray.put(purchaseToJSON(p));
-                        }
-
-                    }
-
-                    resultObject.put("purchases", purchasesArray);
-                    listener.onQueryPurchasesFinished(true, resultObject.toString());
-
+                    });
                 }
                 catch (Exception e) {
                     listener.onQueryPurchasesFinished(false,e.toString());
@@ -358,6 +351,43 @@ public class BillingManager {
 
         startServiceConnectionIfNeeded(executeOnConnectedService, executeOnDisconnectedService);
 
+    }
+
+    void queryPurchasesInternal(final String purchaseType, final List<Purchase> purchases, final Boolean includeAcknowledged, final QueryPurchasesInternalListener listener) {
+        _billingClient.queryPurchasesAsync(purchaseType, new PurchasesResponseListener() {
+            @Override
+            public void onQueryPurchasesResponse(BillingResult billingResult, List<Purchase> list) {
+                if(billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    for (Purchase p : list) {
+
+                        if(p.isAcknowledged()) {
+
+                            if(includeAcknowledged) {
+                                purchases.add(p);
+                            }
+                            // just consume
+                            if(purchaseType.equals(BillingClient.SkuType.INAPP)) {
+                                consumePurchase(p.getPurchaseToken(), new ConsumeResponseListener() {
+                                    @Override
+                                    public void onConsumeResponse(BillingResult billingResult, String purchaseToken) {
+                                        // do nothing, if consume didnt work, it should work on next restore
+                                    }
+                                });
+                            }
+                        }
+                        else {
+                            purchases.add(p);
+                        }
+                    }
+
+                    listener.onQueryPurchasesFinished(true, null);
+                }
+                else {
+                    // report errors
+                    listener.onQueryPurchasesFinished(false, billingResult.getDebugMessage());
+                }
+            }
+        });
     }
 
     void purchaseProduct(final Activity activity, final String skuID, final String oldSkuID, final int replaceSkusProrationMode, final String productType, final PurchaseFinishedListener listener) {
@@ -385,18 +415,51 @@ public class BillingManager {
                             if(skuDetailsList != null && skuDetailsList.size() > 0) {
 
                                 SkuDetails details = skuDetailsList.get(0);
-                                BillingFlowParams.Builder flowParamsBuilder = BillingFlowParams.newBuilder()
+
+                                final BillingFlowParams.Builder flowParamsBuilder = BillingFlowParams.newBuilder()
                                         .setSkuDetails(details);
 
-                                if(oldSkuID != null && !oldSkuID.equals("")) {
-                                    flowParamsBuilder.setOldSku(oldSkuID);
-                                }
+                                if(oldSkuID != null && !oldSkuID.equals("") && replaceSkusProrationMode >= 0) {
 
-                                if(replaceSkusProrationMode >= 0) {
-                                    flowParamsBuilder.setReplaceSkusProrationMode(replaceSkusProrationMode);
-                                }
+                                    final List<Purchase> subPurchases = new ArrayList<Purchase>();
+                                    // have to find old subscription purchase first
+                                    queryPurchasesInternal(BillingClient.SkuType.SUBS, subPurchases, true, new QueryPurchasesInternalListener() {
+                                        @Override
+                                        public void onQueryPurchasesFinished(Boolean success, String error) {
 
-                                _billingClient.launchBillingFlow(activity, flowParamsBuilder.build());
+                                            if(!success || error != null) {
+                                                listener.onPurchasesFinished(false, "Unable to get old subscription purchase " + skuID);
+                                                return;
+                                            }
+
+                                            BillingFlowParams.SubscriptionUpdateParams.Builder subUpdateParams = BillingFlowParams.SubscriptionUpdateParams.newBuilder();
+                                            subUpdateParams.setReplaceSkusProrationMode(replaceSkusProrationMode);
+
+                                            Boolean didFindOldProduct = false;
+                                            for (Purchase subPurchase : subPurchases) {
+                                                if(subPurchase.getSkus().indexOf(oldSkuID) >= 0) {
+                                                    didFindOldProduct = true;
+                                                    subUpdateParams.setOldSkuPurchaseToken(subPurchase.getPurchaseToken());
+                                                    break;
+                                                }
+                                            }
+
+                                            if(!didFindOldProduct) {
+                                                listener.onPurchasesFinished(false, "Unable to get old subscription purchase " + skuID);
+                                                return;
+                                            }
+
+
+                                            flowParamsBuilder.setSubscriptionUpdateParams(subUpdateParams.build());
+                                            _billingClient.launchBillingFlow(activity, flowParamsBuilder.build());
+
+                                        }
+                                    });
+
+                                }
+                                else {
+                                    _billingClient.launchBillingFlow(activity, flowParamsBuilder.build());
+                                }
 
                             }
                             else {
@@ -424,7 +487,7 @@ public class BillingManager {
     }
 
 
-    void consumePurchase(final String purchaseToken, final String developerPayload, final ConsumeResponseListener listener) {
+    void consumePurchase(final String purchaseToken, final ConsumeResponseListener listener) {
 
         Runnable executeOnConnectedService = new Runnable() {
             @Override
@@ -433,11 +496,6 @@ public class BillingManager {
                     checkNotDisposed();
                     ConsumeParams.Builder paramsBuilder = ConsumeParams.newBuilder()
                             .setPurchaseToken(purchaseToken);
-
-                    if(developerPayload != null && !developerPayload.equals("")) {
-                        paramsBuilder.setDeveloperPayload(developerPayload);
-                    }
-
 
                     _billingClient.consumeAsync(paramsBuilder.build(),listener);
                 }
@@ -470,7 +528,7 @@ public class BillingManager {
             receiptObject.put("signature", purchase.getSignature());
 
             resultObject = new JSONObject();
-            resultObject.put("productId", purchase.getSku());
+            resultObject.put("productId", purchase.getSkus().get(0));
             resultObject.put("receiptType", "GooglePlay");
             resultObject.put("receipt", receiptObject);
 
