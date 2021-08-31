@@ -390,7 +390,7 @@ public class BillingManager {
         });
     }
 
-    void purchaseProduct(final Activity activity, final String skuID, final String oldSkuID, final int replaceSkusProrationMode, final String productType, final PurchaseFinishedListener listener) {
+    void purchaseProduct(final Activity activity, final String skuID, final String oldSkuID, final int replaceSkusProrationMode, final String oldSubscriptionPurchaseToken, final String productType, final PurchaseFinishedListener listener) {
 
         Runnable executeOnConnectedService = new Runnable() {
             @Override
@@ -422,40 +422,49 @@ public class BillingManager {
                                 if(oldSkuID != null && !oldSkuID.equals("") && replaceSkusProrationMode >= 0) {
 
                                     final List<Purchase> subPurchases = new ArrayList<Purchase>();
-                                    // have to find old subscription purchase first
-                                    queryPurchasesInternal(BillingClient.SkuType.SUBS, subPurchases, true, new QueryPurchasesInternalListener() {
-                                        @Override
-                                        public void onQueryPurchasesFinished(Boolean success, String error) {
 
-                                            if(!success || error != null) {
-                                                listener.onPurchasesFinished(false, "Unable to get old subscription purchase " + skuID);
-                                                return;
-                                            }
+                                    if(oldSubscriptionPurchaseToken != null && !oldSubscriptionPurchaseToken.equals("")) {
+                                        BillingFlowParams.SubscriptionUpdateParams.Builder subUpdateParams = BillingFlowParams.SubscriptionUpdateParams.newBuilder();
+                                        subUpdateParams.setReplaceSkusProrationMode(replaceSkusProrationMode);
+                                        subUpdateParams.setOldSkuPurchaseToken(oldSubscriptionPurchaseToken);
+                                        flowParamsBuilder.setSubscriptionUpdateParams(subUpdateParams.build());
+                                        _billingClient.launchBillingFlow(activity, flowParamsBuilder.build());
+                                    }
+                                    else {
+                                        // fallback: have to find old subscription purchase first
+                                        queryPurchasesInternal(BillingClient.SkuType.SUBS, subPurchases, true, new QueryPurchasesInternalListener() {
+                                            @Override
+                                            public void onQueryPurchasesFinished(Boolean success, String error) {
 
-                                            BillingFlowParams.SubscriptionUpdateParams.Builder subUpdateParams = BillingFlowParams.SubscriptionUpdateParams.newBuilder();
-                                            subUpdateParams.setReplaceSkusProrationMode(replaceSkusProrationMode);
-
-                                            Boolean didFindOldProduct = false;
-                                            for (Purchase subPurchase : subPurchases) {
-                                                if(subPurchase.getSkus().indexOf(oldSkuID) >= 0) {
-                                                    didFindOldProduct = true;
-                                                    subUpdateParams.setOldSkuPurchaseToken(subPurchase.getPurchaseToken());
-                                                    break;
+                                                if(!success || error != null) {
+                                                    listener.onPurchasesFinished(false, "Unable to get old subscription purchase " + skuID);
+                                                    return;
                                                 }
+
+                                                BillingFlowParams.SubscriptionUpdateParams.Builder subUpdateParams = BillingFlowParams.SubscriptionUpdateParams.newBuilder();
+                                                subUpdateParams.setReplaceSkusProrationMode(replaceSkusProrationMode);
+
+                                                Boolean didFindOldProduct = false;
+                                                for (Purchase subPurchase : subPurchases) {
+                                                    if(subPurchase.getSkus().indexOf(oldSkuID) >= 0) {
+                                                        didFindOldProduct = true;
+                                                        subUpdateParams.setOldSkuPurchaseToken(subPurchase.getPurchaseToken());
+                                                        break;
+                                                    }
+                                                }
+
+                                                if(!didFindOldProduct) {
+                                                    listener.onPurchasesFinished(false, "Unable to get old subscription purchase " + skuID);
+                                                    return;
+                                                }
+
+
+                                                flowParamsBuilder.setSubscriptionUpdateParams(subUpdateParams.build());
+                                                _billingClient.launchBillingFlow(activity, flowParamsBuilder.build());
+
                                             }
-
-                                            if(!didFindOldProduct) {
-                                                listener.onPurchasesFinished(false, "Unable to get old subscription purchase " + skuID);
-                                                return;
-                                            }
-
-
-                                            flowParamsBuilder.setSubscriptionUpdateParams(subUpdateParams.build());
-                                            _billingClient.launchBillingFlow(activity, flowParamsBuilder.build());
-
-                                        }
-                                    });
-
+                                        });
+                                    }
                                 }
                                 else {
                                     _billingClient.launchBillingFlow(activity, flowParamsBuilder.build());
