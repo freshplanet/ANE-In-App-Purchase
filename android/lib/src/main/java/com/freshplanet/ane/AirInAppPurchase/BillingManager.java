@@ -202,10 +202,12 @@ public class BillingManager {
                                     JSONObject detailsObject = new JSONObject();
 
                                     for (SkuDetails skuDetails : result) {
-                                        try {
-                                            detailsObject.put(skuDetails.getSku(), new JSONObject(skuDetails.getOriginalJson()));
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
+                                        if (skuDetails != null) {
+                                            try {
+                                                detailsObject.put(skuDetails.getSku(), new JSONObject(skuDetails.getOriginalJson()));
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
                                         }
                                     }
 
@@ -258,7 +260,12 @@ public class BillingManager {
                                 public void onSkuDetailsResponse(BillingResult billingResult,
                                                                  List<SkuDetails> skuDetailsList) {
                                     // Process the result.
-                                    listener.onGetProductInfoFinishedListener(skuDetailsList);
+                                    if(billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                                        listener.onGetProductInfoFinishedListener(skuDetailsList);
+                                    }
+                                    else {
+                                        listener.onGetProductInfoFinishedListener(null);
+                                    }
                                 }
                             });
                 }
