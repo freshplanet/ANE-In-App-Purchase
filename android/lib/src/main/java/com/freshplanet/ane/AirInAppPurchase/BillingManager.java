@@ -202,10 +202,12 @@ public class BillingManager {
                                     JSONObject detailsObject = new JSONObject();
 
                                     for (SkuDetails skuDetails : result) {
-                                        try {
-                                            detailsObject.put(skuDetails.getSku(), new JSONObject(skuDetails.getOriginalJson()));
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
+                                        if (skuDetails != null) {
+                                            try {
+                                                detailsObject.put(skuDetails.getSku(), new JSONObject(skuDetails.getOriginalJson()));
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
                                         }
                                     }
 
