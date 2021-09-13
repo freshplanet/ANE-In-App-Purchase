@@ -258,7 +258,12 @@ public class BillingManager {
                                 public void onSkuDetailsResponse(BillingResult billingResult,
                                                                  List<SkuDetails> skuDetailsList) {
                                     // Process the result.
-                                    listener.onGetProductInfoFinishedListener(skuDetailsList);
+                                    if(billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                                        listener.onGetProductInfoFinishedListener(skuDetailsList);
+                                    }
+                                    else {
+                                        listener.onGetProductInfoFinishedListener(null);
+                                    }
                                 }
                             });
                 }
