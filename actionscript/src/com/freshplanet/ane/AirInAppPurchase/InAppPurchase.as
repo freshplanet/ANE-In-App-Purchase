@@ -83,13 +83,14 @@ package com.freshplanet.ane.AirInAppPurchase {
          * @param oldProductId used on Android when upgrading/downgrading subscription - pass in the productId of current user subscription
          * @param prorationMode used on Android when upgrading/downgrading subscription
          * @param oldSubscriptionPurchaseToken used on Android when upgrading/downgrading subscription
+         * @param appleDiscountData used on iOS/MacOS when purchasing a subscription with a promotional offer (discount)
          */
-        public function makeSubscription(productId:String, oldProductId:String = null, prorationMode:InAppPurchaseProrationMode = null, oldSubscriptionPurchaseToken:String = null):void {
+        public function makeSubscription(productId:String, oldProductId:String = null, prorationMode:InAppPurchaseProrationMode = null, oldSubscriptionPurchaseToken:String = null, appleDiscountData:Object = null):void {
 
             if (!isSupported)
                 _dispatchEvent(InAppPurchaseEvent.PURCHASE_ERROR, "InAppPurchase not supported");
             else
-                _context.call("makeSubscription", productId, oldProductId ? oldProductId : "", prorationMode ? prorationMode.value : -1, oldSubscriptionPurchaseToken ? oldSubscriptionPurchaseToken : "");
+                _context.call("makeSubscription", productId, oldProductId ? oldProductId : "", prorationMode ? prorationMode.value : -1, oldSubscriptionPurchaseToken ? oldSubscriptionPurchaseToken : "", appleDiscountData ? JSON.stringify(appleDiscountData) : "");
         }
 
         /**
@@ -234,6 +235,8 @@ package com.freshplanet.ane.AirInAppPurchase {
                 _iosPendingPurchases.push(event.level);
             else if(event.code == "DEBUG")
                 _log("DEBUG", event.level);
+            else if(event.code == "log")
+                trace(event.level);
 
             _dispatchEvent(event.code, event.level);
 		}

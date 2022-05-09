@@ -113,7 +113,23 @@ static SKPayment * _promotionPayment = nil;
         [details setValue: [numberFormatter currencyCode] forKey:@"price_currency_code"];
         [details setValue: [numberFormatter currencySymbol] forKey:@"price_currency_symbol"];
         [details setValue: product.price forKey:@"value"];
+        
+        if (@available(macOS 10.14.4, ios 12.2, *))
+        {
+            if (product.discounts != nil && product.discounts.count > 0) {
+                NSMutableArray *discounts = [[NSMutableArray alloc] init];
+                for (SKProductDiscount* discount in product.discounts) {
+                    NSMutableDictionary *discountElement = [[NSMutableDictionary alloc] init];
+                    [discountElement setValue: discount.identifier forKey:@"productId"];
+                    [discountElement setValue: [numberFormatter stringFromNumber:discount.price] forKey:@"price"];
+                    [discounts addObject:discountElement];
+                }
+                [details setValue:discounts forKey:@"discounts"];
+            }
+        }
+        
         [productElement setObject:details forKey:product.productIdentifier];
+        
     }
     
     [dictionary setObject:productElement forKey:@"details"];
@@ -340,32 +356,69 @@ DEFINE_ANE_FUNCTION(AirInAppPurchaseInit) {
 
 DEFINE_ANE_FUNCTION(makeSubscription) {
     
+    AirInAppPurchase* controller = getAirInAppPurchaseContextNativeData(context);
+    
+    if (!controller)
+        return nil;
+    
     uint32_t stringLength;
     const uint8_t* string1;
     
     if (FREGetObjectAsUTF8(argv[0], &stringLength, &string1) != FRE_OK)
         return nil;
+   
     
-    AirInAppPurchase* controller = getAirInAppPurchaseContextNativeData(context);
     
-    if (!controller)
-        return nil; // todo - error
     
     _purchasingProductId = [NSString stringWithUTF8String:(char*)string1];
-    
+
     SKProduct *product = [controller.iapProducts valueForKey:_purchasingProductId];
     if(!product) {
         [controller sendEvent:@"PURCHASE_ERROR" level:@"Unknow product id"];
         return nil;
     }
-        
+
+    SKMutablePayment* payment = [SKMutablePayment paymentWithProduct:product];
     
-    SKPayment* payment = [SKPayment paymentWithProduct:product];
-//    SKPayment* payment = [SKPayment paymentWithProductIdentifier:productIdentifier];
+    if (@available(macOS 10.14.4, ios 12.2, *)) {
+        if(argc >= 4) {
+            const uint8_t* discountString;
+            
+            if (FREGetObjectAsUTF8(argv[4], &stringLength, &discountString) == FRE_OK) {
+                NSString *discountData = [NSString stringWithUTF8String:(char*)discountString];
+                if(![discountData isEqualToString:@""]) {
+                    NSData *jsonData = [discountData dataUsingEncoding:NSUTF8StringEncoding];
+                    NSError *error;
+                    NSDictionary *discountJSON = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+
+                    @try {
+                      
+                        NSString *discountId = [discountJSON valueForKey:@"productId"];
+                        NSString *keyId = [discountJSON valueForKey:@"keyId"];
+                        NSUUID *nonce = [[NSUUID alloc] initWithUUIDString:[discountJSON valueForKey:@"nonce"]];
+                        NSString *signature = [discountJSON valueForKey:@"signature"];
+                        NSNumber *timestamp = [discountJSON valueForKey:@"timestamp"];
+                        NSString *userId = [discountJSON valueForKey:@"userId"];
+                        
+                        SKPaymentDiscount *discount = [[SKPaymentDiscount alloc] initWithIdentifier:discountId keyIdentifier:keyId nonce:nonce signature:signature timestamp:timestamp];
+                        
+                        NSString *timeStamp = [NSString stringWithFormat:@"%@", timestamp];
+                        payment.applicationUsername = userId;
+                        payment.paymentDiscount = discount;
+                        
+                    } @catch (NSException *exception) {
+                        NSLog(@"%@", [@"AirInAppPurchae exception setting discount: " stringByAppendingString:exception.reason]);
+                    }
+                }
+            }
+            
+        }
+    }
     
+
     FREDispatchStatusEventAsync(context, (uint8_t*) "DEBUG", (uint8_t*) [_purchasingProductId UTF8String]);
     FREDispatchStatusEventAsync(context, (uint8_t*) "DEBUG", (uint8_t*) [[payment productIdentifier] UTF8String]);
-   
+
     [[SKPaymentQueue defaultQueue] addPayment:payment];
     
     return nil;
