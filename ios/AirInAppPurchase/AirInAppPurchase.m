@@ -392,17 +392,15 @@ DEFINE_ANE_FUNCTION(makeSubscription) {
                     NSDictionary *discountJSON = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
 
                     @try {
-                      
                         NSString *discountId = [discountJSON valueForKey:@"productId"];
                         NSString *keyId = [discountJSON valueForKey:@"keyId"];
                         NSUUID *nonce = [[NSUUID alloc] initWithUUIDString:[discountJSON valueForKey:@"nonce"]];
                         NSString *signature = [discountJSON valueForKey:@"signature"];
                         NSNumber *timestamp = [discountJSON valueForKey:@"timestamp"];
                         NSString *userId = [discountJSON valueForKey:@"userId"];
-                        
+
                         SKPaymentDiscount *discount = [[SKPaymentDiscount alloc] initWithIdentifier:discountId keyIdentifier:keyId nonce:nonce signature:signature timestamp:timestamp];
-                        
-                        NSString *timeStamp = [NSString stringWithFormat:@"%@", timestamp];
+                                                
                         payment.applicationUsername = userId;
                         payment.paymentDiscount = discount;
                         
