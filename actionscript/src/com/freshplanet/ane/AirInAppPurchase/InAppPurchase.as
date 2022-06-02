@@ -154,8 +154,9 @@ package com.freshplanet.ane.AirInAppPurchase {
 
             if (!isSupported)
                 _dispatchEvent(InAppPurchaseEvent.RESTORE_INFO_ERROR, "InAppPurchase not supported");
-            else if (_isAndroid() || restoreIOSHistory)
-                _context.call("restoreTransaction");
+            else if (_isAndroid() || restoreIOSHistory) {
+                _context.call("restoreTransaction", restoreIOSHistory);
+            }
             else if (_isIOSOrMacOS()) {
 
                 var jsonPurchases:String = "[" + _iosPendingPurchases.join(",") + "]";

@@ -287,7 +287,7 @@ public class BillingManager {
 
     }
 
-    void queryPurchases(final QueryPurchasesFinishedListener listener) {
+    void queryPurchases(final QueryPurchasesFinishedListener listener, final boolean includeAcknowledged) {
 
         Runnable executeOnConnectedService = new Runnable() {
             @Override
@@ -306,7 +306,7 @@ public class BillingManager {
                                 return;
                             }
                             // now fetch subs
-                            queryPurchasesInternal(BillingClient.SkuType.SUBS, purchases, false, new QueryPurchasesInternalListener() {
+                            queryPurchasesInternal(BillingClient.SkuType.SUBS, purchases, includeAcknowledged, new QueryPurchasesInternalListener() {
                                 @Override
                                 public void onQueryPurchasesFinished(Boolean success, String error) {
                                     if(!success || error != null) {

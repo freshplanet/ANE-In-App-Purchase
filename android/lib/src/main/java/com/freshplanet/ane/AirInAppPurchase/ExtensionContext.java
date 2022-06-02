@@ -275,7 +275,8 @@ public class ExtensionContext extends FREContext {
         @Override
         public FREObject call(FREContext ctx, FREObject[] args) {
 
-            _billingManager.queryPurchases(_getPurchasesListener);
+            boolean includeAck = getBooleanFromFREObject(args[0]);
+            _billingManager.queryPurchases(_getPurchasesListener, includeAck);
 
             return null;
         }
