@@ -82,15 +82,14 @@ package com.freshplanet.ane.AirInAppPurchase {
          * @param productId
          * @param oldProductId used on Android when upgrading/downgrading subscription - pass in the productId of current user subscription
          * @param prorationMode used on Android when upgrading/downgrading subscription
-         * @param oldSubscriptionPurchaseToken used on Android when upgrading/downgrading subscription
          * @param appleDiscountData used on iOS/MacOS when purchasing a subscription with a promotional offer (discount)
          */
-        public function makeSubscription(productId:String, oldProductId:String = null, prorationMode:InAppPurchaseProrationMode = null, oldSubscriptionPurchaseToken:String = null, appleDiscountData:Object = null):void {
+        public function makeSubscription(productId:String, oldProductId:String = null, prorationMode:InAppPurchaseProrationMode = null, appleDiscountData:Object = null):void {
 
             if (!isSupported)
                 _dispatchEvent(InAppPurchaseEvent.PURCHASE_ERROR, "InAppPurchase not supported");
             else
-                _context.call("makeSubscription", productId, oldProductId ? oldProductId : "", prorationMode ? prorationMode.value : -1, oldSubscriptionPurchaseToken ? oldSubscriptionPurchaseToken : "", appleDiscountData ? JSON.stringify(appleDiscountData) : "");
+                _context.call("makeSubscription", productId, oldProductId ? oldProductId : "", prorationMode ? prorationMode.value : -1, "", appleDiscountData ? JSON.stringify(appleDiscountData) : "");
         }
 
         /**
