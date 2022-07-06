@@ -190,6 +190,15 @@ static SKPayment * _promotionPayment = nil;
     [data setValue:[[transaction error] localizedDescription] forKey:@"FailureDescription"];
     [data setValue:[[transaction error] localizedRecoverySuggestion] forKey:@"RecoverySuggestion"];
     
+    if (@available(macOS 11.3, ios 14.5, *)) {
+        if([[transaction error] underlyingErrors] && [[transaction error] underlyingErrors].count > 0) {
+            NSError *underlyingError = [[[transaction error] underlyingErrors] firstObject];
+            if(underlyingError) {
+                [data setValue:[NSNumber numberWithInteger:underlyingError.code]  forKey:@"underlyingErrorCode"];
+            }
+        }
+    }
+    
     NSString* jsonString = [self jsonStringFromData:data];
     NSString* error = transaction.error.code == SKErrorPaymentCancelled ? @"RESULT_USER_CANCELED" : jsonString;
     
