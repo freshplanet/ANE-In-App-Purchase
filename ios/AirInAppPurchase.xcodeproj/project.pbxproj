@@ -10,11 +10,11 @@
 		16BE0E521E81BB0E00254FF3 /* AirInAppPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BE0E511E81BB0E00254FF3 /* AirInAppPurchase.m */; };
 		16BE0E531E81BB0E00254FF3 /* AirInAppPurchase.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 16BE0E501E81BB0E00254FF3 /* AirInAppPurchase.h */; };
 		F5984B7D75AB202DD0B48DE6 /* libPods-AirInAppPurchase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EFE35A8FB8D81D5962B8DCBA /* libPods-AirInAppPurchase.a */; };
+		FA733C80286A408F00DEAA53 /* Adobe AIR in Frameworks */ = {isa = PBXBuildFile; fileRef = FA733C7E286A408F00DEAA53 /* Adobe AIR */; };
+		FA733C81286A408F00DEAA53 /* Adobe AIR_64 in Frameworks */ = {isa = PBXBuildFile; fileRef = FA733C7F286A408F00DEAA53 /* Adobe AIR_64 */; };
 		FACB290525CDA8C5005D3825 /* FlashRuntimeExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 16BE0E621E81BC6400254FF3 /* FlashRuntimeExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FACB290625CDA8C5005D3825 /* AirInAppPurchase.h in Headers */ = {isa = PBXBuildFile; fileRef = 16BE0E501E81BB0E00254FF3 /* AirInAppPurchase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FACB290925CDA8CE005D3825 /* AirInAppPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BE0E511E81BB0E00254FF3 /* AirInAppPurchase.m */; };
-		FACB290E25CDA8E4005D3825 /* Adobe AIR in Frameworks */ = {isa = PBXBuildFile; fileRef = FACB290C25CDA8E4005D3825 /* Adobe AIR */; };
-		FACB290F25CDA8E4005D3825 /* Adobe AIR_64 in Frameworks */ = {isa = PBXBuildFile; fileRef = FACB290D25CDA8E4005D3825 /* Adobe AIR_64 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -38,10 +38,10 @@
 		4F5EEECECF41468977B23870 /* Pods-AirInAppPurchase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirInAppPurchase.release.xcconfig"; path = "Pods/Target Support Files/Pods-AirInAppPurchase/Pods-AirInAppPurchase.release.xcconfig"; sourceTree = "<group>"; };
 		73A52F4802CB8303AF16A808 /* Pods-AirInAppPurchase.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirInAppPurchase.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AirInAppPurchase/Pods-AirInAppPurchase.debug.xcconfig"; sourceTree = "<group>"; };
 		EFE35A8FB8D81D5962B8DCBA /* libPods-AirInAppPurchase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AirInAppPurchase.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FA733C7E286A408F00DEAA53 /* Adobe AIR */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "Adobe AIR"; path = "../../../SDKs/AIRSDK_33.1.1.259/runtimes/air/mac/Adobe AIR.framework/Versions/1.0/Adobe AIR"; sourceTree = "<group>"; };
+		FA733C7F286A408F00DEAA53 /* Adobe AIR_64 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "Adobe AIR_64"; path = "../../../SDKs/AIRSDK_33.1.1.259/runtimes/air/mac/Adobe AIR.framework/Versions/1.0/Adobe AIR_64"; sourceTree = "<group>"; };
 		FACB28F925CDA8AD005D3825 /* AirInAppPurchaseMac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AirInAppPurchaseMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FACB28FC25CDA8AD005D3825 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FACB290C25CDA8E4005D3825 /* Adobe AIR */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "Adobe AIR"; path = "../../../SDKs/AIRSDK_33.1.1.345/runtimes/air/mac/Adobe AIR.framework/Versions/1.0/Adobe AIR"; sourceTree = "<group>"; };
-		FACB290D25CDA8E4005D3825 /* Adobe AIR_64 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "Adobe AIR_64"; path = "../../../SDKs/AIRSDK_33.1.1.345/runtimes/air/mac/Adobe AIR.framework/Versions/1.0/Adobe AIR_64"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,8 +57,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FACB290E25CDA8E4005D3825 /* Adobe AIR in Frameworks */,
-				FACB290F25CDA8E4005D3825 /* Adobe AIR_64 in Frameworks */,
+				FA733C80286A408F00DEAA53 /* Adobe AIR in Frameworks */,
+				FA733C81286A408F00DEAA53 /* Adobe AIR_64 in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,8 +107,8 @@
 		DBB5F3703B3BCF13344FD756 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FACB290C25CDA8E4005D3825 /* Adobe AIR */,
-				FACB290D25CDA8E4005D3825 /* Adobe AIR_64 */,
+				FA733C7E286A408F00DEAA53 /* Adobe AIR */,
+				FA733C7F286A408F00DEAA53 /* Adobe AIR_64 */,
 				EFE35A8FB8D81D5962B8DCBA /* libPods-AirInAppPurchase.a */,
 			);
 			name = Frameworks;
