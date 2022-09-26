@@ -10,6 +10,7 @@
 		16BE0E521E81BB0E00254FF3 /* AirInAppPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BE0E511E81BB0E00254FF3 /* AirInAppPurchase.m */; };
 		16BE0E531E81BB0E00254FF3 /* AirInAppPurchase.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 16BE0E501E81BB0E00254FF3 /* AirInAppPurchase.h */; };
 		F5984B7D75AB202DD0B48DE6 /* libPods-AirInAppPurchase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EFE35A8FB8D81D5962B8DCBA /* libPods-AirInAppPurchase.a */; };
+		FA2D84A128E220C4005CCDF0 /* SKStoreProductViewController+removeSceneDisconnected.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2D84A028E220C4005CCDF0 /* SKStoreProductViewController+removeSceneDisconnected.m */; };
 		FA733C80286A408F00DEAA53 /* Adobe AIR in Frameworks */ = {isa = PBXBuildFile; fileRef = FA733C7E286A408F00DEAA53 /* Adobe AIR */; };
 		FA733C81286A408F00DEAA53 /* Adobe AIR_64 in Frameworks */ = {isa = PBXBuildFile; fileRef = FA733C7F286A408F00DEAA53 /* Adobe AIR_64 */; };
 		FACB290525CDA8C5005D3825 /* FlashRuntimeExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 16BE0E621E81BC6400254FF3 /* FlashRuntimeExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -38,6 +39,8 @@
 		4F5EEECECF41468977B23870 /* Pods-AirInAppPurchase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirInAppPurchase.release.xcconfig"; path = "Pods/Target Support Files/Pods-AirInAppPurchase/Pods-AirInAppPurchase.release.xcconfig"; sourceTree = "<group>"; };
 		73A52F4802CB8303AF16A808 /* Pods-AirInAppPurchase.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirInAppPurchase.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AirInAppPurchase/Pods-AirInAppPurchase.debug.xcconfig"; sourceTree = "<group>"; };
 		EFE35A8FB8D81D5962B8DCBA /* libPods-AirInAppPurchase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AirInAppPurchase.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FA2D849F28E220C4005CCDF0 /* SKStoreProductViewController+removeSceneDisconnected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKStoreProductViewController+removeSceneDisconnected.h"; sourceTree = "<group>"; };
+		FA2D84A028E220C4005CCDF0 /* SKStoreProductViewController+removeSceneDisconnected.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SKStoreProductViewController+removeSceneDisconnected.m"; sourceTree = "<group>"; };
 		FA733C7E286A408F00DEAA53 /* Adobe AIR */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "Adobe AIR"; path = "../../../SDKs/AIRSDK_33.1.1.259/runtimes/air/mac/Adobe AIR.framework/Versions/1.0/Adobe AIR"; sourceTree = "<group>"; };
 		FA733C7F286A408F00DEAA53 /* Adobe AIR_64 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "Adobe AIR_64"; path = "../../../SDKs/AIRSDK_33.1.1.259/runtimes/air/mac/Adobe AIR.framework/Versions/1.0/Adobe AIR_64"; sourceTree = "<group>"; };
 		FACB28F925CDA8AD005D3825 /* AirInAppPurchaseMac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AirInAppPurchaseMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -91,6 +94,8 @@
 				16BE0E621E81BC6400254FF3 /* FlashRuntimeExtensions.h */,
 				16BE0E501E81BB0E00254FF3 /* AirInAppPurchase.h */,
 				16BE0E511E81BB0E00254FF3 /* AirInAppPurchase.m */,
+				FA2D849F28E220C4005CCDF0 /* SKStoreProductViewController+removeSceneDisconnected.h */,
+				FA2D84A028E220C4005CCDF0 /* SKStoreProductViewController+removeSceneDisconnected.m */,
 			);
 			path = AirInAppPurchase;
 			sourceTree = "<group>";
@@ -260,6 +265,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA2D84A128E220C4005CCDF0 /* SKStoreProductViewController+removeSceneDisconnected.m in Sources */,
 				16BE0E521E81BB0E00254FF3 /* AirInAppPurchase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
