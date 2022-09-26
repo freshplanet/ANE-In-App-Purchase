@@ -14,7 +14,9 @@
  */
 
 #import "AirInAppPurchase.h"
+#if TARGET_OS_IPHONE
 #import "SKStoreProductViewController+removeSceneDisconnected.h"
+#endif
 
 #define DEFINE_ANE_FUNCTION(fn) FREObject fn(FREContext context, void* functionData, uint32_t argc, FREObject argv[])
 #define MAP_FUNCTION(fn, data) { (const uint8_t*)(#fn), (data), &(fn) }
