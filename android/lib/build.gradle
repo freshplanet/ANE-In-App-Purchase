@@ -3,19 +3,19 @@ apply plugin: 'com.android.library'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.billingclient:billing:4.0.0'
+    implementation 'com.android.billingclient:billing:5.2.0'
 }
 
 android {
 
     useLibrary  'org.apache.http.legacy'
 
-    compileSdkVersion 30
-    buildToolsVersion '30.0.0'
+    compileSdkVersion 31
+    buildToolsVersion '31.0.0'
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 30
+        targetSdkVersion 31
     }
 }
 
