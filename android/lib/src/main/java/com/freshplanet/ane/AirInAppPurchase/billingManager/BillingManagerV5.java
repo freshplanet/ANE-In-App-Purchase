@@ -1,4 +1,4 @@
-package com.freshplanet.ane.AirInAppPurchase;
+package com.freshplanet.ane.AirInAppPurchase.billingManager;
 
 
 import android.app.Activity;
@@ -18,7 +18,6 @@ import com.android.billingclient.api.PurchasesResponseListener;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.QueryProductDetailsParams;
 import com.android.billingclient.api.QueryPurchasesParams;
-import com.android.billingclient.api.SkuDetails;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,7 +28,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class BillingManager {
+public class BillingManagerV5 implements IBillingManager {
 
     private boolean _debugLog = false;
     private boolean _disposed = false;
@@ -38,31 +37,9 @@ public class BillingManager {
     private Context _context;
     private BillingClient _billingClient;
 
-
-
-    public interface SetupFinishedListener {
-
-        void SetupFinished(Boolean success);
-    }
-
-    public interface QueryInventoryFinishedListener {
-
-        void onQueryInventoryFinished(Boolean success, String data);
-    }
-
-    public interface QueryPurchasesFinishedListener {
-
-        void onQueryPurchasesFinished(Boolean success, String data);
-    }
-
     private interface QueryPurchasesInternalListener {
 
         void onQueryPurchasesFinished(Boolean success, String error);
-    }
-
-    public interface PurchaseFinishedListener{
-
-        void onPurchasesFinished(Boolean success, String data);
     }
 
     private interface GetProductInfoFinishedListener {
@@ -70,13 +47,13 @@ public class BillingManager {
         void onGetProductInfoFinishedListener(List<ProductDetails> productDetailsList);
     }
 
-    BillingManager(Context ctx) {
+    public BillingManagerV5(Context ctx) {
 
         _context = ctx;
 
     }
 
-    void dispose() {
+    public void dispose() {
 
         if(_billingClient != null)
             _billingClient.endConnection();
@@ -85,7 +62,7 @@ public class BillingManager {
 
 
 
-    void initialize(final SetupFinishedListener setupFinishedListener, final PurchasesUpdatedListener purchasesUpdatedListener) {
+    public void initialize(final SetupFinishedListener setupFinishedListener, final PurchasesUpdatedListener purchasesUpdatedListener) {
 
         try {
 
@@ -102,11 +79,11 @@ public class BillingManager {
 
                     if (_disposed) return;
 
-
                     if (billingResult.getResponseCode() ==  BillingClient.BillingResponseCode.OK) {
                         // The BillingClient is ready. You can query purchases here.
                         logDebug("BillingManager connected");
                         _setupDone = true;
+
                         setupFinishedListener.SetupFinished(true);
 
                     }
@@ -169,7 +146,7 @@ public class BillingManager {
         }
     }
 
-    void queryInventory(final List<String> skuList, final List<String> skuSubsList, final QueryInventoryFinishedListener listener) {
+    public void queryInventory(final List<String> skuList, final List<String> skuSubsList, final QueryInventoryFinishedListener listener) {
 
         Runnable executeOnConnectedService = new Runnable() {
             @Override
@@ -309,7 +286,7 @@ public class BillingManager {
 
     }
 
-    void queryPurchases(final QueryPurchasesFinishedListener listener, final boolean includeAcknowledged) {
+    public void queryPurchases(final QueryPurchasesFinishedListener listener, final boolean includeAcknowledged) {
 
         Runnable executeOnConnectedService = new Runnable() {
             @Override
@@ -421,7 +398,7 @@ public class BillingManager {
         });
     }
 
-    void purchaseProduct(final Activity activity, final String skuID, final String oldSkuID, final int replaceSkusProrationMode, final String productType, final PurchaseFinishedListener listener, final int offerIndex, final String userId) {
+    public void purchaseProduct(final Activity activity, final String skuID, final String oldSkuID, final int replaceSkusProrationMode, final String productType, final PurchaseFinishedListener listener, final int offerIndex, final String userId) {
 
         Runnable executeOnConnectedService = new Runnable() {
             @Override
@@ -543,7 +520,7 @@ public class BillingManager {
     }
 
 
-    void consumePurchase(final String purchaseToken, final ConsumeResponseListener listener) {
+    public void consumePurchase(final String purchaseToken, final ConsumeResponseListener listener) {
 
         Runnable executeOnConnectedService = new Runnable() {
             @Override
@@ -661,7 +638,7 @@ public class BillingManager {
     /**
      * Enables or disable debug logging through LogCat.
      */
-    void enableDebugLogging(boolean enable, String tag) {
+    public void enableDebugLogging(boolean enable, String tag) {
         checkNotDisposed();
         _debugLog = enable;
         _debugTag = tag;

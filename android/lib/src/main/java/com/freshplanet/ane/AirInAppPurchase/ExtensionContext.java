@@ -30,6 +30,13 @@ import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.ConsumeResponseListener;
 import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.freshplanet.ane.AirInAppPurchase.billingManager.BillingManagerV5;
+import com.freshplanet.ane.AirInAppPurchase.billingManager.IBillingManager;
+import com.freshplanet.ane.AirInAppPurchase.billingManager.PurchaseFinishedListener;
+import com.freshplanet.ane.AirInAppPurchase.billingManager.QueryInventoryFinishedListener;
+import com.freshplanet.ane.AirInAppPurchase.billingManager.QueryPurchasesFinishedListener;
+import com.freshplanet.ane.AirInAppPurchase.billingManager.SetupFinishedListener;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,7 +44,7 @@ public class ExtensionContext extends FREContext {
 
     private static final String TAG = "AirInAppPurchase";
 
-    private BillingManager _billingManager;
+    private IBillingManager _billingManager;
 
     ExtensionContext() {
     }
@@ -82,7 +89,7 @@ public class ExtensionContext extends FREContext {
     private static final String RESTORE_INFO_RECEIVED = "RESTORE_INFO_RECEIVED";
     private static final String RESTORE_INFO_ERROR = "RESTORE_INFO_ERROR";
 
-    private BillingManager.SetupFinishedListener _initLibListener = new BillingManager.SetupFinishedListener() {
+    private SetupFinishedListener _initLibListener = new SetupFinishedListener() {
         @Override
         public void SetupFinished(Boolean success) {
 
@@ -116,7 +123,7 @@ public class ExtensionContext extends FREContext {
         }
     };
 
-    private BillingManager.PurchaseFinishedListener _purchaseFinishedListener = new BillingManager.PurchaseFinishedListener() {
+    private PurchaseFinishedListener _purchaseFinishedListener = new PurchaseFinishedListener() {
         @Override
         public void onPurchasesFinished(Boolean success, String data) {
             if(success)
@@ -151,7 +158,7 @@ public class ExtensionContext extends FREContext {
 
 
 
-    private BillingManager.QueryInventoryFinishedListener _getProductsInfoListener = new BillingManager.QueryInventoryFinishedListener() {
+    private QueryInventoryFinishedListener _getProductsInfoListener = new QueryInventoryFinishedListener() {
         @Override
         public void onQueryInventoryFinished(Boolean success, String data) {
 
@@ -164,7 +171,7 @@ public class ExtensionContext extends FREContext {
         }
     };
 
-    private BillingManager.QueryPurchasesFinishedListener _getPurchasesListener = new BillingManager.QueryPurchasesFinishedListener() {
+    private QueryPurchasesFinishedListener _getPurchasesListener = new QueryPurchasesFinishedListener() {
         @Override
         public void onQueryPurchasesFinished(Boolean success, String data) {
             if(success) {
@@ -193,7 +200,7 @@ public class ExtensionContext extends FREContext {
                 _billingManager.dispose();
             }
 
-            _billingManager = new BillingManager(ctx.getActivity());
+            _billingManager = new BillingManagerV5(ctx.getActivity());
             _billingManager.enableDebugLogging(debug, TAG);
             _billingManager.initialize(_initLibListener, _purchaseUpdatedListener);
 
