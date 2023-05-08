@@ -4,7 +4,6 @@ import android.app.Activity;
 
 import com.android.billingclient.api.ConsumeResponseListener;
 import com.android.billingclient.api.Purchase;
-import com.android.billingclient.api.PurchasesUpdatedListener;
 
 import org.json.JSONObject;
 
@@ -14,7 +13,6 @@ public interface IBillingManager {
 
     void enableDebugLogging(boolean enable, String tag);
     void enableDebugLogging(boolean enable);
-    void initialize(final SetupFinishedListener setupFinishedListener, final PurchasesUpdatedListener purchasesUpdatedListener);
     void dispose();
     void queryInventory(final List<String> skuList, final List<String> skuSubsList, final QueryInventoryFinishedListener listener);
     void purchaseProduct(final Activity activity, final String skuID, final String oldSkuID, final int replaceSkusProrationMode, final String productType, final PurchaseFinishedListener listener, final int offerIndex, final String userId);

@@ -1,7 +1,6 @@
 package com.freshplanet.ane.AirInAppPurchase.billingManager;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 
 import com.android.billingclient.api.BillingClient;
@@ -12,7 +11,6 @@ import com.android.billingclient.api.ConsumeParams;
 import com.android.billingclient.api.ConsumeResponseListener;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesResponseListener;
-import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
@@ -30,9 +28,7 @@ public class BillingManagerV4 implements IBillingManager {
 
     private boolean _debugLog = false;
     private boolean _disposed = false;
-    private String _debugTag = "BillingManager";
-    private boolean _setupDone = false;
-    private Context _context;
+    private String _debugTag = "BillingManagerV4";
     private BillingClient _billingClient;
 
     private interface QueryPurchasesInternalListener {
@@ -45,9 +41,8 @@ public class BillingManagerV4 implements IBillingManager {
         void onGetProductInfoFinishedListener(List<SkuDetails> skuDetailsList);
     }
 
-    public BillingManagerV4(Context ctx, BillingClient billingClient) {
+    public BillingManagerV4(BillingClient billingClient) {
 
-        _context = ctx;
         _billingClient = billingClient;
 
     }
@@ -59,56 +54,6 @@ public class BillingManagerV4 implements IBillingManager {
         _disposed = true;
     }
 
-
-
-    public void initialize(final SetupFinishedListener setupFinishedListener, final PurchasesUpdatedListener purchasesUpdatedListener) {
-
-        try {
-
-            checkNotDisposed();
-            if (_setupDone) throw new IllegalStateException("BillingManager is already set up.");
-
-            _billingClient = BillingClient.newBuilder(_context)
-                    .setListener(purchasesUpdatedListener)
-                    .enablePendingPurchases()
-                    .build();
-            _billingClient.startConnection(new BillingClientStateListener() {
-                @Override
-                public void onBillingSetupFinished(BillingResult billingResult) {
-
-                    if (_disposed) return;
-
-
-                    if (billingResult.getResponseCode() ==  BillingClient.BillingResponseCode.OK) {
-                        // The BillingClient is ready. You can query purchases here.
-                        logDebug("BillingManager connected");
-                        _setupDone = true;
-                        setupFinishedListener.SetupFinished(true);
-
-                    }
-                    else {
-                        setupFinishedListener.SetupFinished(false);
-                    }
-                }
-                @Override
-                public void onBillingServiceDisconnected() {
-                    // Try to restart the connection on the next request to
-                    // Google Play by calling the startConnection() method.
-                    logDebug("BillingManager disconnected");
-                    if (_disposed) return;
-
-                    setupFinishedListener.SetupFinished(false);
-
-
-                }
-            });
-        }
-        catch (Exception e) {
-            logDebug("Error initializing BillingManager " + e.toString());
-            setupFinishedListener.SetupFinished(false);
-        }
-
-    }
 
     private void startServiceConnectionIfNeeded(final Runnable executeOnSuccess, final Runnable executeOnError) {
 
