@@ -91,15 +91,17 @@ package com.freshplanet.ane.AirInAppPurchase {
 
             if (!isSupported)
                 _dispatchEvent(InAppPurchaseEvent.PURCHASE_ERROR, "InAppPurchase not supported");
-            else
+            else {
                 _context.call("makeSubscription",
                         productId,
                         oldProductId ? oldProductId : "",
-                        prorationMode ? prorationMode.value : -1, "",
+                        prorationMode ? prorationMode.value : -1,
                         appleDiscountData ? JSON.stringify(appleDiscountData) : "",
                         androidSubscriptionOfferIndex,
                         userId ? userId : ""
                 );
+            }
+
         }
 
         /**
