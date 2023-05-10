@@ -340,8 +340,12 @@ public class ExtensionContext extends FREContext {
         @Override
         public FREObject call(FREContext ctx, FREObject[] args) {
 
-            boolean includeAck = getBooleanFromFREObject(args[0]);
-            _billingManager.queryPurchases(_getPurchasesListener, includeAck);
+            boolean queryHistory = getBooleanFromFREObject(args[0]);
+            if(queryHistory)
+                _billingManager.queryPurchaseHistory(_getPurchasesListener);
+            else
+                _billingManager.queryPurchases(_getPurchasesListener, false);
+
 
             return null;
         }

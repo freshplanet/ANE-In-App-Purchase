@@ -13,8 +13,11 @@ import com.android.billingclient.api.ConsumeResponseListener;
 import com.android.billingclient.api.ProductDetails;
 import com.android.billingclient.api.ProductDetailsResponseListener;
 import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchaseHistoryRecord;
+import com.android.billingclient.api.PurchaseHistoryResponseListener;
 import com.android.billingclient.api.PurchasesResponseListener;
 import com.android.billingclient.api.QueryProductDetailsParams;
+import com.android.billingclient.api.QueryPurchaseHistoryParams;
 import com.android.billingclient.api.QueryPurchasesParams;
 
 import org.json.JSONArray;
@@ -491,6 +494,120 @@ public class BillingManagerV5 implements IBillingManager {
         };
 
         startServiceConnectionIfNeeded(executeOnConnectedService, executeOnDisconnectedService);
+    }
+
+    public void queryPurchaseHistory(final QueryPurchasesFinishedListener listener) {
+
+        Runnable executeOnConnectedService = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    checkNotDisposed();
+
+                    final List<PurchaseHistoryRecord> purchases = new ArrayList<PurchaseHistoryRecord>();
+
+                    // fetch inapp
+                    queryPurchaseHistoryInternal(BillingClient.ProductType.INAPP, purchases, new QueryPurchasesInternalListener() {
+                        @Override
+                        public void onQueryPurchasesFinished(Boolean success, String error) {
+                            if (!success || error != null) {
+                                listener.onQueryPurchasesFinished(false, error);
+                                return;
+                            }
+                            // now fetch subs
+                            queryPurchaseHistoryInternal(BillingClient.ProductType.SUBS, purchases, new QueryPurchasesInternalListener() {
+                                @Override
+                                public void onQueryPurchasesFinished(Boolean success, String error) {
+                                    if (!success || error != null) {
+                                        listener.onQueryPurchasesFinished(false, error);
+                                        return;
+                                    }
+
+                                    final JSONObject resultObject = new JSONObject();
+                                    final JSONArray purchasesArray = new JSONArray();
+
+                                    for (PurchaseHistoryRecord p : purchases) {
+
+                                        JSONObject purchaseJSON = purchaseHistoryToJSON(p);
+                                        if (purchaseJSON != null) {
+                                            purchasesArray.put(purchaseHistoryToJSON(p));
+                                        }
+
+                                    }
+
+                                    try {
+                                        resultObject.put("purchases", purchasesArray);
+                                    } catch (JSONException e) {
+                                        listener.onQueryPurchasesFinished(false, e.getMessage());
+                                        return;
+                                    }
+
+                                    listener.onQueryPurchasesFinished(true, resultObject.toString());
+
+                                }
+                            });
+
+                        }
+                    });
+                } catch (Exception e) {
+                    listener.onQueryPurchasesFinished(false, e.toString());
+                }
+
+            }
+        };
+
+        Runnable executeOnDisconnectedService = new Runnable() {
+            @Override
+            public void run() {
+                listener.onQueryPurchasesFinished(false, "Service disconnected");
+            }
+        };
+
+        startServiceConnectionIfNeeded(executeOnConnectedService, executeOnDisconnectedService);
+
+    }
+
+    private void queryPurchaseHistoryInternal(final String purchaseType, final List<PurchaseHistoryRecord> purchases, final QueryPurchasesInternalListener listener) {
+
+        _billingClient.queryPurchaseHistoryAsync(QueryPurchaseHistoryParams.newBuilder().setProductType(purchaseType).build(), new PurchaseHistoryResponseListener() {
+            @Override
+            public void onPurchaseHistoryResponse(BillingResult billingResult, List<PurchaseHistoryRecord> list) {
+                if(billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    for (PurchaseHistoryRecord p : list) {
+                        purchases.add(p);
+                    }
+
+                    listener.onQueryPurchasesFinished(true, null);
+                }
+                else {
+                    // report errors
+                    listener.onQueryPurchasesFinished(false, billingResult.getDebugMessage());
+                }
+            }
+        });
+    }
+
+    private JSONObject purchaseHistoryToJSON(PurchaseHistoryRecord purchase) {
+
+        JSONObject resultObject = null;
+
+        try {
+
+            JSONObject receiptObject = new JSONObject();
+            receiptObject.put("signedData", purchase.getOriginalJson());
+            receiptObject.put("signature", purchase.getSignature());
+
+            resultObject = new JSONObject();
+            resultObject.put("productId", purchase.getSkus().get(0));
+            resultObject.put("receiptType", "GooglePlay");
+            resultObject.put("receipt", receiptObject);
+
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return resultObject;
     }
 
     public JSONObject purchaseToJSON(Purchase purchase) {

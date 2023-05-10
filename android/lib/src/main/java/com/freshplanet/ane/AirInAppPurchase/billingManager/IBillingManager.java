@@ -16,6 +16,7 @@ public interface IBillingManager {
     void dispose();
     void queryInventory(final List<String> skuList, final List<String> skuSubsList, final QueryInventoryFinishedListener listener);
     void purchaseProduct(final Activity activity, final String skuID, final String oldSkuID, final int replaceSkusProrationMode, final String productType, final PurchaseFinishedListener listener, final int offerIndex, final String userId);
+    void queryPurchaseHistory(final QueryPurchasesFinishedListener listener);
     void queryPurchases(final QueryPurchasesFinishedListener listener, final boolean includeAcknowledged);
     void consumePurchase(final String purchaseToken, final ConsumeResponseListener listener);
     JSONObject purchaseToJSON(Purchase purchase);
