@@ -92,10 +92,10 @@ public class ExtensionContext extends FREContext {
 
     private SetupFinishedListener _initLibListener = new SetupFinishedListener() {
         @Override
-        public void SetupFinished(Boolean success) {
+        public void SetupFinished(Boolean success, String billingVersion) {
 
             if(success)
-                _dispatchEvent(INIT_SUCCESSFUL, "");
+                _dispatchEvent(INIT_SUCCESSFUL, billingVersion);
             else
                 _dispatchEvent(INIT_ERROR, "");
         }
@@ -227,11 +227,11 @@ public class ExtensionContext extends FREContext {
                             }
 
 
-                            _initLibListener.SetupFinished(true);
+                            _initLibListener.SetupFinished(true, _billingManager.getClass() == BillingManagerV5.class ? "billingV5" : "billingV4");
 
                         }
                         else {
-                            _initLibListener.SetupFinished(false);
+                            _initLibListener.SetupFinished(false, "");
                         }
                     }
                     @Override
@@ -241,7 +241,7 @@ public class ExtensionContext extends FREContext {
                         Log.d(TAG, "BillingManager disconnected");
                         if (_disposed) return;
 
-                        _initLibListener.SetupFinished(false);
+                        _initLibListener.SetupFinished(false, "");
 
 
                     }
@@ -249,7 +249,7 @@ public class ExtensionContext extends FREContext {
             }
             catch (Exception e) {
                 Log.d(TAG, "Error initializing BillingManager " + e);
-                _initLibListener.SetupFinished(false);
+                _initLibListener.SetupFinished(false, "");
             }
 
 
