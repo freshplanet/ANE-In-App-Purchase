@@ -270,6 +270,10 @@ public class ExtensionContext extends FREContext {
         @Override
         public FREObject call(FREContext ctx, FREObject[] args) {
 
+            if(_billingManager == null) {
+                _getProductsInfoListener.onQueryInventoryFinished(false, "Not initialized");
+                return null;
+            }
             List<String> skusName = null;
             if(args[0] != null) {
                 skusName = getListOfStringFromFREArray((FREArray) args[0]);
@@ -291,6 +295,10 @@ public class ExtensionContext extends FREContext {
         @Override
         public FREObject call(final FREContext ctx, FREObject[] args) {
 
+            if(_billingManager == null) {
+                _purchaseFinishedListener.onPurchasesFinished(false, "Not initialized");
+                return null;
+            }
             final String purchaseId = getStringFromFREObject(args[0]);
 
             if (purchaseId == null)
@@ -313,7 +321,10 @@ public class ExtensionContext extends FREContext {
     private FREFunction makeSubscription = new BaseFunction() {
         @Override
         public FREObject call(final FREContext ctx, FREObject[] args) {
-
+            if(_billingManager == null) {
+                _purchaseFinishedListener.onPurchasesFinished(false, "Not initialized");
+                return null;
+            }
             final String purchaseId = getStringFromFREObject(args[0]);
             final String oldPurchaseId = getStringFromFREObject(args[1]);
             final int prorationMode = getIntFromFREObject(args[2]);
@@ -340,6 +351,10 @@ public class ExtensionContext extends FREContext {
         @Override
         public FREObject call(FREContext ctx, FREObject[] args) {
 
+            if(_billingManager == null) {
+                _getPurchasesListener.onQueryPurchasesFinished(false, "Not initialized");
+                return null;
+            }
             boolean queryHistory = getBooleanFromFREObject(args[0]);
             if(queryHistory)
                 _billingManager.queryPurchaseHistory(_getPurchasesListener);
@@ -355,6 +370,10 @@ public class ExtensionContext extends FREContext {
         @Override
         public FREObject call(FREContext ctx, FREObject[] args) {
 
+            if(_billingManager == null) {
+                _dispatchEvent(CONSUME_ERROR, "Not initialized");
+                return null;
+            }
             String receipt = getStringFromFREObject(args[1]);
             JSONObject receiptJson = null;
             String signedData = null;
