@@ -27,9 +27,18 @@ import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
 import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.ConsumeResponseListener;
 import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.freshplanet.ane.AirInAppPurchase.billingManager.BillingManagerV4;
+import com.freshplanet.ane.AirInAppPurchase.billingManager.BillingManagerV5;
+import com.freshplanet.ane.AirInAppPurchase.billingManager.IBillingManager;
+import com.freshplanet.ane.AirInAppPurchase.billingManager.PurchaseFinishedListener;
+import com.freshplanet.ane.AirInAppPurchase.billingManager.QueryInventoryFinishedListener;
+import com.freshplanet.ane.AirInAppPurchase.billingManager.QueryPurchasesFinishedListener;
+import com.freshplanet.ane.AirInAppPurchase.billingManager.SetupFinishedListener;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,7 +46,8 @@ public class ExtensionContext extends FREContext {
 
     private static final String TAG = "AirInAppPurchase";
 
-    private BillingManager _billingManager;
+    private IBillingManager _billingManager;
+    private boolean _disposed;
 
     ExtensionContext() {
     }
@@ -57,8 +67,6 @@ public class ExtensionContext extends FREContext {
             Log.e(TAG, "dispatchStatusEventAsync", exception);
         }
     }
-
-
 
 
     /**
@@ -82,12 +90,12 @@ public class ExtensionContext extends FREContext {
     private static final String RESTORE_INFO_RECEIVED = "RESTORE_INFO_RECEIVED";
     private static final String RESTORE_INFO_ERROR = "RESTORE_INFO_ERROR";
 
-    private BillingManager.SetupFinishedListener _initLibListener = new BillingManager.SetupFinishedListener() {
+    private SetupFinishedListener _initLibListener = new SetupFinishedListener() {
         @Override
-        public void SetupFinished(Boolean success) {
+        public void SetupFinished(Boolean success, String billingVersion) {
 
             if(success)
-                _dispatchEvent(INIT_SUCCESSFUL, "");
+                _dispatchEvent(INIT_SUCCESSFUL, billingVersion);
             else
                 _dispatchEvent(INIT_ERROR, "");
         }
@@ -116,7 +124,7 @@ public class ExtensionContext extends FREContext {
         }
     };
 
-    private BillingManager.PurchaseFinishedListener _purchaseFinishedListener = new BillingManager.PurchaseFinishedListener() {
+    private PurchaseFinishedListener _purchaseFinishedListener = new PurchaseFinishedListener() {
         @Override
         public void onPurchasesFinished(Boolean success, String data) {
             if(success)
@@ -151,7 +159,7 @@ public class ExtensionContext extends FREContext {
 
 
 
-    private BillingManager.QueryInventoryFinishedListener _getProductsInfoListener = new BillingManager.QueryInventoryFinishedListener() {
+    private QueryInventoryFinishedListener _getProductsInfoListener = new QueryInventoryFinishedListener() {
         @Override
         public void onQueryInventoryFinished(Boolean success, String data) {
 
@@ -164,7 +172,7 @@ public class ExtensionContext extends FREContext {
         }
     };
 
-    private BillingManager.QueryPurchasesFinishedListener _getPurchasesListener = new BillingManager.QueryPurchasesFinishedListener() {
+    private QueryPurchasesFinishedListener _getPurchasesListener = new QueryPurchasesFinishedListener() {
         @Override
         public void onQueryPurchasesFinished(Boolean success, String data) {
             if(success) {
@@ -185,17 +193,73 @@ public class ExtensionContext extends FREContext {
 
     private FREFunction initLib = new BaseFunction() {
         @Override
-        public FREObject call(FREContext ctx, FREObject[] args) {
+        public FREObject call(final FREContext ctx, FREObject[] args) {
 
-            Boolean debug = getBooleanFromFREObject(args[1]);
+            final Boolean debug = getBooleanFromFREObject(args[1]);
 
             if(_billingManager != null) {
                 _billingManager.dispose();
             }
 
-            _billingManager = new BillingManager(ctx.getActivity());
+            try {
+
+                final BillingClient billingClient = BillingClient.newBuilder(ctx.getActivity())
+                        .setListener(_purchaseUpdatedListener)
+                        .enablePendingPurchases()
+                        .build();
+                billingClient.startConnection(new BillingClientStateListener() {
+                    @Override
+                    public void onBillingSetupFinished(BillingResult billingResult) {
+
+                        if (_disposed) return;
+
+                        if (billingResult.getResponseCode() ==  BillingClient.BillingResponseCode.OK) {
+                            // The BillingClient is ready. You can query purchases here.
+                            Log.d(TAG, "BillingManager connected");
+
+                            if(billingClient.isFeatureSupported(BillingClient.FeatureType.PRODUCT_DETAILS).getResponseCode() != BillingClient.BillingResponseCode.OK) {
+                                Log.d(TAG, "BillingClient doesn't support PRODUCT_DETAILS, using BillingManagerV4");
+                                _billingManager = new BillingManagerV4(billingClient);
+                            }
+                            else {
+                                Log.d(TAG, "BillingClient supports PRODUCT_DETAILS, using BillingManagerV5");
+                                _billingManager = new BillingManagerV5(billingClient);
+                            }
+
+
+                            _initLibListener.SetupFinished(true, _billingManager.getClass() == BillingManagerV5.class ? "billingV5" : "billingV4");
+
+                        }
+                        else {
+                            _initLibListener.SetupFinished(false, "");
+                        }
+                    }
+                    @Override
+                    public void onBillingServiceDisconnected() {
+                        // Try to restart the connection on the next request to
+                        // Google Play by calling the startConnection() method.
+                        Log.d(TAG, "BillingManager disconnected");
+                        if (_disposed) return;
+
+                        _initLibListener.SetupFinished(false, "");
+
+
+                    }
+                });
+            }
+            catch (Exception e) {
+                Log.d(TAG, "Error initializing BillingManager " + e);
+                _initLibListener.SetupFinished(false, "");
+            }
+
+
+
+
+
+
+
+
             _billingManager.enableDebugLogging(debug, TAG);
-            _billingManager.initialize(_initLibListener, _purchaseUpdatedListener);
 
 
             return null;
@@ -206,6 +270,10 @@ public class ExtensionContext extends FREContext {
         @Override
         public FREObject call(FREContext ctx, FREObject[] args) {
 
+            if(_billingManager == null) {
+                _getProductsInfoListener.onQueryInventoryFinished(false, "Not initialized");
+                return null;
+            }
             List<String> skusName = null;
             if(args[0] != null) {
                 skusName = getListOfStringFromFREArray((FREArray) args[0]);
@@ -227,6 +295,10 @@ public class ExtensionContext extends FREContext {
         @Override
         public FREObject call(final FREContext ctx, FREObject[] args) {
 
+            if(_billingManager == null) {
+                _purchaseFinishedListener.onPurchasesFinished(false, "Not initialized");
+                return null;
+            }
             final String purchaseId = getStringFromFREObject(args[0]);
 
             if (purchaseId == null)
@@ -236,7 +308,7 @@ public class ExtensionContext extends FREContext {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        _billingManager.purchaseProduct(ctx.getActivity(), purchaseId, null, -1, BillingClient.SkuType.INAPP, _purchaseFinishedListener);
+                        _billingManager.purchaseProduct(ctx.getActivity(), purchaseId, null, -1, "inapp", _purchaseFinishedListener, -1, null);
                     }
                 });
 
@@ -249,10 +321,15 @@ public class ExtensionContext extends FREContext {
     private FREFunction makeSubscription = new BaseFunction() {
         @Override
         public FREObject call(final FREContext ctx, FREObject[] args) {
-
+            if(_billingManager == null) {
+                _purchaseFinishedListener.onPurchasesFinished(false, "Not initialized");
+                return null;
+            }
             final String purchaseId = getStringFromFREObject(args[0]);
             final String oldPurchaseId = getStringFromFREObject(args[1]);
             final int prorationMode = getIntFromFREObject(args[2]);
+            final int subscriptionOfferIndex = getIntFromFREObject(args[4]);
+            final String userId = getStringFromFREObject(args[5]);
 
             if (purchaseId == null)
                 _dispatchEvent(PURCHASE_ERROR, "null purchaseId");
@@ -260,7 +337,7 @@ public class ExtensionContext extends FREContext {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        _billingManager.purchaseProduct(ctx.getActivity(), purchaseId, oldPurchaseId, prorationMode, BillingClient.SkuType.SUBS, _purchaseFinishedListener);
+                        _billingManager.purchaseProduct(ctx.getActivity(), purchaseId, oldPurchaseId, prorationMode, "subs", _purchaseFinishedListener, subscriptionOfferIndex, userId);
                     }
                 });
 
@@ -274,8 +351,16 @@ public class ExtensionContext extends FREContext {
         @Override
         public FREObject call(FREContext ctx, FREObject[] args) {
 
-            boolean includeAck = getBooleanFromFREObject(args[0]);
-            _billingManager.queryPurchases(_getPurchasesListener, includeAck);
+            if(_billingManager == null) {
+                _getPurchasesListener.onQueryPurchasesFinished(false, "Not initialized");
+                return null;
+            }
+            boolean queryHistory = getBooleanFromFREObject(args[0]);
+            if(queryHistory)
+                _billingManager.queryPurchaseHistory(_getPurchasesListener);
+            else
+                _billingManager.queryPurchases(_getPurchasesListener, false);
+
 
             return null;
         }
@@ -285,6 +370,10 @@ public class ExtensionContext extends FREContext {
         @Override
         public FREObject call(FREContext ctx, FREObject[] args) {
 
+            if(_billingManager == null) {
+                _dispatchEvent(CONSUME_ERROR, "Not initialized");
+                return null;
+            }
             String receipt = getStringFromFREObject(args[1]);
             JSONObject receiptJson = null;
             String signedData = null;
@@ -330,6 +419,7 @@ public class ExtensionContext extends FREContext {
             _billingManager.dispose();
 
         _billingManager = null;
+        _disposed = true;
 
     }
 

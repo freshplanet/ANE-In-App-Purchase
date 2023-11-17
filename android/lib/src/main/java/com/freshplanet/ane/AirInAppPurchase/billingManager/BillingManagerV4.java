@@ -1,7 +1,6 @@
-package com.freshplanet.ane.AirInAppPurchase;
+package com.freshplanet.ane.AirInAppPurchase.billingManager;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 
 import com.android.billingclient.api.BillingClient;
@@ -11,8 +10,9 @@ import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.ConsumeParams;
 import com.android.billingclient.api.ConsumeResponseListener;
 import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchaseHistoryRecord;
+import com.android.billingclient.api.PurchaseHistoryResponseListener;
 import com.android.billingclient.api.PurchasesResponseListener;
-import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
@@ -26,40 +26,16 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class BillingManager {
+public class BillingManagerV4 implements IBillingManager {
 
     private boolean _debugLog = false;
     private boolean _disposed = false;
-    private String _debugTag = "BillingManager";
-    private boolean _setupDone = false;
-    private Context _context;
+    private String _debugTag = "BillingManagerV4";
     private BillingClient _billingClient;
-
-
-
-    public interface SetupFinishedListener {
-
-        void SetupFinished(Boolean success);
-    }
-
-    public interface QueryInventoryFinishedListener {
-
-        void onQueryInventoryFinished(Boolean success, String data);
-    }
-
-    public interface QueryPurchasesFinishedListener {
-
-        void onQueryPurchasesFinished(Boolean success, String data);
-    }
 
     private interface QueryPurchasesInternalListener {
 
         void onQueryPurchasesFinished(Boolean success, String error);
-    }
-
-    public interface PurchaseFinishedListener{
-
-        void onPurchasesFinished(Boolean success, String data);
     }
 
     private interface GetProductInfoFinishedListener {
@@ -67,69 +43,19 @@ public class BillingManager {
         void onGetProductInfoFinishedListener(List<SkuDetails> skuDetailsList);
     }
 
-    BillingManager(Context ctx) {
+    public BillingManagerV4(BillingClient billingClient) {
 
-        _context = ctx;
+        _billingClient = billingClient;
 
     }
 
-    void dispose() {
+    public void dispose() {
 
         if(_billingClient != null)
             _billingClient.endConnection();
         _disposed = true;
     }
 
-
-
-    void initialize(final SetupFinishedListener setupFinishedListener, final PurchasesUpdatedListener purchasesUpdatedListener) {
-
-        try {
-
-            checkNotDisposed();
-            if (_setupDone) throw new IllegalStateException("BillingManager is already set up.");
-
-            _billingClient = BillingClient.newBuilder(_context)
-                    .setListener(purchasesUpdatedListener)
-                    .enablePendingPurchases()
-                    .build();
-            _billingClient.startConnection(new BillingClientStateListener() {
-                @Override
-                public void onBillingSetupFinished(BillingResult billingResult) {
-
-                    if (_disposed) return;
-
-
-                    if (billingResult.getResponseCode() ==  BillingClient.BillingResponseCode.OK) {
-                        // The BillingClient is ready. You can query purchases here.
-                        logDebug("BillingManager connected");
-                        _setupDone = true;
-                        setupFinishedListener.SetupFinished(true);
-
-                    }
-                    else {
-                        setupFinishedListener.SetupFinished(false);
-                    }
-                }
-                @Override
-                public void onBillingServiceDisconnected() {
-                    // Try to restart the connection on the next request to
-                    // Google Play by calling the startConnection() method.
-                    logDebug("BillingManager disconnected");
-                    if (_disposed) return;
-
-                    setupFinishedListener.SetupFinished(false);
-
-
-                }
-            });
-        }
-        catch (Exception e) {
-            logDebug("Error initializing BillingManager " + e.toString());
-            setupFinishedListener.SetupFinished(false);
-        }
-
-    }
 
     private void startServiceConnectionIfNeeded(final Runnable executeOnSuccess, final Runnable executeOnError) {
 
@@ -166,7 +92,7 @@ public class BillingManager {
         }
     }
 
-    void queryInventory(final List<String> skuList, final List<String> skuSubsList, final QueryInventoryFinishedListener listener) {
+    public void queryInventory(final List<String> skuList, final List<String> skuSubsList, final QueryInventoryFinishedListener listener) {
 
         Runnable executeOnConnectedService = new Runnable() {
             @Override
@@ -287,7 +213,7 @@ public class BillingManager {
 
     }
 
-    void queryPurchases(final QueryPurchasesFinishedListener listener, final boolean includeAcknowledged) {
+    public void queryPurchases(final QueryPurchasesFinishedListener listener, final boolean includeAcknowledged) {
 
         Runnable executeOnConnectedService = new Runnable() {
             @Override
@@ -397,7 +323,7 @@ public class BillingManager {
         });
     }
 
-    void purchaseProduct(final Activity activity, final String skuID, final String oldSkuID, final int replaceSkusProrationMode, final String productType, final PurchaseFinishedListener listener) {
+    public void purchaseProduct(final Activity activity, final String skuID, final String oldSkuID, final int replaceSkusProrationMode, final String productType, final PurchaseFinishedListener listener, final int offerIndex, final String userId) {
 
         Runnable executeOnConnectedService = new Runnable() {
             @Override
@@ -494,7 +420,7 @@ public class BillingManager {
     }
 
 
-    void consumePurchase(final String purchaseToken, final ConsumeResponseListener listener) {
+    public void consumePurchase(final String purchaseToken, final ConsumeResponseListener listener) {
 
         Runnable executeOnConnectedService = new Runnable() {
             @Override
@@ -524,6 +450,120 @@ public class BillingManager {
         startServiceConnectionIfNeeded(executeOnConnectedService, executeOnDisconnectedService);
     }
 
+    public void queryPurchaseHistory(final QueryPurchasesFinishedListener listener) {
+
+        Runnable executeOnConnectedService = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    checkNotDisposed();
+
+                    final List<PurchaseHistoryRecord> purchases = new ArrayList<PurchaseHistoryRecord>();
+
+                    // fetch inapp
+                    queryPurchaseHistoryInternal(BillingClient.SkuType.INAPP, purchases, new QueryPurchasesInternalListener() {
+                        @Override
+                        public void onQueryPurchasesFinished(Boolean success, String error) {
+                            if (!success || error != null) {
+                                listener.onQueryPurchasesFinished(false, error);
+                                return;
+                            }
+                            // now fetch subs
+                            queryPurchaseHistoryInternal(BillingClient.SkuType.SUBS, purchases, new QueryPurchasesInternalListener() {
+                                @Override
+                                public void onQueryPurchasesFinished(Boolean success, String error) {
+                                    if (!success || error != null) {
+                                        listener.onQueryPurchasesFinished(false, error);
+                                        return;
+                                    }
+
+                                    final JSONObject resultObject = new JSONObject();
+                                    final JSONArray purchasesArray = new JSONArray();
+
+                                    for (PurchaseHistoryRecord p : purchases) {
+
+                                        JSONObject purchaseJSON = purchaseHistoryToJSON(p);
+                                        if (purchaseJSON != null) {
+                                            purchasesArray.put(purchaseHistoryToJSON(p));
+                                        }
+
+                                    }
+
+                                    try {
+                                        resultObject.put("purchases", purchasesArray);
+                                    } catch (JSONException e) {
+                                        listener.onQueryPurchasesFinished(false, e.getMessage());
+                                        return;
+                                    }
+
+                                    listener.onQueryPurchasesFinished(true, resultObject.toString());
+
+                                }
+                            });
+
+                        }
+                    });
+                } catch (Exception e) {
+                    listener.onQueryPurchasesFinished(false, e.toString());
+                }
+
+            }
+        };
+
+        Runnable executeOnDisconnectedService = new Runnable() {
+            @Override
+            public void run() {
+                listener.onQueryPurchasesFinished(false, "Service disconnected");
+            }
+        };
+
+        startServiceConnectionIfNeeded(executeOnConnectedService, executeOnDisconnectedService);
+
+    }
+
+    private void queryPurchaseHistoryInternal(final String purchaseType, final List<PurchaseHistoryRecord> purchases, final QueryPurchasesInternalListener listener) {
+        _billingClient.queryPurchaseHistoryAsync(purchaseType, new PurchaseHistoryResponseListener() {
+            @Override
+            public void onPurchaseHistoryResponse(BillingResult billingResult, List<PurchaseHistoryRecord> list) {
+                if(billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    for (PurchaseHistoryRecord p : list) {
+                        purchases.add(p);
+                    }
+
+                    listener.onQueryPurchasesFinished(true, null);
+                }
+                else {
+                    // report errors
+                    listener.onQueryPurchasesFinished(false, billingResult.getDebugMessage());
+                }
+            }
+        });
+    }
+
+    private JSONObject purchaseHistoryToJSON(PurchaseHistoryRecord purchase) {
+
+        JSONObject resultObject = null;
+
+        try {
+
+            JSONObject receiptObject = new JSONObject();
+            receiptObject.put("signedData", purchase.getOriginalJson());
+            receiptObject.put("signature", purchase.getSignature());
+
+            resultObject = new JSONObject();
+            resultObject.put("productId", purchase.getSkus().get(0));
+            resultObject.put("receiptType", "GooglePlay");
+            resultObject.put("receipt", receiptObject);
+
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return resultObject;
+    }
+
+
     public JSONObject purchaseToJSON(Purchase purchase) {
 
         JSONObject resultObject = null;
@@ -551,7 +591,7 @@ public class BillingManager {
     /**
      * Enables or disable debug logging through LogCat.
      */
-    void enableDebugLogging(boolean enable, String tag) {
+    public void enableDebugLogging(boolean enable, String tag) {
         checkNotDisposed();
         _debugLog = enable;
         _debugTag = tag;

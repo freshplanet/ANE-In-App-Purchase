@@ -393,10 +393,10 @@ DEFINE_ANE_FUNCTION(makeSubscription) {
     SKMutablePayment* payment = [SKMutablePayment paymentWithProduct:product];
     
     if (@available(macOS 10.14.4, ios 12.2, *)) {
-        if(argc >= 4) {
+        if(argc >= 3) {
             const uint8_t* discountString;
             
-            if (FREGetObjectAsUTF8(argv[4], &stringLength, &discountString) == FRE_OK) {
+            if (FREGetObjectAsUTF8(argv[3], &stringLength, &discountString) == FRE_OK) {
                 NSString *discountData = [NSString stringWithUTF8String:(char*)discountString];
                 if(![discountData isEqualToString:@""]) {
                     NSData *jsonData = [discountData dataUsingEncoding:NSUTF8StringEncoding];
