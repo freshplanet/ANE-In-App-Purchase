@@ -153,7 +153,11 @@ package com.freshplanet.ane.AirInAppPurchase {
 
                 productsIds ||= [];
                 subscriptionIds ||= [];
-                _context.call("getProductsInfo", productsIds, subscriptionIds);
+                if (!_allStrings(productsIds) || !_allStrings(subscriptionIds)) {
+                    _dispatchEvent(InAppPurchaseEvent.PRODUCT_INFO_ERROR, "Product and subscription IDs must all be strings");
+                } else {
+                    _context.call("getProductsInfo", productsIds, subscriptionIds);
+                }
             }
         }
 
@@ -252,6 +256,17 @@ package com.freshplanet.ane.AirInAppPurchase {
 
             _dispatchEvent(event.code, event.level);
 		}
+
+        /** Return true if all values in the array are strings */
+        private static function _allStrings(arr:Array):Boolean {
+
+            for each (var obj:Object in arr) {
+                if (!(obj is String)) {
+                    return false;
+                }
+            }
+            return true;
+        }
 
         /**
          *
