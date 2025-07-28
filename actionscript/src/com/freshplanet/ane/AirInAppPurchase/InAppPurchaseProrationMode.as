@@ -20,36 +20,33 @@ public class InAppPurchaseProrationMode {
 	 *
 	 ***************************/
 
-	static public const UNKNOWN_SUBSCRIPTION_UPGRADE_DOWNGRADE_POLICY : InAppPurchaseProrationMode = new InAppPurchaseProrationMode(Private, 0);
-	static public const IMMEDIATE_WITH_TIME_PRORATION                 : InAppPurchaseProrationMode = new InAppPurchaseProrationMode(Private, 1);
-	static public const IMMEDIATE_AND_CHARGE_PRORATED_PRICE           : InAppPurchaseProrationMode = new InAppPurchaseProrationMode(Private, 2);
-	static public const IMMEDIATE_WITHOUT_PRORATION                   : InAppPurchaseProrationMode = new InAppPurchaseProrationMode(Private, 3);
-	static public const DEFERRED                    				  : InAppPurchaseProrationMode = new InAppPurchaseProrationMode(Private, 4);
+	static public const UNKNOWN_REPLACEMENT_MODE					  : InAppPurchaseProrationMode = new InAppPurchaseProrationMode(Private, 0);
+	static public const WITH_TIME_PRORATION 						  : InAppPurchaseProrationMode = new InAppPurchaseProrationMode(Private, 1);
+	static public const CHARGE_PRORATED_PRICE						  : InAppPurchaseProrationMode = new InAppPurchaseProrationMode(Private, 2);
+	static public const WITHOUT_PRORATION							  : InAppPurchaseProrationMode = new InAppPurchaseProrationMode(Private, 3);
+	static public const CHARGE_FULL_PRICE 							  : InAppPurchaseProrationMode = new InAppPurchaseProrationMode(Private, 5);
+	static public const DEFERRED									  : InAppPurchaseProrationMode = new InAppPurchaseProrationMode(Private, 6);
 
 
 	public static function fromValue(value:String):InAppPurchaseProrationMode {
 
 		switch (value)
 		{
-			case UNKNOWN_SUBSCRIPTION_UPGRADE_DOWNGRADE_POLICY.value:
-				return UNKNOWN_SUBSCRIPTION_UPGRADE_DOWNGRADE_POLICY;
-				break;
-			case IMMEDIATE_WITH_TIME_PRORATION.value:
-				return IMMEDIATE_WITH_TIME_PRORATION;
-				break;
-			case IMMEDIATE_AND_CHARGE_PRORATED_PRICE.value:
-				return IMMEDIATE_AND_CHARGE_PRORATED_PRICE;
-				break;
-			case IMMEDIATE_WITHOUT_PRORATION.value:
-				return IMMEDIATE_WITHOUT_PRORATION;
-				break;
+			case UNKNOWN_REPLACEMENT_MODE.value:
+				return UNKNOWN_REPLACEMENT_MODE;
+			case WITH_TIME_PRORATION.value:
+				return WITH_TIME_PRORATION;
+			case CHARGE_PRORATED_PRICE.value:
+				return CHARGE_PRORATED_PRICE;
+			case WITHOUT_PRORATION.value:
+				return WITHOUT_PRORATION;
+			case CHARGE_FULL_PRICE.value:
+				return CHARGE_FULL_PRICE;
 			case DEFERRED.value:
 				return DEFERRED;
-				break;
 
 			default:
 				return null;
-				break;
 		}
 	}
 

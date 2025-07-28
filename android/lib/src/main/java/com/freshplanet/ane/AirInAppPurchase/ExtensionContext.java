@@ -31,9 +31,9 @@ import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.ConsumeResponseListener;
+import com.android.billingclient.api.PendingPurchasesParams;
 import com.android.billingclient.api.PurchasesUpdatedListener;
-import com.freshplanet.ane.AirInAppPurchase.billingManager.BillingManagerV4;
-import com.freshplanet.ane.AirInAppPurchase.billingManager.BillingManagerV5;
+import com.freshplanet.ane.AirInAppPurchase.billingManager.BillingManager;
 import com.freshplanet.ane.AirInAppPurchase.billingManager.IBillingManager;
 import com.freshplanet.ane.AirInAppPurchase.billingManager.PurchaseFinishedListener;
 import com.freshplanet.ane.AirInAppPurchase.billingManager.QueryInventoryFinishedListener;
@@ -220,7 +220,7 @@ public class ExtensionContext extends FREContext {
 
                 final BillingClient billingClient = BillingClient.newBuilder(ctx.getActivity())
                         .setListener(_purchaseUpdatedListener)
-                        .enablePendingPurchases()
+                        .enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
                         .build();
                 billingClient.startConnection(new BillingClientStateListener() {
                     @Override
@@ -232,17 +232,11 @@ public class ExtensionContext extends FREContext {
                             // The BillingClient is ready. You can query purchases here.
                             Log.d(TAG, "BillingManager connected");
 
-                            if(billingClient.isFeatureSupported(BillingClient.FeatureType.PRODUCT_DETAILS).getResponseCode() != BillingClient.BillingResponseCode.OK) {
-                                Log.d(TAG, "BillingClient doesn't support PRODUCT_DETAILS, using BillingManagerV4");
-                                _billingManager = new BillingManagerV4(billingClient);
-                            }
-                            else {
-                                Log.d(TAG, "BillingClient supports PRODUCT_DETAILS, using BillingManagerV6");
-                                _billingManager = new BillingManagerV5(billingClient);
-                            }
+                            Log.d(TAG, "BillingClient supports PRODUCT_DETAILS, using BillingManagerV6");
+                            _billingManager = new BillingManager(billingClient);
 
 
-                            _initLibListener.SetupFinished(true, _billingManager.getClass() == BillingManagerV5.class ? "billingV5" : "billingV4");
+                            _initLibListener.SetupFinished(true, "billingV8");
 
                         }
                         else {
