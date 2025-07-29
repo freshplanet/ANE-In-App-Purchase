@@ -4,6 +4,8 @@ package com.freshplanet.ane.AirInAppPurchase.billingManager;
 import android.app.Activity;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.android.billingclient.api.AcknowledgePurchaseParams;
 import com.android.billingclient.api.AcknowledgePurchaseResponseListener;
 import com.android.billingclient.api.BillingClient;
@@ -15,12 +17,11 @@ import com.android.billingclient.api.ConsumeResponseListener;
 import com.android.billingclient.api.ProductDetails;
 import com.android.billingclient.api.ProductDetailsResponseListener;
 import com.android.billingclient.api.Purchase;
-import com.android.billingclient.api.PurchaseHistoryRecord;
-import com.android.billingclient.api.PurchaseHistoryResponseListener;
 import com.android.billingclient.api.PurchasesResponseListener;
 import com.android.billingclient.api.QueryProductDetailsParams;
-import com.android.billingclient.api.QueryPurchaseHistoryParams;
+import com.android.billingclient.api.QueryProductDetailsResult;
 import com.android.billingclient.api.QueryPurchasesParams;
+import com.android.billingclient.api.UnfetchedProduct;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,12 +32,12 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class BillingManagerV5 implements IBillingManager {
+public class BillingManager implements IBillingManager {
 
     private boolean _debugLog = false;
     private boolean _disposed = false;
     private String _debugTag = "BillingManagerV6";
-    private BillingClient _billingClient;
+    private final BillingClient _billingClient;
 
     private interface QueryPurchasesInternalListener {
 
@@ -45,10 +46,10 @@ public class BillingManagerV5 implements IBillingManager {
 
     private interface GetProductInfoFinishedListener {
 
-        void onGetProductInfoFinishedListener(List<ProductDetails> productDetailsList);
+        void onGetProductInfoFinishedListener(List<ProductDetails> productDetailsList, List<UnfetchedProduct> unfetchedProductList);
     }
 
-    public BillingManagerV5(BillingClient billingClient) {
+    public BillingManager(BillingClient billingClient) {
         _billingClient = billingClient;
     }
 
@@ -72,7 +73,7 @@ public class BillingManagerV5 implements IBillingManager {
         } else {
             _billingClient.startConnection(new BillingClientStateListener() {
                 @Override
-                public void onBillingSetupFinished(BillingResult billingResult) {
+                public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
                     if (billingResult.getResponseCode() ==  BillingClient.BillingResponseCode.OK) {
 
                         if (executeOnSuccess != null) {
@@ -101,7 +102,8 @@ public class BillingManagerV5 implements IBillingManager {
             public void run() {
                 try {
                     checkNotDisposed();
-                    final List<ProductDetails> result = new ArrayList<ProductDetails>();
+                    final List<ProductDetails> result = new ArrayList<>();
+                    final List<UnfetchedProduct> unfetched = new ArrayList<>();
 
                     List<QueryProductDetailsParams.Product> iapList = new ArrayList<>();
 
@@ -119,15 +121,19 @@ public class BillingManagerV5 implements IBillingManager {
 
                     getProductInfo(iapParams, new GetProductInfoFinishedListener() {
                         @Override
-                        public void onGetProductInfoFinishedListener(List<ProductDetails> productDetailsList) {
+                        public void onGetProductInfoFinishedListener(List<ProductDetails> productDetailsList, List<UnfetchedProduct> unfetchedProductList) {
 
                             if(productDetailsList != null) {
                                 result.addAll(productDetailsList);
                             }
 
+                            if (unfetchedProductList != null) {
+                                unfetched.addAll(unfetchedProductList);
+                            }
+
                             List<QueryProductDetailsParams.Product> subList = new ArrayList<>();
 
-                            if(skuSubsList != null && skuSubsList.size() > 0) {
+                            if(skuSubsList != null && !skuSubsList.isEmpty()) {
                                 for (String productId : skuSubsList) {
                                     subList.add(QueryProductDetailsParams.Product.newBuilder()
                                             .setProductId(productId)
@@ -138,7 +144,7 @@ public class BillingManagerV5 implements IBillingManager {
                             }
 
                             QueryProductDetailsParams subParams = null;
-                            if(subList.size() > 0) {
+                            if(!subList.isEmpty()) {
                                 subParams = QueryProductDetailsParams.newBuilder()
                                         .setProductList(subList)
                                         .build();
@@ -146,12 +152,15 @@ public class BillingManagerV5 implements IBillingManager {
 
                             getProductInfo(subParams, new GetProductInfoFinishedListener() {
                                 @Override
-                                public void onGetProductInfoFinishedListener(List<ProductDetails> productDetailsList) {
+                                public void onGetProductInfoFinishedListener(List<ProductDetails> productDetailsList, List<UnfetchedProduct> unfetchedProductList) {
 
                                     if(productDetailsList != null) {
                                         result.addAll(productDetailsList);
                                     }
 
+                                    if (unfetchedProductList != null) {
+                                        unfetched.addAll(unfetchedProductList);
+                                    }
 
                                     JSONObject detailsObject = new JSONObject();
 
@@ -165,9 +174,22 @@ public class BillingManagerV5 implements IBillingManager {
                                         }
                                     }
 
+                                    JSONObject unfetchedObject = new JSONObject();
+
+                                    for (UnfetchedProduct unfetchedProduct : unfetched) {
+                                        if (unfetchedProduct != null) {
+                                            try {
+                                                unfetchedObject.put(unfetchedProduct.getProductId(), unfetchedProduct.getStatusCode());
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }
+
                                     JSONObject resultObject = new JSONObject();
                                     try {
                                         resultObject.put("details", detailsObject);
+                                        resultObject.put("unfetched", unfetchedObject);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -212,21 +234,21 @@ public class BillingManagerV5 implements IBillingManager {
                     if(params != null) {
                         _billingClient.queryProductDetailsAsync(params, new ProductDetailsResponseListener() {
                             @Override
-                            public void onProductDetailsResponse(BillingResult billingResult, List<ProductDetails> list) {
+                            public void onProductDetailsResponse(@NonNull BillingResult billingResult, @NonNull QueryProductDetailsResult queryProductDetailsResult) {
                                 if(billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-                                    listener.onGetProductInfoFinishedListener(list);
+                                    listener.onGetProductInfoFinishedListener(queryProductDetailsResult.getProductDetailsList(), queryProductDetailsResult.getUnfetchedProductList());
                                 }
                                 else {
-                                    listener.onGetProductInfoFinishedListener(null);
+                                    listener.onGetProductInfoFinishedListener(null, null);
                                 }
                             }
                         });
                     } else {
-                        listener.onGetProductInfoFinishedListener(null);
+                        listener.onGetProductInfoFinishedListener(null, null);
                     }
                 }
                 catch (Exception e) {
-                    listener.onGetProductInfoFinishedListener(null);
+                    listener.onGetProductInfoFinishedListener(null, null);
                 }
             }
         };
@@ -234,7 +256,7 @@ public class BillingManagerV5 implements IBillingManager {
         Runnable executeOnDisconnectedService = new Runnable() {
             @Override
             public void run() {
-                listener.onGetProductInfoFinishedListener(null);
+                listener.onGetProductInfoFinishedListener(null, null);
             }
         };
 
@@ -251,7 +273,7 @@ public class BillingManagerV5 implements IBillingManager {
                 try {
                     checkNotDisposed();
 
-                    final List<Purchase> purchases = new ArrayList<Purchase>();
+                    final List<Purchase> purchases = new ArrayList<>();
 
                     // fetch inapp
                     queryPurchasesInternal(BillingClient.ProductType.INAPP, purchases, false, new QueryPurchasesInternalListener() {
@@ -321,7 +343,7 @@ public class BillingManagerV5 implements IBillingManager {
         QueryPurchasesParams params = QueryPurchasesParams.newBuilder().setProductType(productType).build();
         _billingClient.queryPurchasesAsync(params, new PurchasesResponseListener() {
             @Override
-            public void onQueryPurchasesResponse(BillingResult billingResult, List<Purchase> list) {
+            public void onQueryPurchasesResponse(@NonNull BillingResult billingResult, @NonNull List<Purchase> list) {
                 if(billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
                     for (Purchase p : list) {
 
@@ -334,8 +356,8 @@ public class BillingManagerV5 implements IBillingManager {
                             if(productType.equals(BillingClient.ProductType.INAPP)) {
                                 consumePurchase(p.getPurchaseToken(), new ConsumeResponseListener() {
                                     @Override
-                                    public void onConsumeResponse(BillingResult billingResult, String purchaseToken) {
-                                        // do nothing, if consume didnt work, it should work on next restore
+                                    public void onConsumeResponse(@NonNull BillingResult billingResult, @NonNull String purchaseToken) {
+                                        // do nothing, if consume didn't work, it should work on next restore
                                     }
                                 });
                             }
@@ -383,9 +405,9 @@ public class BillingManagerV5 implements IBillingManager {
 
                     getProductInfo(params, new GetProductInfoFinishedListener() {
                         @Override
-                        public void onGetProductInfoFinishedListener(List<ProductDetails> productDetailsList) {
+                        public void onGetProductInfoFinishedListener(List<ProductDetails> productDetailsList, List<UnfetchedProduct> unfetchedProductList) {
 
-                            if(productDetailsList != null && productDetailsList.size() > 0) {
+                            if(productDetailsList != null && !productDetailsList.isEmpty()) {
 
                                 ProductDetails details = productDetailsList.get(0);
 
@@ -409,7 +431,7 @@ public class BillingManagerV5 implements IBillingManager {
 
                                 billingFlowParams.setObfuscatedAccountId(userId);
 
-                                if(oldSkuID != null && !oldSkuID.equals("") && replaceSkusProrationMode >= 0) {
+                                if(oldSkuID != null && !oldSkuID.isEmpty() && replaceSkusProrationMode >= 0) {
 
                                     final List<Purchase> subPurchases = new ArrayList<>();
 
@@ -424,7 +446,7 @@ public class BillingManagerV5 implements IBillingManager {
                                             }
 
                                             BillingFlowParams.SubscriptionUpdateParams.Builder subUpdateParams = BillingFlowParams.SubscriptionUpdateParams.newBuilder();
-                                            subUpdateParams.setReplaceProrationMode(replaceSkusProrationMode);
+                                            subUpdateParams.setSubscriptionReplacementMode(replaceSkusProrationMode);
 
                                             boolean didFindOldProduct = false;
                                             for (Purchase subPurchase : subPurchases) {
@@ -453,7 +475,11 @@ public class BillingManagerV5 implements IBillingManager {
 
                             }
                             else {
-                                listener.onPurchasesFinished(false, "Unable to get productInfo for purchasing skuID " + skuID);
+                                String error = "Unable to get productInfo for purchasing skuID " + skuID;
+                                if (unfetchedProductList != null && !unfetchedProductList.isEmpty()) {
+                                    error += " status code: " + unfetchedProductList.get(0).getStatusCode();
+                                }
+                                listener.onPurchasesFinished(false, error);
                             }
                         }
                     });
@@ -539,7 +565,7 @@ public class BillingManagerV5 implements IBillingManager {
                 try {
                     checkNotDisposed();
 
-                    final List<PurchaseHistoryRecord> purchases = new ArrayList<PurchaseHistoryRecord>();
+                    final List<Purchase> purchases = new ArrayList<>();
 
                     // fetch inapp
                     queryPurchaseHistoryInternal(BillingClient.ProductType.INAPP, purchases, new QueryPurchasesInternalListener() {
@@ -561,7 +587,7 @@ public class BillingManagerV5 implements IBillingManager {
                                     final JSONObject resultObject = new JSONObject();
                                     final JSONArray purchasesArray = new JSONArray();
 
-                                    for (PurchaseHistoryRecord p : purchases) {
+                                    for (Purchase p : purchases) {
 
                                         JSONObject purchaseJSON = purchaseHistoryToJSON(p);
                                         if (purchaseJSON != null) {
@@ -602,15 +628,13 @@ public class BillingManagerV5 implements IBillingManager {
 
     }
 
-    private void queryPurchaseHistoryInternal(final String purchaseType, final List<PurchaseHistoryRecord> purchases, final QueryPurchasesInternalListener listener) {
+    private void queryPurchaseHistoryInternal(final String purchaseType, final List<Purchase> purchases, final QueryPurchasesInternalListener listener) {
 
-        _billingClient.queryPurchaseHistoryAsync(QueryPurchaseHistoryParams.newBuilder().setProductType(purchaseType).build(), new PurchaseHistoryResponseListener() {
+        _billingClient.queryPurchasesAsync(QueryPurchasesParams.newBuilder().setProductType(purchaseType).build(), new PurchasesResponseListener() {
             @Override
-            public void onPurchaseHistoryResponse(BillingResult billingResult, List<PurchaseHistoryRecord> list) {
+            public void onQueryPurchasesResponse(@NonNull BillingResult billingResult, @NonNull List<Purchase> list) {
                 if(billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-                    for (PurchaseHistoryRecord p : list) {
-                        purchases.add(p);
-                    }
+                    purchases.addAll(list);
 
                     listener.onQueryPurchasesFinished(true, null);
                 }
@@ -622,7 +646,7 @@ public class BillingManagerV5 implements IBillingManager {
         });
     }
 
-    private JSONObject purchaseHistoryToJSON(PurchaseHistoryRecord purchase) {
+    private JSONObject purchaseHistoryToJSON(Purchase purchase) {
 
         JSONObject resultObject = null;
 
@@ -633,7 +657,7 @@ public class BillingManagerV5 implements IBillingManager {
             receiptObject.put("signature", purchase.getSignature());
 
             resultObject = new JSONObject();
-            resultObject.put("productId", purchase.getSkus().get(0));
+            resultObject.put("productId", purchase.getProducts().get(0));
             resultObject.put("receiptType", "GooglePlay");
             resultObject.put("receipt", receiptObject);
 
@@ -656,7 +680,7 @@ public class BillingManagerV5 implements IBillingManager {
             receiptObject.put("signature", purchase.getSignature());
 
             resultObject = new JSONObject();
-            resultObject.put("productId", purchase.getSkus().get(0));
+            resultObject.put("productId", purchase.getProducts().get(0));
             resultObject.put("receiptType", "GooglePlay");
             resultObject.put("receipt", receiptObject);
 
